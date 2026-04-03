@@ -5,15 +5,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Altice implements Serializable{
-	public static Altice alt = null;
+	private static final long serialVersionUID = 1L;
 	
+	public static Altice alt = null;
 	private ArrayList<Persona> misHumanos;
 	private ArrayList<Plan> misPlanes;
 	private ArrayList<Servicio> misServicios;
 	private ArrayList<Pago> misPagos;
 	private ArrayList<Contrato> misContratos;
 	private ArrayList<Ticket> misTickets;
-	private ArrayList<Usuario> misUsers;
 	public static Usuario loginUser;
 	public static int idPlan =1;
 
@@ -25,7 +25,6 @@ public class Altice implements Serializable{
 		misPagos = new ArrayList<>();
 		misContratos = new ArrayList<>();
 		misTickets = new ArrayList<>();
-		misUsers = new ArrayList<>();
 	}
 
 	public static Altice getInstance() {
@@ -66,11 +65,6 @@ public class Altice implements Serializable{
 	public static void setLoginUser(Usuario loginUser) {
 		Altice.loginUser = loginUser;
 	}
-	
-	
-	public ArrayList<Usuario> getMisUsers() {
-		return misUsers;
-	}
 
 	public static int getIdPlan() {
 		return idPlan;
@@ -79,7 +73,14 @@ public class Altice implements Serializable{
 	public static void setIdPlan(int idPlan) {
 		Altice.idPlan = idPlan;
 	}
+	
+	public static Altice getAlt() {
+		return alt;
+	}
 
+	public static void setAlt(Altice alt) {
+		Altice.alt = alt;
+	}
 	/*1 Inicio metodos busqueda de clases por algun identificador*/
 /*
 	//1.Contrato.1 Buscar cliente by Identificador
@@ -102,6 +103,8 @@ public class Altice implements Serializable{
 	}
 	*/
 	
+	
+
 	//1.Contraro.1 Buscar Plan by ID
 	public Plan buscarPlanByID(String idPlan) {
 		for (Plan planes : misPlanes) {
@@ -126,9 +129,10 @@ public class Altice implements Serializable{
 		return login;
 	}
 	
-	//1.Usuario.1 Registrar Usuario
-	public void registrarUsuario(Usuario user) {
-		misUsers.add(user);
+	//1.Persona.1 Agregar persona
+	
+	public void regPersona(Persona p) {
+		misHumanos.add(p);
 	}
 	
 }

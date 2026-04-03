@@ -1,6 +1,10 @@
 package logico;
 
-public abstract class Persona {
+import java.io.Serializable;
+
+public abstract class Persona implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	protected Usuario user; 
 	protected String nombre;
 	protected boolean estado; //true para activo false para inactivo
