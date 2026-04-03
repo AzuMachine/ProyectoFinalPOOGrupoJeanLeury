@@ -11,7 +11,7 @@ public class Altice {
 	private ArrayList<Pago> misPagos;
 	private ArrayList<Contrato> misContratos;
 	private ArrayList<Ticket> misTickets;
-
+	public static int idPlan =1;
 
 	public Altice() {
 		super();
@@ -78,4 +78,15 @@ public class Altice {
 		return null;
 	}
 	*/
+	
+	//1.Contraro.1 Buscar Plan by ID
+	public Plan buscarPlanByID(String idPlan) {
+		for (Plan planes : misPlanes) {
+			if(planes.getIdPlan().equalsIgnoreCase(idPlan)) { return planes;}
+		}
+		return null;
+	}
+	
+	
+	
 }

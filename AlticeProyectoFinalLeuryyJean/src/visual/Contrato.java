@@ -17,6 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Contrato extends JDialog {
 
@@ -28,7 +30,7 @@ public class Contrato extends JDialog {
 	private JTextField txtCostoInstalacion;
 	private JTextField txtTotalCajaInicial;
 	private JTextField textField;
-	
+
 	//Codigo para los colores
 	//Final funciona como un static, le dice al programa que el color no va a cambiar
 	/**
@@ -40,7 +42,7 @@ public class Contrato extends JDialog {
 	private final Color INPUT_DARK = new Color(43, 51, 73);       
 	private final Color BURNT_SIENNA = new Color(221, 112, 87);   
 	private JTextField txtPlanes;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -64,25 +66,25 @@ public class Contrato extends JDialog {
 		setBounds(100, 100, 722, 651);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
-		
+
 		contentPanel.setBackground(NAVY_ALTICE); //Se asigna el color de fondo
-		
+
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
 			JPanel panel = new JPanel();
-			
+
 			panel.setBackground(NAVY_ALTICE); //Se le asigna el color al panel
-			
+
 			panel.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
-			
+
 			JPanel panelBusqueda = new JPanel();
-			
+
 			panelBusqueda.setBackground(NAVY_ALTICE);
-			
+
 			panelBusqueda.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 			panelBusqueda.setBounds(20, 42, 650, 116);
 			panel.add(panelBusqueda);
@@ -101,38 +103,38 @@ public class Contrato extends JDialog {
 				lblNewLabel_2.setBounds(92, 46, 137, 17);
 				panelBusqueda.add(lblNewLabel_2);
 			}
-			
+
 			txtRNC_Cliente = new JTextField();
 			txtRNC_Cliente.setFont(new Font("Tahoma", Font.BOLD, 16));
-			
+
 			//Fondo Gris oscuro para el RNC
 			txtRNC_Cliente.setBackground(INPUT_DARK);
 			txtRNC_Cliente.setForeground(BURNT_SIENNA);
-			
+
 			txtRNC_Cliente.setBounds(218, 43, 173, 23);
 			panelBusqueda.add(txtRNC_Cliente);
 			txtRNC_Cliente.setColumns(10);
-			
+
 			JButton BtnBuscarClienteRNC = new JButton("Buscar Cliente");
-			
+
 			//Colores del boton
 			BtnBuscarClienteRNC.setBackground(ACCENT_ORANGE);
 			BtnBuscarClienteRNC.setForeground(new Color(255, 255, 255));
-			
+
 			BtnBuscarClienteRNC.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			
+
 			//Revisar esto
 			BtnBuscarClienteRNC.setActionCommand("OK");
 			BtnBuscarClienteRNC.setBounds(423, 42, 141, 25);
 			panelBusqueda.add(BtnBuscarClienteRNC);
-			
+
 			JLabel lblNewLabel_3 = new JLabel("Ingrese documento de identidad para la busqueda del Cliente");
-			
+
 			lblNewLabel_3.setForeground(new Color(255, 255, 255));
 			lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			lblNewLabel_3.setBounds(92, 74, 341, 12);
 			panelBusqueda.add(lblNewLabel_3);
-			
+
 			JLabel lblNewLabel = new JLabel("Bloque de busqueda:");
 			lblNewLabel.setForeground(new Color(255, 255, 255));
 			lblNewLabel.setBounds(20, 10, 181, 30);
@@ -160,8 +162,19 @@ public class Contrato extends JDialog {
 					lblNewLabel_4.setBounds(10, 75, 223, 12);
 					panelPlanes.add(lblNewLabel_4);
 				}
-				
+
 				txtPlanes = new JTextField();
+				txtPlanes.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						//ListarPlanes.
+						ListarPlanes listP = new ListarPlanes();
+						listP.setEnabled(true);
+						listP.setVisible(true);
+					}
+				});
+
+
 				txtPlanes.setEditable(false);
 				txtPlanes.setBounds(10, 36, 282, 18);
 				panelPlanes.add(txtPlanes);
@@ -176,9 +189,9 @@ public class Contrato extends JDialog {
 			}
 			{
 				JPanel panelDeCaja = new JPanel();
-				
+
 				panelDeCaja.setBackground(NAVY_ALTICE);
-				
+
 				panelDeCaja.setLayout(null);
 				panelDeCaja.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 				panelDeCaja.setBounds(368, 204, 302, 301);
@@ -214,7 +227,7 @@ public class Contrato extends JDialog {
 				{
 					txtCostoInstalacion = new JTextField();
 					txtCostoInstalacion.setEditable(false);
-					
+
 					txtCostoInstalacion.setBackground(ACCENT_ORANGE);
 					txtCostoInstalacion.setForeground(new Color(255, 255, 255));
 					txtCostoInstalacion.setColumns(10);
@@ -223,9 +236,9 @@ public class Contrato extends JDialog {
 				}
 				{
 					JPanel panelCajaInicial = new JPanel();
-					
+
 					panelCajaInicial.setBackground(NAVY_ALTICE);
-					
+
 					panelCajaInicial.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 					panelCajaInicial.setBounds(10, 120, 282, 78);
 					panelDeCaja.add(panelCajaInicial);
