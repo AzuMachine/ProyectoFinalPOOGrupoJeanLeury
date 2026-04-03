@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Altice implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
+
 	public static Altice alt = null;
 	private ArrayList<Persona> misHumanos;
 	private ArrayList<Plan> misPlanes;
@@ -61,7 +61,7 @@ public class Altice implements Serializable{
 	public static Usuario getLoginUser() {
 		return loginUser;
 	}
-	
+
 	public static void setLoginUser(Usuario loginUser) {
 		Altice.loginUser = loginUser;
 	}
@@ -73,7 +73,7 @@ public class Altice implements Serializable{
 	public static void setIdPlan(int idPlan) {
 		Altice.idPlan = idPlan;
 	}
-	
+
 	public static Altice getAlt() {
 		return alt;
 	}
@@ -82,7 +82,7 @@ public class Altice implements Serializable{
 		Altice.alt = alt;
 	}
 	/*1 Inicio metodos busqueda de clases por algun identificador*/
-/*
+	/*
 	//1.Contrato.1 Buscar cliente by Identificador
 	public Persona buscarClienteById(String idCliente) {
 		for (Cliente c : misHumanos) {
@@ -101,22 +101,39 @@ public class Altice implements Serializable{
 		}
 		return null;
 	}
-	*/
-	
-	
+	 */
 
-	//1.Contraro.1 Buscar Plan by ID
+
+
+	//1.Plan.1 Buscar Plan by ID
 	public Plan buscarPlanByID(String idPlan) {
 		for (Plan planes : misPlanes) {
 			if(planes.getIdPlan().equalsIgnoreCase(idPlan)) { return planes;}
 		}
 		return null;
 	}
+
+	//1.Plan.2 Agregar plan
+	public void agrPlan(Plan plan) {
+		misPlanes.add(plan);
+		idPlan++;
+	}
+
+	//Fin codigos planes
+
+	//1.Servicios.1 Buscar By ID
 	
+	public Servicio buscarServicioByID(String idServi) {
+		for (Servicio services : misServicios) {
+			if(services.getIdService().equalsIgnoreCase(idServi)) {return services;}
+		}
+		return null;
+	}
 	
-	
+	//Fin codigo Servicios
+
 	//1.LogIn.1 Confirmar el Log In
-	
+
 	public boolean confirmarIngreso(String username, String pass) {
 		boolean login = false;
 		for (Persona p: misHumanos ) {
@@ -128,11 +145,12 @@ public class Altice implements Serializable{
 		}
 		return login;
 	}
-	
+
 	//1.Persona.1 Agregar persona
-	
+
 	public void regPersona(Persona p) {
 		misHumanos.add(p);
 	}
-	
+
+
 }

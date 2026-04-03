@@ -138,12 +138,13 @@ public class ListarPlanes extends JDialog {
 	private void loadPlanes() {
 		model.setRowCount(0);
 		
-		Object[] filas2 = new Object[3];
+		Object[] filas2 = new Object[4];
 		
 		for (Plan planes : Altice.getInstance().getMisPlanes()) {
 			filas2[0] = planes.getIdPlan();
 			filas2[1] = planes.getNombreComercial();
-			filas2[2] = planes.getPrecioTotal();
+			filas2[2] = planes.getPrecioBase();
+			filas2[3] = planes.getState();
 			
 			model.addRow(filas2);
 		}
@@ -151,7 +152,7 @@ public class ListarPlanes extends JDialog {
 	}
 	
 	private void loadHeaders() {
-		String headerPlanes[] = {"ID", "Datos", "Tarifa Mensual"}; 
+		String headerPlanes[] = {"ID", "Nombre Comercial", "Precio Base", "Estado"}; 
 		model.setColumnIdentifiers(headerPlanes);
 		table.setModel(model);
 		loadPlanes();

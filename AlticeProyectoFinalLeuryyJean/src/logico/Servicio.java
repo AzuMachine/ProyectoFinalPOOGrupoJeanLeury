@@ -17,7 +17,7 @@ public class Servicio {
 		this.nombre = nombre;
 		this.descTecnica = descTecnica;
 		this.tipo = tipo;
-		this.costoMensualInd = costoMensualInd;
+		this.setCostoMensualInd(costoMensualInd);
 		this.habilitado = true;
 	}
 
@@ -59,6 +59,14 @@ public class Servicio {
 
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
+	}
+
+	public float getCostoMensualInd() {
+		return costoMensualInd;
+	}
+
+	public void setCostoMensualInd(float costoMensualInd) {
+		this.costoMensualInd = costoMensualInd;
 	} 
 	
 }
