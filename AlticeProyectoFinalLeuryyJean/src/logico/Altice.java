@@ -1,8 +1,10 @@
 package logico;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Altice {
+public class Altice implements Serializable{
 	public static Altice alt = null;
 	
 	private ArrayList<Persona> misHumanos;
@@ -11,6 +13,8 @@ public class Altice {
 	private ArrayList<Pago> misPagos;
 	private ArrayList<Contrato> misContratos;
 	private ArrayList<Ticket> misTickets;
+	private ArrayList<Usuario> misUsers;
+	public static Usuario loginUser;
 	public static int idPlan =1;
 
 	public Altice() {
@@ -21,6 +25,7 @@ public class Altice {
 		misPagos = new ArrayList<>();
 		misContratos = new ArrayList<>();
 		misTickets = new ArrayList<>();
+		misUsers = new ArrayList<>();
 	}
 
 	public static Altice getInstance() {
@@ -54,9 +59,27 @@ public class Altice {
 		return misTickets;
 	}
 
+	public static Usuario getLoginUser() {
+		return loginUser;
+	}
+	
+	public static void setLoginUser(Usuario loginUser) {
+		Altice.loginUser = loginUser;
+	}
 	
 	
-	
+	public ArrayList<Usuario> getMisUsers() {
+		return misUsers;
+	}
+
+	public static int getIdPlan() {
+		return idPlan;
+	}
+
+	public static void setIdPlan(int idPlan) {
+		Altice.idPlan = idPlan;
+	}
+
 	/*1 Inicio metodos busqueda de clases por algun identificador*/
 /*
 	//1.Contrato.1 Buscar cliente by Identificador
@@ -88,5 +111,24 @@ public class Altice {
 	}
 	
 	
+	
+	//1.LogIn.1 Confirmar el Log In
+	
+	public boolean confirmarIngreso(String username, String pass) {
+		boolean login = false;
+		for (Persona p: misHumanos ) {
+			if(p.getUser().getUserName().equals(username) && p.getUser().getPassword().equals(pass)){
+				loginUser = p.getUser();
+				login = true;
+				p.getUser().setUltimoIngreso(LocalDateTime.now());
+			}
+		}
+		return login;
+	}
+	
+	//1.Usuario.1 Registrar Usuario
+	public void registrarUsuario(Usuario user) {
+		misUsers.add(user);
+	}
 	
 }

@@ -13,6 +13,9 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class LogIn extends JFrame {
 
@@ -21,6 +24,7 @@ public class LogIn extends JFrame {
 	private JLabel alticeIconoLogIn;
 	private JTextField txtUsuarioLog;
 	private JTextField txtPassLog;
+	private JButton btnLogIn;
 
 	/**
 	 * Launch the application.
@@ -42,9 +46,12 @@ public class LogIn extends JFrame {
 	 * Create the frame.
 	 */
 	public LogIn() {
+		setTitle("Altice v1.0");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(LogIn.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 618, 625);
+		setBounds(100, 100, 403, 541);
 		contentPane = new JPanel();
 		contentPane.setLocation(-173, 0);
 		contentPane.setBackground(new Color(29,41,59));
@@ -55,25 +62,25 @@ public class LogIn extends JFrame {
 		JPanel panelLogin = new JPanel();
 		panelLogin.setBorder(new LineBorder(new Color(171, 173, 179), 1, true));
 		panelLogin.setBackground(new Color(33,50,65));
-		panelLogin.setBounds(173, 105, 203, 331);
+		panelLogin.setBounds(92, 98, 203, 305);
 		contentPane.add(panelLogin);
 		panelLogin.setLayout(null);
 		
 		alticeIconoLogIn = new JLabel("");
-		alticeIconoLogIn.setBounds(74, 11, 59, 63);
+		alticeIconoLogIn.setBounds(74, 19, 59, 63);
 		panelLogin.add(alticeIconoLogIn);
 		alticeIconoLogIn.setIcon(new ImageIcon(LogIn.class.getResource("/Imagenes/AlticeIcon40px.png")));
 		
 		txtUsuarioLog = new JTextField();
 		txtUsuarioLog.setBorder(new LineBorder(SystemColor.activeCaption, 1, true));
-		txtUsuarioLog.setBounds(20, 132, 160, 27);
+		txtUsuarioLog.setBounds(20, 134, 160, 27);
 		txtUsuarioLog.setBackground(new Color (73,87,107));
 		panelLogin.add(txtUsuarioLog);
 		txtUsuarioLog.setColumns(10);
 		
 		txtPassLog = new JTextField();
 		txtPassLog.setBorder(new LineBorder(new Color(171, 173, 179)));
-		txtPassLog.setBounds(20, 217, 160, 27);
+		txtPassLog.setBounds(20, 213, 160, 27);
 		txtPassLog.setBackground(new Color (73,87,107));
 		panelLogin.add(txtPassLog);
 		txtPassLog.setColumns(10);
@@ -81,17 +88,26 @@ public class LogIn extends JFrame {
 		JLabel lblNewLabel = new JLabel("Usuario:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setBounds(20, 107, 86, 14);
+		lblNewLabel.setBounds(20, 101, 86, 14);
 		panelLogin.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Contraseña:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setBounds(20, 192, 86, 14);
+		lblNewLabel_1.setBounds(20, 180, 86, 14);
 		panelLogin.add(lblNewLabel_1);
 		
-		JButton btnLogIn = new JButton("New button");
-		btnLogIn.setBounds(51, 279, 89, 23);
+		btnLogIn = new JButton("Iniciar Sesión");
+		btnLogIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnLogIn.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		btnLogIn.setForeground(SystemColor.textHighlightText);
+		btnLogIn.setBorder(new LineBorder(new Color(255, 110, 52), 1, true));
+		btnLogIn.setBackground(new Color(255, 110, 52));
+		btnLogIn.setBounds(57, 259, 89, 23);
 		
 		panelLogin.add(btnLogIn);
 

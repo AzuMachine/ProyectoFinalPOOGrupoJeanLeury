@@ -1,11 +1,12 @@
 package logico;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Usuario {
+public class Usuario implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	public enum rol{ADMINISTRADOR, COMERCIAL, TECNICO, CLIENTE}
-	
 	private rol rol; //rol de la persona para
 	private String userName;
 	private String password;
