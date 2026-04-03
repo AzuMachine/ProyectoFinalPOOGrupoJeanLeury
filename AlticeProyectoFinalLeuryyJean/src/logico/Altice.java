@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Altice {
 	public static Altice alt = null;
+	
 	private ArrayList<Persona> misHumanos;
 	private ArrayList<Plan> misPlanes;
 	private ArrayList<Servicio> misServicios;
@@ -53,9 +54,12 @@ public class Altice {
 		return misTickets;
 	}
 
+	
+	
+	
 	/*1 Inicio metodos busqueda de clases por algun identificador*/
 /*
-	//1.1 Buscar cliente by Identificador
+	//1.Contrato.1 Buscar cliente by Identificador
 	public Persona buscarClienteById(String idCliente) {
 		for (Cliente c : misHumanos) {
 			if (c.getId().equalsIgnoreCase(idCliente) && c instanceof Cliente) {
