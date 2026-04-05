@@ -22,6 +22,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JRadioButton;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ListarEmpleados extends JDialog {
 
@@ -66,6 +68,11 @@ public class ListarEmpleados extends JDialog {
 			contentPanel.add(scrollPane);
 			{
 				table_1 = new JTable();
+				table_1.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+					}
+				});
 				scrollPane.setViewportView(table_1);
 			}
 		}
