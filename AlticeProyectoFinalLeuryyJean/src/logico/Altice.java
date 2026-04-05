@@ -16,6 +16,9 @@ public class Altice implements Serializable{
 	private ArrayList<Ticket> misTickets;
 	public static Usuario loginUser;
 	public static int idPlan =1;
+	public static int idEmpleado =1;
+	public static int idCliente =1;
+	
 
 	public Altice() {
 		super();
@@ -133,6 +136,39 @@ public class Altice implements Serializable{
 	
 	public void regPersona(Persona p) {
 		misHumanos.add(p);
+		if(p instanceof Empleado) {
+			idEmpleado++;
+		}
+		if(p instanceof Cliente) {
+			idCliente++;
+		} 
 	}
 	
+	//1.Persona.2 buscarPersonaByRNC
+	public Persona buscarPersonaByRNC(String RNC) {
+		for (Persona p : misHumanos) {
+			if(p.getRnc().equalsIgnoreCase(RNC)) {
+			return p;
+			}
+		}
+		return null;
+	}
+	
+	//1.Empleado.1 Actualizar empleado
+	public void actualizarEmpleado(Empleado emp) {
+		// TODO Auto-generated method stub
+		
+	}
+	//1.Empleado.2 Buscar Empleado por ID
+	public Persona buscarPersonaByID(String id) {
+		for (Persona p : misHumanos) {
+			if(p instanceof Empleado) {
+				Empleado emp = (Empleado)p;
+				if (emp.getIdEmpleado().equalsIgnoreCase(id)) {
+					return emp;
+				}
+			}
+		}
+		return null;
+	}
 }

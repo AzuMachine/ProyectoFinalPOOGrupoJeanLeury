@@ -22,6 +22,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class DashBoardAdmin extends JFrame {
 
@@ -53,8 +57,23 @@ public class DashBoardAdmin extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosed(WindowEvent e) {
+				FileOutputStream altSalida;
+				ObjectOutputStream altWrite;
+				
+				try {
+					altSalida = new FileOutputStream("Altice.dat");
+					altWrite = new ObjectOutputStream(altSalida);
+					altWrite.writeObject(Altice.getInstance());
+				} catch (FileNotFoundException e1) {
+					// TODO: handle exception
+					e1.printStackTrace();
+				}catch (IOException e1) {
+					// TODO: handle exception
+					e1.printStackTrace();
+				}
 			}
 		});
+		
 		setResizable(false);
 		setTitle("Administración Global | Perfil Admin: " + logged().getNombre());
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DashBoardAdmin.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
@@ -81,14 +100,18 @@ public class DashBoardAdmin extends JFrame {
 		btnGeEmp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				btnGeEmp.setBackground(new Color(255, 110, 0));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				btnGeEmp.setBackground(new Color(255, 110, 52));
 			}
 		});
 		//Gestion empleados funcion del boton
 		btnGeEmp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				GestionEmpleados gemp = new GestionEmpleados();
+				gemp.setVisible(true);
 			}
 		});
 		btnGeEmp.setBackground(new Color(255, 110, 52));
@@ -104,9 +127,11 @@ public class DashBoardAdmin extends JFrame {
 		btnGePlan.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				btnGePlan.setBackground(new Color(255, 110, 0));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				btnGePlan.setBackground(new Color(255, 110, 52));
 			}
 		});
 		//Plan funcion del boton
@@ -127,14 +152,17 @@ public class DashBoardAdmin extends JFrame {
 		btnReportes.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				btnReportes.setBackground(new Color(255, 110, 0));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				btnReportes.setBackground(new Color(255, 110, 52));
 			}
 		});
 		//Reportes funcion del boton
 		btnReportes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		btnReportes.setBackground(new Color(255, 110, 52));
@@ -150,9 +178,11 @@ public class DashBoardAdmin extends JFrame {
 		btnMisDatos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				btnMisDatos.setBackground(new Color(255, 110, 0));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				btnMisDatos.setBackground(new Color(255, 110, 52));
 			}
 		});
 		//Admin funcion del boton
