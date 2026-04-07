@@ -177,31 +177,6 @@ public class DashboarPlanes extends JDialog {
 			panelResumen_Precio.add(panel);
 			panel.setLayout(null);
 			
-			JCheckBox chckbxInternetFibra = new JCheckBox("Internet Fibra 100MB");
-			styleCheckBox(chckbxInternetFibra);
-			chckbxInternetFibra.setBounds(6, 43, 201, 20);
-			panel.add(chckbxInternetFibra);
-			
-			JCheckBox chckbxTelefonaIlimitada = new JCheckBox("Telefonía ilimitada");
-			styleCheckBox(chckbxTelefonaIlimitada);
-			chckbxTelefonaIlimitada.setBounds(6, 75, 201, 20);
-			panel.add(chckbxTelefonaIlimitada);
-			
-			JCheckBox chckbxTvPremiumHd = new JCheckBox("TV Premium HD");
-			styleCheckBox(chckbxTvPremiumHd);
-			chckbxTvPremiumHd.setBounds(6, 111, 201, 20);
-			panel.add(chckbxTvPremiumHd);
-			
-			JCheckBox chckbxServicioCloudgb = new JCheckBox("Servicio Cloud 50GB");
-			styleCheckBox(chckbxServicioCloudgb);
-			chckbxServicioCloudgb.setBounds(6, 144, 201, 20);
-			panel.add(chckbxServicioCloudgb);
-			
-			JCheckBox chckbxSoportePremium = new JCheckBox("Soporte Premium");
-			styleCheckBox(chckbxSoportePremium);
-			chckbxSoportePremium.setBounds(6, 178, 201, 20);
-			panel.add(chckbxSoportePremium);
-			
 			textField = new JTextField();
 			textField.setHorizontalAlignment(SwingConstants.CENTER);
 			textField.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -268,8 +243,5 @@ public class DashboarPlanes extends JDialog {
 	}
 	
 	private void styleCheckBox(JCheckBox chk) {
-		chk.setBackground(INPUT_DARK);
-		chk.setForeground(Color.WHITE);
-		chk.setFont(new Font("Tahoma", Font.BOLD, 13));
 	}
 }
