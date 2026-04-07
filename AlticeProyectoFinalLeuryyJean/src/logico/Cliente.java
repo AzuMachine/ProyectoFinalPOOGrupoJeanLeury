@@ -8,7 +8,7 @@ public class Cliente extends Persona {
 	private boolean deuda; //para saber si hay deuda o no
 	private float montoDeuda; /*La deuda crece al crear contrato, decrece al hacer un pago de cualquiera de sus servicios, si debe dos meses de algun contrato especifico, se le inhabilita contratar otro*/
 	private ArrayList<Pago> misPagos;
-	private ArrayList<Contrato> misContratos; //Cliente puede tener record historico, pero solo uno en habilitado/vigente
+	private ArrayList<Contratos> misContratos; //Cliente puede tener record historico, pero solo uno en habilitado/vigente
 	public Cliente(String nombre, Usuario user, int edad, String direccion, String sexo, String numeroContacto,
 			String correo, String rnc, logico.Cliente.Cat categoria) {
 		super(nombre, user, edad, direccion, sexo, numeroContacto, correo, rnc);
@@ -30,7 +30,7 @@ public class Cliente extends Persona {
 		return misPagos;
 	}
 
-	public ArrayList<Contrato> getMisContratos() {
+	public ArrayList<Contratos> getMisContratos() {
 		return misContratos;
 	}
 

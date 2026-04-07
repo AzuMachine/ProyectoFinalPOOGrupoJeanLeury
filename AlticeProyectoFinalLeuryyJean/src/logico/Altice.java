@@ -12,7 +12,7 @@ public class Altice implements Serializable{
 	private ArrayList<Plan> misPlanes;
 	private ArrayList<Servicio> misServicios;
 	private ArrayList<Pago> misPagos;
-	private ArrayList<Contrato> misContratos;
+	private ArrayList<Contratos> misContratos;
 	private ArrayList<Ticket> misTickets;
 	public static Usuario loginUser;
 	public static int idPlan =1;
@@ -53,7 +53,7 @@ public class Altice implements Serializable{
 		return misPagos;
 	}
 
-	public ArrayList<Contrato> getMisContratos() {
+	public ArrayList<Contratos> getMisContratos() {
 		return misContratos;
 	}
 
