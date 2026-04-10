@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import logico.Servicio.Serv;
+
 public class Altice implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -16,6 +18,9 @@ public class Altice implements Serializable{
 	private ArrayList<Ticket> misTickets;
 	public static Usuario loginUser;
 	public static int idPlan =1;
+	public static int idServFIB = 1;
+	public static int idServTV = 1;
+	public static int idServTEL = 1;
 	public static int idEmpleado =1;
 	public static int idCliente =1;
 	
@@ -131,6 +136,19 @@ public class Altice implements Serializable{
 			if(services.getIdService().equalsIgnoreCase(idServi)) {return services;}
 		}
 		return null;
+	}
+	
+	//1.Servicios.2 GuardarServ
+	
+	public void guardarServ(Servicio serv) {
+		misServicios.add(serv);
+		if(serv.getTipo().equals(Serv.INTERNET)) {
+			idServFIB++;
+		}else if (serv.getTipo().equals(Serv.TELEFONIA)) {
+			idServTEL++;
+		}else if (serv.getTipo().equals(Serv.TELEVISION)) {
+			idServTV++;
+		}
 	}
 	
 	//Fin codigo Servicios
