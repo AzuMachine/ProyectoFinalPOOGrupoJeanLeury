@@ -1,12 +1,11 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -17,12 +16,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.SwingConstants;
 
 import logico.Altice;
 import logico.Servicio;
@@ -193,10 +192,14 @@ public class DashBoardCrearServ extends JFrame {
 		contentPane.add(buttonPane, BorderLayout.SOUTH);
 
 		btnListar = new JButton("Ver Listado");
-		btnListar.addActionListener(e -> {
-			ListarServicios listServs = new ListarServicios();
-			listServs.setVisible(true);
+		btnListar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListarServicios listServ = new ListarServicios();
+				listServ.setModal(true);
+				listServ.setVisible(true);
+			}
 		});
+		
 		estiloBoton(btnListar, BURNT_SIENNA, Color.BLACK);
 		buttonPane.add(btnListar);
 

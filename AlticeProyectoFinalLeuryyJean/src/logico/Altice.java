@@ -151,6 +151,12 @@ public class Altice implements Serializable{
 		}
 	}
 	
+	//1.Servicio.3 Eliminar
+	public void eliminarServicio(Servicio selectedServ) {
+		misServicios.remove(selectedServ);
+		
+	}
+	
 	//Fin codigo Servicios
 
 	//1.LogIn.1 Confirmar el Log In
@@ -206,4 +212,6 @@ public class Altice implements Serializable{
 		}
 		return null;
 	}
+
+
 }
