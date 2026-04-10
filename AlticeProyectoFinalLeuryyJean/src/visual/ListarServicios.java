@@ -1,123 +1,216 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.border.BevelBorder;
-import java.awt.Font;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.table.TableCellRenderer;
 
-public class ListarServicios extends JDialog {
+import logico.Altice;
+import logico.Servicio;
+import logico.Servicio.Serv;
+
+public class ListarServicios extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel panelPrincipal = new JPanel();
 	private JTable table;
-	private static Object raw[];
-	private static DefaultTableModel model;
-	private JComboBox cbxFiltroListar;
+	private Object raw[];
+	private DefaultTableModel model;
+	private JComboBox<String> cbxFiltroListar;
 	private JButton btnSalir;
 	private JScrollPane scrollPane;
 	private JButton btnEliminar;
 	private JButton btnModificar;
 
-	/**
-	 * Launch the application.
-	 */
+	private final Color NAVY_ALTICE = new Color(33, 50, 65);      
+	private final Color INPUT_DARK = new Color(43, 51, 73);        
+	private final Color BURNT_SIENNA = new Color(221, 112, 87);  
+
 	public static void main(String[] args) {
 		try {
-			ListarServicios dialog = new ListarServicios();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
+			ListarServicios frame = new ListarServicios();
+			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
 	public ListarServicios() {
-		setTitle("Listar Servicios");
+		setTitle("Listado General de Servicios");
 		setResizable(false);
-		setBounds(100, 100, 859, 578);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 1050, 750); 
 		setLocationRelativeTo(null);
+		
 		getContentPane().setLayout(new BorderLayout());
-		panelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelPrincipal.setBackground(NAVY_ALTICE); 
+		panelPrincipal.setBorder(new EmptyBorder(10, 10, 10, 10));
 		getContentPane().add(panelPrincipal, BorderLayout.CENTER);
 		panelPrincipal.setLayout(null);
-		{
-			JLabel lblNewLabel = new JLabel("Servicios Registrados en el Sistema");
-			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-			lblNewLabel.setBounds(10, 21, 341, 27);
-			panelPrincipal.add(lblNewLabel);
-		}
-		{
-			cbxFiltroListar = new JComboBox();
-			cbxFiltroListar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			cbxFiltroListar.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			cbxFiltroListar.setModel(new DefaultComboBoxModel(new String[] {"<<Seleccionar>>", " INTERNET – Fibra Óptica", "TELEVISIÓN – Cable Básico HD", "TELEFONÍA – Fija (Voz Digital)"}));
-			cbxFiltroListar.setBounds(614, 26, 221, 20);
-			panelPrincipal.add(cbxFiltroListar);
-		}
-		{
-			JPanel panelScroll = new JPanel();
-			panelScroll.setBounds(10, 69, 825, 402);
-			panelPrincipal.add(panelScroll);
-			panelScroll.setLayout(new BorderLayout(0, 0));
-			{
-				scrollPane = new JScrollPane();
-				panelScroll.add(scrollPane, BorderLayout.CENTER);
-				{
-					table = new JTable();
-					model = new DefaultTableModel();
-					scrollPane.setViewportView(table);
-				}
+		
+		JLabel lblTitulo = new JLabel("Servicios Registrados en el Sistema");
+		lblTitulo.setForeground(BURNT_SIENNA); 
+		lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 22)); 
+		lblTitulo.setBounds(20, 21, 500, 35);
+		panelPrincipal.add(lblTitulo);
+		
+		cbxFiltroListar = new JComboBox<String>();
+		cbxFiltroListar.setBackground(INPUT_DARK);
+		cbxFiltroListar.setForeground(Color.WHITE);
+		cbxFiltroListar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadHeaders();
 			}
-		}
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-			FlowLayout fl_buttonPane = new FlowLayout(FlowLayout.RIGHT);
-			fl_buttonPane.setVgap(10);
-			buttonPane.setLayout(fl_buttonPane);
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				btnModificar = new JButton("Modificar");
-				btnModificar.setFont(new Font("Tahoma", Font.BOLD, 11));
-				btnModificar.setEnabled(false);
-				btnModificar.setActionCommand("OK");
-				buttonPane.add(btnModificar);
+		});
+		cbxFiltroListar.setFont(new Font("Tahoma", Font.BOLD, 14));
+		cbxFiltroListar.setModel(new DefaultComboBoxModel<String>(new String[] {"<< Filtrar por tipo >>", "INTERNET", "TELEFONIA", "TELEVISION"}));
+		cbxFiltroListar.setBounds(740, 26, 270, 30);
+		panelPrincipal.add(cbxFiltroListar);
+		
+		JPanel panelScroll = new JPanel();
+		panelScroll.setBackground(NAVY_ALTICE);
+		panelScroll.setBounds(20, 80, 990, 540); 
+		panelPrincipal.add(panelScroll);
+		panelScroll.setLayout(new BorderLayout(0, 0));
+		
+		scrollPane = new JScrollPane();
+		panelScroll.add(scrollPane, BorderLayout.CENTER);
+		
+		table = new JTable();
+		// Aumentamos el alto de fila inicial, pero el renderizador lo ajustará si es necesario
+		table.setRowHeight(60); 
+		table.setFont(new Font("Tahoma", Font.PLAIN, 13)); 
+		table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 14));
+		scrollPane.setViewportView(table);
+		
+		JPanel buttonPane = new JPanel();
+		buttonPane.setBackground(INPUT_DARK); 
+		buttonPane.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+		FlowLayout fl_buttonPane = new FlowLayout(FlowLayout.RIGHT);
+		fl_buttonPane.setHgap(20);
+		fl_buttonPane.setVgap(15);
+		buttonPane.setLayout(fl_buttonPane);
+		getContentPane().add(buttonPane, BorderLayout.SOUTH);
+		
+		btnModificar = new JButton("Modificar Servicio");
+		btnModificar.setBackground(BURNT_SIENNA);
+		btnModificar.setForeground(Color.BLACK);
+		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnModificar.setEnabled(false);
+		buttonPane.add(btnModificar);
+		
+		btnEliminar = new JButton("Eliminar Seleccionado");
+		btnEliminar.setBackground(BURNT_SIENNA);
+		btnEliminar.setForeground(Color.BLACK);
+		btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnEliminar.setEnabled(false);
+		buttonPane.add(btnEliminar);
+		
+		btnSalir = new JButton("Cerrar Ventana");
+		btnSalir.setBackground(Color.DARK_GRAY);
+		btnSalir.setForeground(Color.WHITE);
+		btnSalir.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
 			}
-			{
-				btnEliminar = new JButton("Eliminar");
-				btnEliminar.setEnabled(false);
-				btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 11));
-				btnEliminar.setActionCommand("OK");
-				buttonPane.add(btnEliminar);
-				getRootPane().setDefaultButton(btnEliminar);
+		});
+		buttonPane.add(btnSalir);
+
+		loadHeaders();
+	}
+
+	private void loadServicios() {
+		model.setRowCount(0);
+		raw = new Object[model.getColumnCount()];
+		String seleccion = cbxFiltroListar.getSelectedItem().toString();
+
+		for (Servicio servi : Altice.getInstance().getMisServicios()) {
+			boolean agregar = false;
+
+			if(seleccion.contains("<<")) {
+				agregar = true;
+			} else if (seleccion.equalsIgnoreCase("INTERNET") && servi.getTipo().equals(Serv.INTERNET)) {
+				agregar = true;
+			} else if (seleccion.equalsIgnoreCase("TELEFONIA") && servi.getTipo().equals(Serv.TELEFONIA)) {
+				agregar = true;
+			} else if (seleccion.equalsIgnoreCase("TELEVISION") && servi.getTipo().equals(Serv.TELEVISION)) {
+				agregar = true;
 			}
-			{
-				btnSalir = new JButton("Salir");
-				btnSalir.setFont(new Font("Tahoma", Font.BOLD, 11));
-				btnSalir.setActionCommand("Cancel");
-				buttonPane.add(btnSalir);
+
+			if(agregar) {
+				raw[0] = servi.getIdService();
+				raw[1] = servi.getNombre();
+				raw[2] = servi.getDescTecnica();
+				raw[3] = servi.getTipo();
+				raw[4] = "RD$ " + servi.getCostoMensualInd();
+				model.addRow(raw);
 			}
 		}
 	}
 
+	private void loadHeaders() {
+		String header[] = {"Código ID", "Nombre del Servicio", "Descripción Técnica", "Categoría", "Mensualidad"};
+		model = new DefaultTableModel(null, header) {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table.setModel(model);
+		
+		// Multilineas
+		table.getColumnModel().getColumn(2).setCellRenderer(new MultiLineCellRenderer());
+		
+		table.getColumnModel().getColumn(0).setPreferredWidth(90);
+		table.getColumnModel().getColumn(1).setPreferredWidth(180);
+		table.getColumnModel().getColumn(2).setPreferredWidth(450);
+		table.getColumnModel().getColumn(3).setPreferredWidth(120);
+		table.getColumnModel().getColumn(4).setPreferredWidth(120);
+		
+		loadServicios();
+	}
+
+	// CLASE INTERNA: Renderizador para permitir múltiples líneas en una celda
+	class MultiLineCellRenderer extends JTextArea implements TableCellRenderer {
+		private static final long serialVersionUID = 1L;
+
+		public MultiLineCellRenderer() {
+			setLineWrap(true);
+			setWrapStyleWord(true);
+			setOpaque(true);
+			setFont(new Font("Tahoma", Font.PLAIN, 12));
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+				setBackground(table.getSelectionBackground());
+			} else {
+				setForeground(table.getForeground());
+				setBackground(table.getBackground());
+			}
+			setText((value == null) ? "" : value.toString());
+			return this;
+		}
+	}
 }
