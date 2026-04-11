@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import logico.Servicio.Serv;
+
 public class Altice implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -12,12 +14,17 @@ public class Altice implements Serializable{
 	private ArrayList<Plan> misPlanes;
 	private ArrayList<Servicio> misServicios;
 	private ArrayList<Pago> misPagos;
-	private ArrayList<Contrato> misContratos;
+	private ArrayList<Contratos> misContratos;
 	private ArrayList<Ticket> misTickets;
 	public static Usuario loginUser;
+	
 	private int idPlan =1;
 	private int idEmpleado =0;
 	private int idCliente =1;
+	private int idServFIB = 1;
+	private int idServTV = 1;
+	private int idServTEL = 1;
+	
 
 
 	public Altice() {
@@ -56,7 +63,7 @@ public class Altice implements Serializable{
 		return misPagos;
 	}
 
-	public ArrayList<Contrato> getMisContratos() {
+	public ArrayList<Contratos> getMisContratos() {
 		return misContratos;
 	}
 
@@ -96,6 +103,30 @@ public class Altice implements Serializable{
 		this.idCliente = idCliente;
 	}
 
+	public int getIdServFIB() {
+		return idServFIB;
+	}
+
+	public int getIdServTV() {
+		return idServTV;
+	}
+
+	public int getIdServTEL() {
+		return idServTEL;
+	}
+
+	public void setIdServFIB(int idServFIB) {
+		this.idServFIB = idServFIB;
+	}
+
+	public void setIdServTV(int idServTV) {
+		this.idServTV = idServTV;
+	}
+
+	public void setIdServTEL(int idServTEL) {
+		this.idServTEL = idServTEL;
+	}
+
 	public static Altice getAlt() {
 		return alt;
 	}
@@ -130,6 +161,26 @@ public class Altice implements Serializable{
 		return null;
 	}
 
+	
+	//1.Servicios.2 GuardarServ
+	
+	public void guardarServ(Servicio serv) {
+		misServicios.add(serv);
+		if(serv.getTipo().equals(Serv.INTERNET)) {
+			idServFIB++;
+		}else if (serv.getTipo().equals(Serv.TELEFONIA)) {
+			idServTEL++;
+		}else if (serv.getTipo().equals(Serv.TELEVISION)) {
+			idServTV++;
+		}
+	}
+	
+	//1.Servicio.3 Eliminar
+	public void eliminarServicio(Servicio selectedServ) {
+		misServicios.remove(selectedServ);
+		
+	}
+	
 	//Fin codigo Servicios
 
 	//1.LogIn.1 Confirmar el Log In
@@ -188,6 +239,7 @@ public class Altice implements Serializable{
 		}
 		return null;
 	}
+
 	//1.Empleado.3 Buscar IndiceEmpleadoId
 	public int buscarIndiceEmpleadoId(String idEmp) {
 		int  aux = -1;
@@ -215,3 +267,4 @@ public class Altice implements Serializable{
 	}
 	//Fin codigo Empleado
 }
+
