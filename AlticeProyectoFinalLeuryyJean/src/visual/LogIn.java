@@ -62,7 +62,8 @@ public class LogIn extends JFrame {
 						altSale = new FileOutputStream("Altice.dat");
 						altWrite = new ObjectOutputStream(altSale);
 						Usuario def = new Usuario(Usuario.rol.ADMINISTRADOR,"admin","admin");
-						Empleado aux = new Empleado("Administrador Default",def,0,"Disco duro","M","N/A","N/A","N/A","EMP-0"); 
+						Empleado aux = new Empleado("AdminDefault",def,0,"Disco duro","M","N/A","N/A","N/A","EMP-0"); 
+						aux.setDepartamento("Administración");
 						Altice.getInstance().regPersona(aux);
 						altWrite.writeObject(Altice.getInstance());
 						altSale.close();

@@ -18,7 +18,7 @@ public class Usuario implements Serializable{
 		this.rol = rol;
 		this.userName = userName;
 		this.password = password;
-		this.ultimoIngreso = LocalDateTime.now();
+		this.ultimoIngreso = null;
 	}
 
 
