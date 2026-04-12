@@ -328,19 +328,21 @@ public class DashBoardCrearServ extends JDialog { // Cambiado a JDialog
 		
 		int index = cbxFiltroServ.getSelectedIndex();
 		switch(index) {
-		case 1:
-			txtID_Serv.setText("ALT-FIB-" + Altice.idServFIB);
-			break;
-		case 2:
-			txtID_Serv.setText("ALT-TV-" + Altice.idServTV);
-			break;
-		case 3:
-			txtID_Serv.setText("ALT-TEL-" + Altice.idServTEL);
-			break;
-		default:
-			txtID_Serv.setText("");
-			txtPrecio_Serv.setText("");
-			break;
+
+			case 1:
+				txtID_Serv.setText("ALT-FIB-" + Altice.getInstance().getIdServFIB());
+				break;
+			case 2:
+				txtID_Serv.setText("ALT-TV-" + Altice.getInstance().getIdServTV());
+				break;
+			case 3:
+				txtID_Serv.setText("ALT-TEL-" + Altice.getInstance().getIdServTEL());
+				break;
+			default:
+				txtID_Serv.setText("");
+				txtPrecio_Serv.setText("");
+				break;
+
 		}
 	}
 

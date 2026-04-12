@@ -56,7 +56,7 @@ public class DashBoardAdmin extends JFrame {
 		//Listener para guardar los datos al cerrar
 		addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowClosed(WindowEvent e) {
+			public void windowClosing(WindowEvent e) {
 				FileOutputStream altSalida;
 				ObjectOutputStream altWrite;
 				

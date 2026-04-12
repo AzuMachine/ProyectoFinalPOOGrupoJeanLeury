@@ -17,13 +17,15 @@ public class Altice implements Serializable{
 	private ArrayList<Contratos> misContratos;
 	private ArrayList<Ticket> misTickets;
 	public static Usuario loginUser;
-	public static int idPlan =1;
-	public static int idServFIB = 1;
-	public static int idServTV = 1;
-	public static int idServTEL = 1;
-	public static int idEmpleado =1;
-	public static int idCliente =1;
 	
+	private int idPlan =1;
+	private int idEmpleado =0;
+	private int idCliente =1;
+	private int idServFIB = 1;
+	private int idServTV = 1;
+	private int idServTEL = 1;
+	
+
 
 	public Altice() {
 		super();
@@ -33,6 +35,9 @@ public class Altice implements Serializable{
 		misPagos = new ArrayList<>();
 		misContratos = new ArrayList<>();
 		misTickets = new ArrayList<>();
+		this.idEmpleado =0;
+		this.idPlan =1;
+		this.idCliente =1;
 	}
 
 	public static Altice getInstance() {
@@ -74,12 +79,52 @@ public class Altice implements Serializable{
 		Altice.loginUser = loginUser;
 	}
 
-	public static int getIdPlan() {
+	public int getIdPlan() {
 		return idPlan;
 	}
 
-	public static void setIdPlan(int idPlan) {
-		Altice.idPlan = idPlan;
+	public int getIdEmpleado() {
+		return idEmpleado;
+	}
+
+	public int getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdPlan(int idPlan) {
+		this.idPlan = idPlan;
+	}
+
+	public void setIdEmpleado(int idEmpleado) {
+		this.idEmpleado = idEmpleado;
+	}
+
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public int getIdServFIB() {
+		return idServFIB;
+	}
+
+	public int getIdServTV() {
+		return idServTV;
+	}
+
+	public int getIdServTEL() {
+		return idServTEL;
+	}
+
+	public void setIdServFIB(int idServFIB) {
+		this.idServFIB = idServFIB;
+	}
+
+	public void setIdServTV(int idServTV) {
+		this.idServTV = idServTV;
+	}
+
+	public void setIdServTEL(int idServTEL) {
+		this.idServTEL = idServTEL;
 	}
 
 	public static Altice getAlt() {
@@ -89,30 +134,8 @@ public class Altice implements Serializable{
 	public static void setAlt(Altice alt) {
 		Altice.alt = alt;
 	}
-	/*1 Inicio metodos busqueda de clases por algun identificador*/
-	/*
-	//1.Contrato.1 Buscar cliente by Identificador
-	public Persona buscarClienteById(String idCliente) {
-		for (Cliente c : misHumanos) {
-			if (c.getId().equalsIgnoreCase(idCliente) && c instanceof Cliente) {
-				return c;
-			}
-		}
-		return null;
-	}
-	//1.2
-	public Cliente buscarClienteId(String idCliente) {
-		for (Cliente c : misClientes) {
-			if (c.getId().equalsIgnoreCase(idCliente) && c.isEstado()==true) {
-				return c;
-			}
-		}
-		return null;
-	}
-	 */
-
-
-
+	
+	//<<<<<<<<<<<<<<<<<<<<<<INICIO METODOS DE BUSQUEDA>>>>>>>>>>>>>>>>>>>>
 	//1.Plan.1 Buscar Plan by ID
 	public Plan buscarPlanByID(String idPlan) {
 		for (Plan planes : misPlanes) {
@@ -130,13 +153,14 @@ public class Altice implements Serializable{
 	//Fin codigos planes
 
 	//1.Servicios.1 Buscar By ID
-	
+
 	public Servicio buscarServicioByID(String idServi) {
 		for (Servicio services : misServicios) {
 			if(services.getIdService().equalsIgnoreCase(idServi)) {return services;}
 		}
 		return null;
 	}
+
 	
 	//1.Servicios.2 GuardarServ
 	
@@ -156,6 +180,7 @@ public class Altice implements Serializable{
 		misServicios.remove(selectedServ);
 		
 	}
+
 	
 	//1.Servicios. 4 Actualizar
 	public void actualizarServicio(Servicio miServi) {
@@ -183,10 +208,6 @@ public class Altice implements Serializable{
 		return auxServices;
 	}
 	
-	//Fin codigo Servicios
-
-	//1.LogIn.1 Confirmar el Log In
-
 
 
 	public boolean confirmarIngreso(String username, String pass) {
@@ -212,28 +233,30 @@ public class Altice implements Serializable{
 			idCliente++;
 		} 
 	}
-	
 	//1.Persona.2 buscarPersonaByRNC
 	public Persona buscarPersonaByRNC(String RNC) {
 		for (Persona p : misHumanos) {
 			if(p.getRnc().equalsIgnoreCase(RNC)) {
-			return p;
+				return p;
 			}
 		}
 		return null;
 	}
+	//Fin codigo Persona
 	
 	//1.Empleado.1 Actualizar empleado
 	public void actualizarEmpleado(Empleado emp) {
-		// TODO Auto-generated method stub
-		
+		int index = buscarIndiceEmpleadoId(emp.getIdEmpleado());
+		if(index!=-1) {
+			misHumanos.set(index, emp);
+		}
 	}
 	//1.Empleado.2 Buscar Empleado por ID
-	public Persona buscarPersonaByID(String id) {
+	public Persona buscarEmpleadoByID(String idEmp) {
 		for (Persona p : misHumanos) {
 			if(p instanceof Empleado) {
 				Empleado emp = (Empleado)p;
-				if (emp.getIdEmpleado().equalsIgnoreCase(id)) {
+				if (emp.getIdEmpleado().equalsIgnoreCase(idEmp)) {
 					return emp;
 				}
 			}
@@ -241,7 +264,31 @@ public class Altice implements Serializable{
 		return null;
 	}
 
+	//1.Empleado.3 Buscar IndiceEmpleadoId
+	public int buscarIndiceEmpleadoId(String idEmp) {
+		int  aux = -1;
+		boolean encontrado = false; 
+		int i =0;
 
-
-
+		while(!encontrado && i<misHumanos.size()){
+			if(misHumanos.get(i) instanceof Empleado) {
+				if(((Empleado)misHumanos.get(i)).getIdEmpleado().equalsIgnoreCase(idEmp)) {
+					encontrado = true;
+					aux = i;
+				}
+			}
+			i++;
+		}
+		return aux;
+	}
+	//1.Empleado.4 despedir Empleado
+	public void despedirEmpleado(Empleado emp) {
+		int index = buscarIndiceEmpleadoId(emp.getIdEmpleado());
+		if(index !=-1) {
+			emp.setEstado(false);
+			misHumanos.set(index, emp);
+		}
+	}
+	//Fin codigo Empleado
 }
+

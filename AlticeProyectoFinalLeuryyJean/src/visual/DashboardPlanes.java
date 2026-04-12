@@ -21,7 +21,7 @@ import javax.swing.border.SoftBevelBorder;
 
 import logico.Altice;
 
-public class DashboarPlanes extends JFrame {
+public class DashboardPlanes extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -37,14 +37,14 @@ public class DashboarPlanes extends JFrame {
 
 	public static void main(String[] args) {
 		try {
-			DashboarPlanes frame = new DashboarPlanes();
+			DashboardPlanes frame = new DashboardPlanes();
 			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public DashboarPlanes() {
+	public DashboardPlanes() {
 		setFont(new Font("Tahoma", Font.BOLD, 16));
 		setTitle("PORTAL DE CREACION DE LOS PLANES");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,7 +78,7 @@ public class DashboarPlanes extends JFrame {
 		
 		txtIDplan = new JTextField();
 		txtIDplan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtIDplan.setText("Plan-" + Altice.idPlan);
+		txtIDplan.setText("Plan-" + Altice.getInstance().getIdPlan());
 		txtIDplan.setCaretColor(Color.WHITE);
 		txtIDplan.setForeground(BURNT_SIENNA);
 		txtIDplan.setBackground(INPUT_DARK);
@@ -205,7 +205,7 @@ public class DashboarPlanes extends JFrame {
 	
 	public void clean() {
 		txtNombreComercial.setText("");
-		txtIDplan.setText("Plan-" + Altice.idPlan);
+		txtIDplan.setText("Plan-" + Altice.getInstance().getIdPlan());
 	}
 	
 	private void lblHeaderStyle(JLabel lbl) {

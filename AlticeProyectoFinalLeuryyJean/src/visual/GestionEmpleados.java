@@ -14,12 +14,14 @@ import java.awt.Toolkit;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class GestionEmpleados extends JFrame {
+public class GestionEmpleados extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -45,15 +47,10 @@ public class GestionEmpleados extends JFrame {
 	 * Create the frame.
 	 */
 	public GestionEmpleados() {
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosed(WindowEvent e) {
-			}
-		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestionEmpleados.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
 		setTitle("Gestión de Empleados | Perfil Admin: " + logged().getNombre());
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 761, 445);
 		//dim = getToolkit().getScreenSize();
 		//setSize(dim.width-50,dim.height - 45);
@@ -75,7 +72,6 @@ public class GestionEmpleados extends JFrame {
 				RegistrarEmpleado reg = new RegistrarEmpleado(null);
 				reg.setModal(true);
 				reg.setVisible(true);	
-				dispose();
 			}
 		});
 		btnCrearEmp.setBounds(146, 285, 122, 23);
@@ -84,6 +80,9 @@ public class GestionEmpleados extends JFrame {
 		JButton btnListarEmp = new JButton("Listar Empleado");
 		btnListarEmp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ListarEmpleados list= new ListarEmpleados();
+				list.setModal(true);
+				list.setVisible(true);
 			}
 		});
 		btnListarEmp.setBounds(383, 285, 122, 23);
