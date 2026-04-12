@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog; // Cambiado
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,7 +27,7 @@ import logico.Altice;
 import logico.Servicio;
 import logico.Servicio.Serv;
 
-public class DashBoardCrearServ extends JFrame { 
+public class DashBoardCrearServ extends JDialog { // Cambiado a JDialog
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,23 +49,33 @@ public class DashBoardCrearServ extends JFrame {
 	private JButton btnCancelar;
 	private JButton btnListar;
 
+	private Servicio miServi = null;
+
 	public static void main(String[] args) {
 		try {
-			DashBoardCrearServ frame = new DashBoardCrearServ();
-			frame.setVisible(true);
+			DashBoardCrearServ dialog = new DashBoardCrearServ(null);
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public DashBoardCrearServ() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Registrar Servicios - Altice");
+	public DashBoardCrearServ(Servicio selectedServ) {
+		//Revisar esto aca, Jean
+		//setModal(true); 
+		miServi = selectedServ;
 		setResizable(false);
-		// Ventana más grande para albergar componentes mayores
+
+		if(miServi == null) {
+			setTitle("Registrar Servicios - Altice");
+		}else {
+			setTitle("Modificar Servicios - Altice");
+		}
+
 		setBounds(100, 100, 620, 800);
 		setLocationRelativeTo(null);
-		
+
 		contentPane = new JPanel();
 		contentPane.setBackground(NAVY_ALTICE);
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -80,13 +90,18 @@ public class DashBoardCrearServ extends JFrame {
 
 		initComponents();
 		createButtonPane();
+
+		if(miServi != null) {
+			cargarDatos();
+		}
 	}
 
+
+
 	private void initComponents() {
-		// --- Sección Información General ---
 		JLabel lblInfoGral = new JLabel("Información General:");
 		lblInfoGral.setForeground(BURNT_SIENNA);
-		lblInfoGral.setFont(new Font("Tahoma", Font.BOLD, 18)); // Fuente más grande
+		lblInfoGral.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblInfoGral.setBounds(20, 23, 220, 30);
 		panelCreacion.add(lblInfoGral);
 
@@ -104,7 +119,6 @@ public class DashBoardCrearServ extends JFrame {
 		cbxFiltroServ.addActionListener(e -> actualizarSegunSeleccion());
 		panelCreacion.add(cbxFiltroServ);
 
-		// --- Panel de Campos de Datos ---
 		JPanel panelCampos = new JPanel();
 		panelCampos.setBackground(NAVY_ALTICE);
 		panelCampos.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -155,7 +169,6 @@ public class DashBoardCrearServ extends JFrame {
 		txtPane_Descrip_Serv.setBounds(15, 210, 525, 160);
 		panelCampos.add(txtPane_Descrip_Serv);
 
-		// --- Sección Detalles de Precio ---
 		JLabel lblDetallesAdic = new JLabel("Resumen Económico:");
 		lblDetallesAdic.setForeground(BURNT_SIENNA);
 		lblDetallesAdic.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -199,11 +212,14 @@ public class DashBoardCrearServ extends JFrame {
 				listServ.setVisible(true);
 			}
 		});
-		
+
 		estiloBoton(btnListar, BURNT_SIENNA, Color.BLACK);
 		buttonPane.add(btnListar);
 
 		btnRegServ = new JButton("Registrar Servicio");
+		if(miServi != null) {
+			btnRegServ.setText("Actualizar datos");
+		}
 		btnRegServ.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ejecutarRegistro();
@@ -218,7 +234,7 @@ public class DashBoardCrearServ extends JFrame {
 		btnCancelar.addActionListener(e -> dispose());
 		buttonPane.add(btnCancelar);
 	}
-	
+
 	private void estiloBoton(JButton btn, Color bg, Color fg) {
 		btn.setBackground(bg);
 		btn.setForeground(fg);
@@ -226,12 +242,34 @@ public class DashBoardCrearServ extends JFrame {
 		btn.setFocusPainted(false);
 	}
 
+	private void cargarDatos() {
+		txtID_Serv.setText(miServi.getIdService());
+		txtNombreServ.setText(miServi.getNombre());
+		txtPane_Descrip_Serv.setText(miServi.getDescTecnica());
+		txtPrecio_Serv.setText(String.valueOf(miServi.getCostoMensualInd()));
+
+		//Ebitar que el CBX de error de seleccion
+		ActionListener[] listeners = cbxFiltroServ.getActionListeners();
+		for (ActionListener al : listeners) {
+			cbxFiltroServ.removeActionListener(al);
+		}
+		
+		if (miServi.getTipo() == Serv.INTERNET) cbxFiltroServ.setSelectedIndex(1);
+		if (miServi.getTipo() == Serv.TELEVISION) cbxFiltroServ.setSelectedIndex(2);
+		if (miServi.getTipo() == Serv.TELEFONIA) cbxFiltroServ.setSelectedIndex(3);
+		
+		//El tipo de servicio no se modifica
+		cbxFiltroServ.setEnabled(false);
+		btnListar.setEnabled(false);
+		
+	}
+
 	private void ejecutarRegistro() {
 		if(cbxFiltroServ.getSelectedIndex() == 0) {
 			JOptionPane.showMessageDialog(null, "Error: Debe seleccionar un tipo de servicio.", "Altice", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
-		
+
 		String seleccion = cbxFiltroServ.getSelectedItem().toString();
 		if(!estanLlenos()) {
 			JOptionPane.showMessageDialog(null, "Error: El nombre y la descripción son obligatorios.", "Altice", JOptionPane.WARNING_MESSAGE);
@@ -239,25 +277,38 @@ public class DashBoardCrearServ extends JFrame {
 		}
 
 		try {
-			Serv servEnum = null;
-			float precio = 0;
-			
-			if(seleccion.contains("INTERNET")) {
-				servEnum = Serv.INTERNET;
-				precio = new Float(txtPrecio_Serv.getText().toString());
-			} else if (seleccion.contains("TELEVISIÓN")) {
-				servEnum = Serv.TELEVISION;
-				precio = new Float(txtPrecio_Serv.getText().toString());
-			} else if (seleccion.contains("TELEFONÍA")) {
-				servEnum = Serv.TELEFONIA;
-				precio = new Float(txtPrecio_Serv.getText().toString());
+
+			if(miServi == null) {
+				Serv servEnum = null;
+				float precio = Float.parseFloat(txtPrecio_Serv.getText());
+
+				if(seleccion.contains("INTERNET")) {
+					servEnum = Serv.INTERNET;
+					precio = Float.parseFloat(txtPrecio_Serv.getText());
+				} else if (seleccion.contains("TELEVISIÓN")) {
+					servEnum = Serv.TELEVISION;
+					precio = Float.parseFloat(txtPrecio_Serv.getText());
+				} else if (seleccion.contains("TELEFONÍA")) {
+					servEnum = Serv.TELEFONIA;
+					precio = Float.parseFloat(txtPrecio_Serv.getText());
+				}
+
+				Servicio nuevo = new Servicio(txtID_Serv.getText(), txtNombreServ.getText(), txtPane_Descrip_Serv.getText(), servEnum, precio, true);
+				Altice.getInstance().guardarServ(nuevo);
+
+				JOptionPane.showMessageDialog(null, "Servicio registrado exitosamente en el sistema.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+				clean();
+			}else {
+				miServi.setNombre(txtNombreServ.getText());
+				miServi.setDescTecnica(txtPane_Descrip_Serv.getText());
+				miServi.setCostoMensualInd(Float.parseFloat(txtPrecio_Serv.getText()));
+
+				Altice.getInstance().actualizarServicio(miServi);
+				ListarServicios.loadServicios();
+				ListarServicios.btnModificar.setEnabled(false);
+				ListarServicios.btnEliminar.setEnabled(false);
+				dispose();
 			}
-
-			Servicio nuevo = new Servicio(txtID_Serv.getText(), txtNombreServ.getText(), txtPane_Descrip_Serv.getText(), servEnum, precio, true);
-			Altice.getInstance().guardarServ(nuevo);
-
-			JOptionPane.showMessageDialog(null, "Servicio registrado exitosamente en el sistema.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-			clean();
 
 		} catch (Exception e2) {
 			JOptionPane.showMessageDialog(null, "Error al guardar: " + e2.getMessage());
@@ -272,21 +323,24 @@ public class DashBoardCrearServ extends JFrame {
 	}
 
 	private void actualizarSegunSeleccion() {
+		
+		if(miServi != null) return;
+		
 		int index = cbxFiltroServ.getSelectedIndex();
 		switch(index) {
-			case 1:
-				txtID_Serv.setText("ALT-FIB-" + Altice.idServFIB);
-				break;
-			case 2:
-				txtID_Serv.setText("ALT-TV-" + Altice.idServTV);
-				break;
-			case 3:
-				txtID_Serv.setText("ALT-TEL-" + Altice.idServTEL);
-				break;
-			default:
-				txtID_Serv.setText("");
-				txtPrecio_Serv.setText("");
-				break;
+		case 1:
+			txtID_Serv.setText("ALT-FIB-" + Altice.idServFIB);
+			break;
+		case 2:
+			txtID_Serv.setText("ALT-TV-" + Altice.idServTV);
+			break;
+		case 3:
+			txtID_Serv.setText("ALT-TEL-" + Altice.idServTEL);
+			break;
+		default:
+			txtID_Serv.setText("");
+			txtPrecio_Serv.setText("");
+			break;
 		}
 	}
 

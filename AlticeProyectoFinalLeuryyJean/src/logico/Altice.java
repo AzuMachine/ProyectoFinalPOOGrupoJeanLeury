@@ -157,9 +157,37 @@ public class Altice implements Serializable{
 		
 	}
 	
+	//1.Servicios. 4 Actualizar
+	public void actualizarServicio(Servicio miServi) {
+		int index = buscarIndexServicioByID(miServi.getIdService());
+		
+		if(index != -1) {
+			misServicios.set(index, miServi);
+		}
+		
+	}
+	
+	//1. Servicios. 5 Buscar Index serv
+	private int buscarIndexServicioByID(String idService) {
+		int auxServices = -1;
+		boolean encontrado = false;
+		int ind = 0;
+		
+		while (!encontrado && ind < misServicios.size()) {
+			if(misServicios.get(ind).getIdService().equalsIgnoreCase(idService)) {
+				encontrado = true; auxServices = ind;
+			}
+			ind++;
+		}
+		
+		return auxServices;
+	}
+	
 	//Fin codigo Servicios
 
 	//1.LogIn.1 Confirmar el Log In
+
+
 
 	public boolean confirmarIngreso(String username, String pass) {
 		boolean login = false;
@@ -212,6 +240,8 @@ public class Altice implements Serializable{
 		}
 		return null;
 	}
+
+
 
 
 }
