@@ -1,36 +1,35 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logico.Altice;
+import logico.Plan;
+import logico.Plan.Estado;
+import logico.Plan.Tipo;
 import logico.Servicio;
 import logico.Servicio.Serv;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.Color;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 
 public class RegistrarPlan extends JDialog {
 
@@ -47,16 +46,17 @@ public class RegistrarPlan extends JDialog {
 	private ArrayList<Servicio> serviciosTemp = new ArrayList<>();
 	private DefaultTableModel model;
 	private Object[] raw;
-	private Servicio selected =null;
+	private Servicio selected = null;
 	private JButton btnEliminarServicio;
+	private Plan planActual = null; // Para manejar la actualización
+	private JLabel lblTitulo;
+	private JButton btnRegistrar;
+	private JPanel panelAgregar;
 
-
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		try {
-			RegistrarPlan dialog = new RegistrarPlan();
+			// Pasamos null para modo registro
+			RegistrarPlan dialog = new RegistrarPlan(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -64,26 +64,35 @@ public class RegistrarPlan extends JDialog {
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
-	public RegistrarPlan() {
-		setTitle("Registrar plan");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(GestionEmpleados.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
+	// Constructor modificado para recibir un Plan
+	public RegistrarPlan(Plan plan) {
+		this.planActual = plan;
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistrarPlan.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
 		setResizable(false);
 		setBounds(100, 100, 675, 795);
 		setLocationRelativeTo(null);
+		
+		if (planActual == null) {
+			setTitle("Registrar plan");
+		} else {
+			setTitle("Actualizar plan");
+		}
+
 		getContentPane().setLayout(new BorderLayout());
 		panelAtras.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(panelAtras, BorderLayout.CENTER);
 		panelAtras.setBackground(new Color(29, 41, 59));
 		panelAtras.setLayout(null);
+		
 		{
-			JLabel lblTitulo = new JLabel("Crear Nuevo Plan");
+			lblTitulo = new JLabel("Crear Nuevo Plan");
+			if (planActual != null) {
+				lblTitulo.setText("Actualizar Plan");
+			}
 			lblTitulo.setForeground(Color.WHITE);
 			lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 20));
 			lblTitulo.setBounds(36, 21, 213, 40);
-
 			panelAtras.add(lblTitulo);
 		}
 
@@ -93,7 +102,7 @@ public class RegistrarPlan extends JDialog {
 		lblNewLabel_1.setBounds(40, 72, 72, 16);
 		panelAtras.add(lblNewLabel_1);
 
-		lblIdPlan = new JLabel("PLN-1");
+		lblIdPlan = new JLabel("PLN-" + Altice.getInstance().getIdPlan());
 		lblIdPlan.setForeground(Color.WHITE);
 		lblIdPlan.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblIdPlan.setBounds(40, 87, 184, 36);
@@ -115,18 +124,18 @@ public class RegistrarPlan extends JDialog {
 		lblNewLabel_1_2_1.setBounds(295, 206, 185, 16);
 		panelAtras.add(lblNewLabel_1_2_1);
 
-		lblPrecioTotal = new JLabel("$");
-		lblPrecioTotal.setForeground(new Color(221,112,87));
+		lblPrecioTotal = new JLabel("RD$ 0.00");
+		lblPrecioTotal.setForeground(new Color(221, 112, 87));
 		lblPrecioTotal.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		lblPrecioTotal.setBounds(295, 223, 184, 36);
 		panelAtras.add(lblPrecioTotal);
 
-		JLabel lblNewLabel_6 = new JLabel("Precio con impuestos \r\n(18% ITBIS, 10% ISC, 2% CDT)");
+		JLabel lblNewLabel_6 = new JLabel("Precio con impuestos (18% ITBIS, 10% ISC, 2% CDT)");
 		lblNewLabel_6.setForeground(Color.WHITE);
 		lblNewLabel_6.setBounds(295, 269, 304, 12);
 		panelAtras.add(lblNewLabel_6);
 
-		lblPrecioBase = new JLabel("$");
+		lblPrecioBase = new JLabel("RD$ 0.00");
 		lblPrecioBase.setForeground(Color.WHITE);
 		lblPrecioBase.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblPrecioBase.setBounds(40, 223, 184, 36);
@@ -189,31 +198,32 @@ public class RegistrarPlan extends JDialog {
 		panelAtras.add(scrollPaneTablaServ);
 
 		table = new JTable();
-		selected = null;
+		model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int index = table.getSelectedRow();
-		        if(index >= 0) {
-		            String id = table.getValueAt(index, 0).toString();
-		            
-		            selected = buscarServicioPorIdCrearPlan(id);
-		            if(selected != null) {
-		                btnEliminarServicio.setEnabled(true);
-		            }
-		        }
+				if (index >= 0) {
+					String id = table.getValueAt(index, 0).toString();
+					selected = buscarServicioPorIdCrearPlan(id);
+					if (selected != null) {
+						btnEliminarServicio.setEnabled(true);
+					}
+				}
 			}
-
-
 		});
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		model = new DefaultTableModel();
 		scrollPaneTablaServ.setViewportView(table);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(412, 456, 222, 188);
-		panelAtras.add(panel);
-		panel.setLayout(null);
+		panelAgregar = new JPanel();
+		panelAgregar.setBounds(412, 456, 222, 188);
+		panelAtras.add(panelAgregar);
+		panelAgregar.setLayout(null);
 
 		txtServicio = new JTextField();
 		txtServicio.setEnabled(false);
@@ -222,41 +232,34 @@ public class RegistrarPlan extends JDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				ListarParaAsigServ.selected = null;
-				ListarParaAsigServ list = new ListarParaAsigServ();
-				list.loadHeaders();
-				list.setModal(true);
-				list.setVisible(true);
+		        ListarParaAsigServ list = new ListarParaAsigServ();
+		        list.setModal(true);
+		        list.setVisible(true);
 
-				if (ListarParaAsigServ.selected != null) {
+		        if (ListarParaAsigServ.selected != null) {
 		            Servicio s = ListarParaAsigServ.selected;
-		            
-		            // Validamos si ya existe en este plan
 		            if (buscarServicioPorIdCrearPlan(s.getIdService()) == null) {
-		                serviciosTemp.add(s);     
-		                loadServicios();           
-		                actualizarPrecios();       
+		                serviciosTemp.add(s);
+		                loadServicios();
+		                actualizarPrecios();
 		                txtServicio.setText(s.getNombre());
 		            } else {
 		                JOptionPane.showMessageDialog(null, "Este servicio ya está en el plan.");
 		            }
 		        }
-				else {
-					txtServicio.setText("");;
-				}
 			}
 		});
 		txtServicio.setBounds(23, 84, 175, 20);
-		panel.add(txtServicio);
-		txtServicio.setColumns(10);
+		panelAgregar.add(txtServicio);
 
 		JLabel lblNewLabel_6_1_1 = new JLabel("Servicio seleccionado");
 		lblNewLabel_6_1_1.setForeground(Color.GRAY);
 		lblNewLabel_6_1_1.setBounds(46, 106, 130, 12);
-		panel.add(lblNewLabel_6_1_1);
+		panelAgregar.add(lblNewLabel_6_1_1);
 
 		JLabel lblNewLabel = new JLabel("Haga click aquí para agregar");
 		lblNewLabel.setBounds(33, 59, 175, 14);
-		panel.add(lblNewLabel);
+		panelAgregar.add(lblNewLabel);
 
 		JLabel lblAgregarServicio = new JLabel("Agregar Servicio");
 		lblAgregarServicio.setForeground(Color.WHITE);
@@ -264,70 +267,123 @@ public class RegistrarPlan extends JDialog {
 		lblAgregarServicio.setBounds(412, 399, 213, 40);
 		panelAtras.add(lblAgregarServicio);
 
-		JLabel lblNewLabel_6_1 = new JLabel("Dar doble click sobre el servicio para ver detalles.");
+		JLabel lblNewLabel_6_1 = new JLabel("Doble clic sobre el servicio para ver detalles.");
 		lblNewLabel_6_1.setForeground(Color.WHITE);
 		lblNewLabel_6_1.setBounds(36, 437, 304, 12);
 		panelAtras.add(lblNewLabel_6_1);
-		
+
 		btnEliminarServicio = new JButton("Eliminar Seleccionado");
+		btnEliminarServicio.setEnabled(false);
 		btnEliminarServicio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (selected != null) {
-		            serviciosTemp.remove(selected);
-		            loadServicios();
-		            actualizarPrecios();
-		            selected = null;
-		        }
+					serviciosTemp.remove(selected);
+					loadServicios();
+					actualizarPrecios();
+					selected = null;
+					btnEliminarServicio.setEnabled(false);
+				}
 			}
 		});
 		btnEliminarServicio.setBounds(36, 654, 158, 23);
 		panelAtras.add(btnEliminarServicio);
+
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnRegistrar = new JButton("Registrar");
+				btnRegistrar = new JButton("Registrar");
+				if (planActual != null) {
+					btnRegistrar.setText("Actualizar");
+				}
 				btnRegistrar.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
+				    public void actionPerformed(ActionEvent e) {
+				        
+				        if (txtNombreProm.getText().trim().isEmpty()) {
+				            JOptionPane.showMessageDialog(null, "Debe ingresar un nombre promocional.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+				            return;
+				        }
+				        if (serviciosTemp.size() == 0) {
+				            JOptionPane.showMessageDialog(null, "Error: Añada al menos un servicio al plan.", "Información", JOptionPane.WARNING_MESSAGE);
+				            return;
+				        }
+				        if (!rdbtnResidencial.isSelected() && !rdbtnNegocios.isSelected()) {
+				            JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de plan.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+				            return;
+				        }
 
-						ListarParaAsigServ.selected = null;
-						selected = null;
-						
-						if(!(serviciosTemp.size()>0)) {
-							 JOptionPane.showMessageDialog(null, "Error: Añada servicios al plan.","Información", JOptionPane.WARNING_MESSAGE);
-							 return;
-						 }
-					}
+				        Tipo tipoSeleccionado;
+				        if (rdbtnResidencial.isSelected()) {
+				            tipoSeleccionado = Tipo.RESIDENCIAL;
+				        } else {
+				            tipoSeleccionado = Tipo.NEGOCIOS;
+				        }
+
+				        if (planActual != null) {
+				            planActual.setState(Estado.DESCONTINUADO);
+				        }
+
+				        String nuevoID = "PLN-" + Altice.getInstance().getIdPlan();
+				        Plan nuevoPlan = new Plan(nuevoID, txtNombreProm.getText(), tipoSeleccionado);
+				        for (Servicio s : serviciosTemp) {
+				            nuevoPlan.addServicio(s);
+				        }
+				        Altice.getInstance().agrPlan(nuevoPlan); 
+				        if (planActual != null) {
+				            JOptionPane.showMessageDialog(null, "El plan anterior ha sido descontinuado. Se ha generado una nueva versión con el ID: " + nuevoID, "Información", JOptionPane.INFORMATION_MESSAGE);
+				        } else {
+				            JOptionPane.showMessageDialog(null, "Plan registrado exitosamente con el ID: " + nuevoID, "Información", JOptionPane.INFORMATION_MESSAGE);
+				        }
+				        ListarPlanes.loadPlanes(); 
+				        dispose();
+				    }
 				});
-				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
-				getRootPane().setDefaultButton(btnRegistrar);
 			}
 			{
-				JButton btnCancelar = new JButton("Cancelar");
+				JButton btnCancelar = new JButton("Cerrar");
 				btnCancelar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
-				btnCancelar.setActionCommand("Cancel");
 				buttonPane.add(btnCancelar);
 			}
 		}
+
 		loadHeaders();
-	}
-	public void cleanServicio() {
-		txtServicio.setText("");
+		cargarDatos(); // Carga la info si planActual != null
 	}
 
-	public void Clean() {
-		txtNombreProm.setText("");
-		lblIdPlan.setText("PLN-" + Altice.getInstance().getIdPlan());
-		rdbtnNegocios.setSelected(false);
-		rdbtnResidencial.setSelected(false);
-		lblPrecioBase.setText("RD$ ");
-		lblPrecioTotal.setText("RD$ ");
+	public void cargarDatos() {
+		if (planActual != null) {
+			lblIdPlan.setText(planActual.getIdPlan());
+			txtNombreProm.setText(planActual.getNombreComercial());
+			
+			if (planActual.getType() == Tipo.RESIDENCIAL) {
+				rdbtnResidencial.setSelected(true);
+			} else {
+				rdbtnNegocios.setSelected(true);
+			}
+
+			// Copiamos los servicios del plan a nuestra lista temporal
+			serviciosTemp = new ArrayList<Servicio>(planActual.getPlanServices());
+			loadServicios();
+			actualizarPrecios();
+		}
+	}
+
+	public void modoDetalle() {
+		setTitle("Detalle del Plan");
+		lblTitulo.setText("Detalles de Plan");
+		txtNombreProm.setEditable(false);
+		rdbtnResidencial.setEnabled(false);
+		rdbtnNegocios.setEnabled(false);
+		btnEliminarServicio.setVisible(false);
+		btnRegistrar.setVisible(false);
+		panelAgregar.setVisible(false);
+		txtServicio.setEnabled(false);
 	}
 
 	public void actualizarPrecios() {
@@ -335,53 +391,49 @@ public class RegistrarPlan extends JDialog {
 		for (Servicio s : serviciosTemp) {
 			sumaBase += s.getCostoMensualInd();
 		}
-		float precioConImpuestos = sumaBase * 1.30f; 
+		
+		float impuestado = sumaBase * 1.30f;
+		float finalTotal = impuestado;
+		
+		if (rdbtnNegocios.isSelected()) {
+			finalTotal = impuestado * 1.50f;
+		}
 
 		lblPrecioBase.setText("RD$ " + String.format("%.2f", sumaBase));
-		lblPrecioTotal.setText("RD$ " + String.format("%.2f", precioConImpuestos));
+		lblPrecioTotal.setText("RD$ " + String.format("%.2f", finalTotal));
 	}
 
 	public void loadHeaders() {
-		String headersServicios[] = {"ID", "Nombre", "Tipo", "Precio"};
+		String headersServicios[] = { "ID", "Nombre", "Tipo", "Precio" };
 		model.setColumnIdentifiers(headersServicios);
 		table.setModel(model);
 		loadServicios();
-
 	}
 
 	public void loadServicios() {
 		model.setRowCount(0);
-
-		if (btnEliminarServicio != null) {
-			btnEliminarServicio.setEnabled(false);
-		}
-
-		raw = new Object[table.getColumnCount()]; 
-		for(Servicio temp: serviciosTemp) {
-			Serv tipoServicio = temp.getTipo(); 
+		raw = new Object[4];
+		for (Servicio temp : serviciosTemp) {
 			raw[0] = temp.getIdService();
 			raw[1] = temp.getNombre();
 			
-			String tipo= "";
-			if(tipoServicio == Serv.INTERNET) {tipo = "Internet";}
-			if(tipoServicio == Serv.TELEFONIA) {tipo = "Telefonía";}
-			if(tipoServicio == Serv.TELEVISION) {tipo = "Televisión";}
+			String tipo = "";
+			if (temp.getTipo() == Serv.INTERNET) { tipo = "Internet"; }
+			if (temp.getTipo() == Serv.TELEFONIA) { tipo = "Telefonía"; }
+			if (temp.getTipo() == Serv.TELEVISION) { tipo = "Televisión"; }
 
 			raw[2] = tipo;
 			raw[3] = temp.getCostoMensualInd();
 			model.addRow(raw);
-
 		}
-
 	}
-	
+
 	public Servicio buscarServicioPorIdCrearPlan(String id) {
-	    for (Servicio s : serviciosTemp) {
-	        if (s.getIdService().equals(id)) {
-	            return s;
-	        }
-	    }
-	    return null;
+		for (Servicio s : serviciosTemp) {
+			if (s.getIdService().equals(id)) {
+				return s;
+			}
+		}
+		return null;
 	}
-
 }

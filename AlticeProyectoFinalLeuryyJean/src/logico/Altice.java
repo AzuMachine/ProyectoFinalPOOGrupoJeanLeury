@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import logico.Servicio.Serv;
+import logico.Usuario.rolEmp;
 
 public class Altice implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -14,7 +15,7 @@ public class Altice implements Serializable{
 	private ArrayList<Plan> misPlanes;
 	private ArrayList<Servicio> misServicios;
 	private ArrayList<Pago> misPagos;
-	private ArrayList<Contratos> misContratos;
+	private ArrayList<Contrato> misContratos;
 	private ArrayList<Ticket> misTickets;
 	public static Usuario loginUser;
 
@@ -61,7 +62,7 @@ public class Altice implements Serializable{
 		return misPagos;
 	}
 
-	public ArrayList<Contratos> getMisContratos() {
+	public ArrayList<Contrato> getMisContratos() {
 		return misContratos;
 	}
 
@@ -180,6 +181,7 @@ public class Altice implements Serializable{
 		misServicios.remove(selectedServ);
 
 	}
+	
 	//1.Servicio.4 Actualizar
 	public void actualizarServicio(Servicio serv) {
 		int index = buscarIndiceServicioId(serv.getIdService());
@@ -205,8 +207,7 @@ public class Altice implements Serializable{
 	}
 	//Fin codigo Servicios
 
-	//1.LogIn.1 Confirmar el Log In
-
+	//1. Login.1 confirmar ingreso
 	public boolean confirmarIngreso(String username, String pass) {
 		boolean login = false;
 		for (Persona p: misHumanos ) {
@@ -217,6 +218,14 @@ public class Altice implements Serializable{
 			}
 		}
 		return login;
+	}
+	//1. Login.2 adminPorDefecto
+	public void adminPorDefecto() {
+	    if (misHumanos.size() == 0) {
+	        Usuario adminUser = new Usuario(rolEmp.ADMINISTRADOR, "admin", "admin");
+	        Empleado admin = new Empleado("Administrador", adminUser, 0, "N/A", "N/A", "000", "admin@altice.com", "000", "ADM-001");
+	        misHumanos.add(admin);
+	    }
 	}
 
 	//1.Persona.1 Agregar persona
@@ -230,7 +239,6 @@ public class Altice implements Serializable{
 			idCliente++;
 		} 
 	}
-
 	//1.Persona.2 buscarPersonaByRNC
 	public Persona buscarPersonaByRNC(String RNC) {
 		for (Persona p : misHumanos) {
@@ -262,8 +270,7 @@ public class Altice implements Serializable{
 		}
 		return null;
 	}
-
-	//1.Empleado.3 Buscar IndiceEmpleadoId
+	//1.Empleado.3 Buscar indice Empleado Id
 	public int buscarIndiceEmpleadoId(String idEmp) {
 		int  aux = -1;
 		boolean encontrado = false; 

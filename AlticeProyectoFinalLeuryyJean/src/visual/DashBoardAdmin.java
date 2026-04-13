@@ -214,6 +214,9 @@ public class DashBoardAdmin extends JFrame {
 		});
 		btnGestionServ.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				GestionServicios ges = new GestionServicios();
+				ges.setModal(true);
+				ges.setVisible(true);
 			}
 		});
 		btnGestionServ.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/50servicios.png")));
@@ -236,8 +239,10 @@ public class DashBoardAdmin extends JFrame {
 		});
 		
 		btnGestionClientes.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
+				GestionClientes ges = new GestionClientes();
+				ges.setModal(true);
+				ges.setVisible(true);
 			}
 		});
 		btnGestionClientes.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/adminDash.png")));

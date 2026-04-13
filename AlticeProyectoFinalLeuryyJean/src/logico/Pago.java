@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 public class Pago {
 	public enum Metodo {EFECTIVO, TRANSFERENCIA, TARJETA, PUNTO_ALTICE}
 	private String numeroRecibo;
-	private Contratos con;
+	private Contrato con;
 	private float monto;
 	private LocalDateTime fechaPago; 
 	private String numCompFis; //en caso de ser una persona, solo poner N/A
 	
-	public Pago(String numeroRecibo, Contratos con, float monto, String numCompFis) {
+	public Pago(String numeroRecibo, Contrato con, float monto, String numCompFis) {
 		super();
 		this.numeroRecibo = numeroRecibo;
 		this.con = con;
@@ -23,7 +23,7 @@ public class Pago {
 		return numeroRecibo;
 	}
 
-	public Contratos getCon() {
+	public Contrato getCon() {
 		return con;
 	}
 
@@ -43,7 +43,7 @@ public class Pago {
 		this.numeroRecibo = numeroRecibo;
 	}
 
-	public void setCon(Contratos con) {
+	public void setCon(Contrato con) {
 		this.con = con;
 	}
 

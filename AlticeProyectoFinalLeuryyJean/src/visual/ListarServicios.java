@@ -30,18 +30,18 @@ import logico.Altice;
 import logico.Servicio;
 import logico.Servicio.Serv;
 
-public class ListarServicios extends JDialog { // Cambiado a JDialog
+public class ListarServicios extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel panelPrincipal = new JPanel();
 	private JTable table;
-	private Object raw[];
-	private DefaultTableModel model;
-	private JComboBox<String> cbxFiltroListar;
+	private static Object raw[];
+	private static DefaultTableModel model;
+	private static JComboBox<String> cbxFiltroListar;
 	private JButton btnSalir;
 	private JScrollPane scrollPane;
-	private JButton btnEliminar;
-	private JButton btnModificar;
+	public static JButton btnEliminar;
+	public static JButton btnModificar;
 	private Servicio selectedServ = null;
 
 	private final Color NAVY_ALTICE = new Color(33, 50, 65);      
@@ -131,6 +131,15 @@ public class ListarServicios extends JDialog { // Cambiado a JDialog
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 
 		btnModificar = new JButton("Modificar Servicio");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(selectedServ != null) {
+					RegistrarServicio aux = new RegistrarServicio(selectedServ);
+					aux.setModal(true);
+					aux.setVisible(true);
+				}
+			}
+		});
 		btnModificar.setBackground(BURNT_SIENNA);
 		btnModificar.setForeground(Color.BLACK);
 		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -171,7 +180,7 @@ public class ListarServicios extends JDialog { // Cambiado a JDialog
 		loadHeaders();
 	}
 
-	private void loadServicios() {
+	public static void loadServicios() {
 		model.setRowCount(0);
 		raw = new Object[model.getColumnCount()];
 		String seleccion = cbxFiltroListar.getSelectedItem().toString();

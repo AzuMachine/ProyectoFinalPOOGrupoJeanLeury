@@ -58,6 +58,7 @@ public class RegistrarEmpleado extends JDialog {
 	private JButton btnGenerar;
 	private boolean detalle = false;
 	private JLabel lblTitulo;
+	
 	/**
 	 * Launch the application.
 	 */

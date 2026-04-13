@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class DashBoardComercial extends JFrame {
 
@@ -54,7 +56,7 @@ public class DashBoardComercial extends JFrame {
 		setFont(new Font("Tahoma", Font.BOLD, 14));
 		setTitle("GESTION Y VENTAS ALTICE - SUCURSAL CENTRAL");
 		setResizable(false);
-		setBounds(100, 100, 690, 921);
+		setBounds(100, 100, 690, 886);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		
@@ -114,23 +116,35 @@ public class DashBoardComercial extends JFrame {
 			JPanel panelBotones = new JPanel();
 			panelBotones.setBackground(NAVY_ALTICE);
 			panelBotones.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-			panelBotones.setBounds(364, 400, 297, 398);
+			panelBotones.setBounds(364, 373, 297, 398);
 			panelComercial1.add(panelBotones);
 			panelBotones.setLayout(null);
 			
 			btnNewButton = new JButton("Gestión Clientes");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			btnNewButton.setBackground(ACCENT_ORANGE);
 			btnNewButton.setForeground(Color.BLACK);
 			btnNewButton.setBounds(53, 42, 200, 55);
 			panelBotones.add(btnNewButton);
 			
 			btnNuevasVentas = new JButton("Nuevas Ventas");
+			btnNuevasVentas.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			btnNuevasVentas.setBackground(ACCENT_ORANGE);
 			btnNuevasVentas.setForeground(Color.BLACK);
 			btnNuevasVentas.setBounds(53, 130, 200, 55);
 			panelBotones.add(btnNuevasVentas);
 			
 			btnHacerPagocaja = new JButton("Hacer Pago (Caja)");
+			btnHacerPagocaja.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			btnHacerPagocaja.setBackground(ACCENT_ORANGE);
 			btnHacerPagocaja.setForeground(Color.BLACK);
 			btnHacerPagocaja.setEnabled(false);
@@ -138,6 +152,10 @@ public class DashBoardComercial extends JFrame {
 			panelBotones.add(btnHacerPagocaja);
 			
 			btnAsignarTiket = new JButton("Asignar Tiket");
+			btnAsignarTiket.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			btnAsignarTiket.setBackground(ACCENT_ORANGE);
 			btnAsignarTiket.setForeground(Color.BLACK);
 			btnAsignarTiket.setBounds(53, 313, 200, 55);
@@ -146,7 +164,7 @@ public class DashBoardComercial extends JFrame {
 			JPanel panelMonto = new JPanel();
 			panelMonto.setLayout(null);
 			panelMonto.setBackground(new Color(45, 51, 59));
-			panelMonto.setBounds(10, 186, 321, 180);
+			panelMonto.setBounds(10, 170, 321, 180);
 			panelComercial1.add(panelMonto);
 			
 			JLabel lblMontoTitulo = new JLabel("MONTO EN CAJA HOY (VALOR EN RD$)");
@@ -163,7 +181,7 @@ public class DashBoardComercial extends JFrame {
 			JPanel panelVentas = new JPanel();
 			panelVentas.setLayout(null);
 			panelVentas.setBackground(new Color(45, 51, 59));
-			panelVentas.setBounds(364, 188, 294, 180);
+			panelVentas.setBounds(364, 172, 294, 180);
 			panelComercial1.add(panelVentas);
 			
 			JLabel lblVentasTitulo = new JLabel("VENTAS REALIZADAS HOY (CONTRATOS)");
@@ -182,7 +200,7 @@ public class DashBoardComercial extends JFrame {
 			panelDeudores.setLayout(null);
 			panelDeudores.setBorder(new LineBorder(new Color(120, 80, 80)));
 			panelDeudores.setBackground(new Color(60, 50, 50));
-			panelDeudores.setBounds(10, 400, 321, 180);
+			panelDeudores.setBounds(10, 373, 321, 180);
 			panelComercial1.add(panelDeudores);
 			
 			JLabel lblDeudaTitulo = new JLabel("CLIENTES CON DEUDA PENDIENTE");
@@ -208,7 +226,7 @@ public class DashBoardComercial extends JFrame {
 			panelDeudores_1.setLayout(null);
 			panelDeudores_1.setBorder(new LineBorder(new Color(120, 80, 80)));
 			panelDeudores_1.setBackground(new Color(60, 50, 50));
-			panelDeudores_1.setBounds(10, 618, 321, 180);
+			panelDeudores_1.setBounds(10, 591, 321, 180);
 			panelComercial1.add(panelDeudores_1);
 			
 			JLabel lblCantidadDeTikets = new JLabel("CANTIDAD DE TIKETS SIN ASIGNAR");
@@ -240,6 +258,11 @@ public class DashBoardComercial extends JFrame {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				cancelButton = new JButton("Cancelar");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
 				cancelButton.setBackground(Color.DARK_GRAY);
 				cancelButton.setForeground(Color.WHITE);
 				cancelButton.setFont(new Font("Tahoma", Font.PLAIN, 13));

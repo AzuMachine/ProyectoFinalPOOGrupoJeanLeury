@@ -69,7 +69,7 @@ public class GestionPlanes extends JDialog {
 		JButton btnCrearPlan = new JButton("Crear Plan");
 		btnCrearPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistrarPlan reg = new RegistrarPlan();
+				RegistrarPlan reg = new RegistrarPlan(null);
 				reg.setModal(true);
 				reg.setVisible(true);
 			}
@@ -81,7 +81,7 @@ public class GestionPlanes extends JDialog {
 		JButton btnListarPlanes = new JButton("Listar Planes");
 		btnListarPlanes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListarParaAsignarPlanes lis = new ListarParaAsignarPlanes();
+				ListarPlanes lis= new ListarPlanes();
 				lis.setModal(true);
 				lis.setVisible(true);
 			}
