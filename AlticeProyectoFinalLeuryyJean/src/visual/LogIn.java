@@ -61,7 +61,7 @@ public class LogIn extends JFrame {
 					try {
 						altSale = new FileOutputStream("Altice.dat");
 						altWrite = new ObjectOutputStream(altSale);
-						Usuario def = new Usuario(Usuario.rol.ADMINISTRADOR,"admin","admin");
+						Usuario def = new Usuario(Usuario.rolEmp.ADMINISTRADOR,"admin","admin");
 						Empleado aux = new Empleado("AdminDefault",def,0,"Disco duro","M","N/A","N/A","N/A","EMP-0"); 
 						aux.setDepartamento("Administración");
 						Altice.getInstance().regPersona(aux);
@@ -155,19 +155,19 @@ public class LogIn extends JFrame {
 				if (Altice.getInstance().confirmarIngreso(user, pass)) {
 					Usuario logueado = Altice.getLoginUser();
 
-					if (logueado.getRol() == Usuario.rol.ADMINISTRADOR) {
+					if (logueado.getRol() == Usuario.rolEmp.ADMINISTRADOR) {
 						DashBoardAdmin admin = new DashBoardAdmin();
 						admin.setVisible(true);
 					} 
-					else if (logueado.getRol() == Usuario.rol.COMERCIAL) {
+					else if (logueado.getRol() == Usuario.rolEmp.COMERCIAL) {
 						DashBoardComercial comercial = new DashBoardComercial();
 						comercial.setVisible(true);
 					} 
-					else if (logueado.getRol() == Usuario.rol.TECNICO) {
+					else if (logueado.getRol() == Usuario.rolEmp.TECNICO) {
 						DashBoardTecnico tecnico = new DashBoardTecnico();
 						tecnico.setVisible(true);
 					} 
-					else if (logueado.getRol() == Usuario.rol.CLIENTE) {
+					else if (logueado.getRol() == Usuario.rolEmp.CLIENTE) {
 						DashBoardCliente cliente = new DashBoardCliente();
 						cliente.setVisible(true);
 					}

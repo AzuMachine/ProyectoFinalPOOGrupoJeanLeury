@@ -53,6 +53,7 @@ public class Contrato extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setFont(new Font("Tahoma", Font.BOLD, 16));
 		setTitle("SISTEMA DE GESTIÓN DE CLIENTES Y CONTRATOS - ALTICE");
+		setLocationRelativeTo(null);
 		setResizable(false);
 		setBounds(100, 100, 722, 651);
 		setLocationRelativeTo(null);
@@ -142,7 +143,7 @@ public class Contrato extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Mantiene funcionalidad original
-				ListarPlanes listP = new ListarPlanes();
+				ListarParaAsignarPlanes listP = new ListarParaAsignarPlanes();
 				listP.setEnabled(true);
 				listP.setVisible(true);
 			}

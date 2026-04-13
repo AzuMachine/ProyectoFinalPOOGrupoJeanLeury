@@ -1,36 +1,27 @@
 package visual;
 
-//import java.awt.Dimension;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
+import javax.swing.JButton;
+import java.awt.Color;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import logico.Altice;
 import logico.Persona;
 
-import java.awt.Toolkit;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Toolkit;
 
-public class GestionEmpleados extends JDialog {
+import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class GestionPlanes extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel panelAtras;
-	private JButton btnCrearEmp;
-	private JButton btnListarEmp;
-	private JPanel panelGraficoGestion;
-	//private Dimension dim;
 
 	/**
 	 * Launch the application.
@@ -39,8 +30,9 @@ public class GestionEmpleados extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GestionEmpleados frame = new GestionEmpleados();
-					frame.setVisible(true);
+					GestionPlanes dialog = new GestionPlanes();
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -49,62 +41,64 @@ public class GestionEmpleados extends JDialog {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the dialog.
 	 */
-	public GestionEmpleados() {
+	public GestionPlanes() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestionEmpleados.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
-		setTitle("Gestión de Empleados | Perfil Admin: " + logged().getNombre());
+		setTitle("Gestión de Planes | Perfil Admin: " + logged().getNombre());
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setResizable(false);
 		setBounds(100, 100, 761, 445);
 		setLocationRelativeTo(null);
-		setResizable(false);
-		panelAtras = new JPanel();
-		panelAtras.setBackground(new Color(29,41,59));
-		panelAtras.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(panelAtras);
+		getContentPane().setLayout(null);
+		
+		JPanel panelAtras = new JPanel();
 		panelAtras.setLayout(null);
+		panelAtras.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelAtras.setBackground(new Color(29, 41, 59));
+		panelAtras.setBounds(0, 0, 745, 406);
+		getContentPane().add(panelAtras);
 		
 		JPanel panel = new JPanel();
+		panel.setLayout(null);
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBackground(new Color(44,51,70));
+		panel.setBackground(new Color(44, 51, 70));
 		panel.setBounds(43, 32, 658, 341);
 		panelAtras.add(panel);
-		panel.setLayout(null);
 		
-		btnCrearEmp = new JButton("Crear Empleado");
-		btnCrearEmp.setBackground(new Color(255, 110, 52));
-		btnCrearEmp.addActionListener(new ActionListener() {
+		JButton btnCrearPlan = new JButton("Crear Plan");
+		btnCrearPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistrarEmpleado reg = new RegistrarEmpleado(null);
+				RegistrarPlan reg = new RegistrarPlan();
 				reg.setModal(true);
-				reg.setVisible(true);	
+				reg.setVisible(true);
 			}
 		});
-		btnCrearEmp.setBounds(468, 75, 169, 96);
-		panel.add(btnCrearEmp);
+		btnCrearPlan.setBackground(new Color(255, 110, 52));
+		btnCrearPlan.setBounds(468, 75, 169, 96);
+		panel.add(btnCrearPlan);
 		
-		btnListarEmp = new JButton("Listar Empleados");
-		btnListarEmp.setBackground(new Color(255, 110, 52));
-		btnListarEmp.addActionListener(new ActionListener() {
+		JButton btnListarPlanes = new JButton("Listar Planes");
+		btnListarPlanes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListarEmpleados list= new ListarEmpleados();
-				list.setModal(true);
-				list.setVisible(true);
+				ListarParaAsignarPlanes lis = new ListarParaAsignarPlanes();
+				lis.setModal(true);
+				lis.setVisible(true);
 			}
 		});
-		btnListarEmp.setBounds(468, 220, 169, 96);
-		panel.add(btnListarEmp);
+		btnListarPlanes.setBackground(new Color(255, 110, 52));
+		btnListarPlanes.setBounds(468, 220, 169, 96);
+		panel.add(btnListarPlanes);
 		
-		panelGraficoGestion = new JPanel();
+		JPanel panelGraficoGestion = new JPanel();
 		panelGraficoGestion.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelGraficoGestion.setBounds(20, 75, 428, 241);
 		panel.add(panelGraficoGestion);
 		
-		JLabel lblNewLabel = new JLabel("Empleados activos este mes\r\n");
+		JLabel lblNewLabel = new JLabel("Popularidad: Planes más vendidos este mes\r\n");
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 21));
-		lblNewLabel.setBounds(20, 24, 340, 27);
+		lblNewLabel.setBounds(20, 24, 464, 27);
 		panel.add(lblNewLabel);
 
 	}

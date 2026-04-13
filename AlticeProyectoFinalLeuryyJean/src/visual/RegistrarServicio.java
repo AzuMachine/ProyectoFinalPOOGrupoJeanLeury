@@ -27,7 +27,7 @@ import logico.Altice;
 import logico.Servicio;
 import logico.Servicio.Serv;
 
-public class DashBoardCrearServ extends JFrame { 
+public class RegistrarServicio extends JFrame { 
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,21 +51,21 @@ public class DashBoardCrearServ extends JFrame {
 
 	public static void main(String[] args) {
 		try {
-			DashBoardCrearServ frame = new DashBoardCrearServ();
+			RegistrarServicio frame = new RegistrarServicio();
 			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public DashBoardCrearServ() {
+	public RegistrarServicio() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Registrar Servicios - Altice");
 		setResizable(false);
 		// Ventana más grande para albergar componentes mayores
 		setBounds(100, 100, 620, 800);
 		setLocationRelativeTo(null);
-		
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBackground(NAVY_ALTICE);
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));

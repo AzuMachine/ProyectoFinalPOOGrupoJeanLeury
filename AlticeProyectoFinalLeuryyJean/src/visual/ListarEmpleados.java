@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import logico.Altice;
 import logico.Empleado;
 import logico.Persona;
-import logico.Usuario.rol;
+import logico.Usuario.rolEmp;
 
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -72,6 +72,7 @@ public class ListarEmpleados extends JDialog {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ListarEmpleados.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
 		setBounds(100, 100, 1077, 640);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -240,7 +241,7 @@ public class ListarEmpleados extends JDialog {
 				getRootPane().setDefaultButton(btnActualizar);
 			}
 			{
-				btnCancelar = new JButton("Cancel");
+				btnCancelar = new JButton("Cancelar");
 				btnCancelar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
@@ -265,19 +266,19 @@ public class ListarEmpleados extends JDialog {
 				Empleado emp = (Empleado) temp;
 				boolean esRolBuscado = false; 
 
-				rol rolEmpleado = emp.getUser().getRol();
+				rolEmp rolEmpleado = emp.getUser().getRol();
 
 				//si es <<seleccione>>
 				if (selected.equalsIgnoreCase("<<Seleccione>>")){
 					esRolBuscado = true; //agrega todos al arreglo
 				}
-				else if (selected.equalsIgnoreCase("Administrador") && rolEmpleado == rol.ADMINISTRADOR){
+				else if (selected.equalsIgnoreCase("Administrador") && rolEmpleado == rolEmp.ADMINISTRADOR){
 					esRolBuscado = true;
 				}
-				else if (selected.equalsIgnoreCase("Comercial") && rolEmpleado == rol.COMERCIAL){
+				else if (selected.equalsIgnoreCase("Comercial") && rolEmpleado == rolEmp.COMERCIAL){
 					esRolBuscado = true;
 				}
-				else if (selected.equalsIgnoreCase("Técnico") && rolEmpleado == rol.TECNICO){
+				else if (selected.equalsIgnoreCase("Técnico") && rolEmpleado == rolEmp.TECNICO){
 					esRolBuscado = true;
 				}
 
@@ -301,13 +302,9 @@ public class ListarEmpleados extends JDialog {
 					}
 
 					model.addRow(raw);
-
 				}
 			}
 		}
-
-
-
 	}
 
 	public void loadHeaders() {
