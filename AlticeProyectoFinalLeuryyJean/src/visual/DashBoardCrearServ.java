@@ -47,7 +47,6 @@ public class DashBoardCrearServ extends JDialog { // Cambiado a JDialog
 
 	private JButton btnRegServ;
 	private JButton btnCancelar;
-	private JButton btnListar;
 
 	private Servicio miServi = null;
 
@@ -204,18 +203,6 @@ public class DashBoardCrearServ extends JDialog { // Cambiado a JDialog
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 15, 15));
 		contentPane.add(buttonPane, BorderLayout.SOUTH);
 
-		btnListar = new JButton("Ver Listado");
-		btnListar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ListarServicios listServ = new ListarServicios();
-				listServ.setModal(true);
-				listServ.setVisible(true);
-			}
-		});
-
-		estiloBoton(btnListar, BURNT_SIENNA, Color.BLACK);
-		buttonPane.add(btnListar);
-
 		btnRegServ = new JButton("Registrar Servicio");
 		if(miServi != null) {
 			btnRegServ.setText("Actualizar datos");
@@ -236,10 +223,6 @@ public class DashBoardCrearServ extends JDialog { // Cambiado a JDialog
 	}
 
 	private void estiloBoton(JButton btn, Color bg, Color fg) {
-		btn.setBackground(bg);
-		btn.setForeground(fg);
-		btn.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btn.setFocusPainted(false);
 	}
 
 	private void cargarDatos() {
@@ -260,7 +243,6 @@ public class DashBoardCrearServ extends JDialog { // Cambiado a JDialog
 		
 		//El tipo de servicio no se modifica
 		cbxFiltroServ.setEnabled(false);
-		btnListar.setEnabled(false);
 		
 	}
 
