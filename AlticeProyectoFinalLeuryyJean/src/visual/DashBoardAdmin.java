@@ -209,7 +209,7 @@ public class DashBoardAdmin extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnGestionServ.setBackground(new Color(255, 110, 52));
+				btnGestionServ.setBackground(new Color(255, 110, 52)); 
 			}
 		});
 		btnGestionServ.addActionListener(new ActionListener() {
