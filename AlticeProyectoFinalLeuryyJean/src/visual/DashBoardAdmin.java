@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logico.Altice;
+import logico.Empleado;
 import logico.Persona;
 
 import java.awt.Toolkit;
@@ -26,12 +27,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 public class DashBoardAdmin extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel panelAdmin;
 	private Dimension dim;
+	private JButton btnContratos;
+	private JButton btnMisDatos;
 
 	/**
 	 * Launch the application.
@@ -91,7 +97,7 @@ public class DashBoardAdmin extends JFrame {
 		
 		JPanel panelBotones = new JPanel();
 		panelBotones.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelBotones.setBounds(43, 79, 1447, 180);
+		panelBotones.setBounds(43, 79, 1447, 241);
 		panelAdmin.add(panelBotones);
 		panelBotones.setLayout(null);
 		
@@ -179,7 +185,7 @@ public class DashBoardAdmin extends JFrame {
 		panelBotones.add(btnReportes);
 		
 		//Boton de Perfil de Admin
-		JButton btnMisDatos = new JButton("Mis Datos");
+		btnMisDatos = new JButton("Mis Datos");
 		//Admin cambio de color
 		btnMisDatos.addMouseListener(new MouseAdapter() {
 			@Override
@@ -194,6 +200,11 @@ public class DashBoardAdmin extends JFrame {
 		//Admin funcion del boton
 		btnMisDatos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Empleado aux = (Empleado)logged();
+				RegistrarEmpleado detalle = new RegistrarEmpleado(aux);
+				detalle.modoDetalle();
+				detalle.setModal(true);
+				detalle.setVisible(true);
 			}
 		});
 		btnMisDatos.setBackground(new Color(255, 110, 52));
@@ -255,16 +266,61 @@ public class DashBoardAdmin extends JFrame {
 		btnGestionClientes.setBounds(966, 52, 224, 75);
 		panelBotones.add(btnGestionClientes);
 		
+		btnContratos = new JButton("Gestión de Contratos");
+		btnContratos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnContratos.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/adminDash.png")));
+		btnContratos.setForeground(Color.WHITE);
+		btnContratos.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnContratos.setBackground(new Color(255, 110, 52));
+		btnContratos.setBounds(611, 138, 224, 75);
+		panelBotones.add(btnContratos);
+		
 		JPanel panelGraphYStats = new JPanel();
 		panelGraphYStats.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelGraphYStats.setBounds(198, 546, 1137, 215);
+		panelGraphYStats.setBounds(198, 392, 1137, 369);
 		panelAdmin.add(panelGraphYStats);
 		panelGraphYStats.setLayout(null);
 		
 		JPanel panelGraphic = new JPanel();
 		panelGraphic.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelGraphic.setBounds(51, 51, 591, 87);
+		panelGraphic.setBounds(51, 55, 591, 259);
 		panelGraphYStats.add(panelGraphic);
+		panelGraphic.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel = new JLabel("Empleados Activos: ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		lblNewLabel.setBounds(775, 50, 316, 27);
+		panelGraphYStats.add(lblNewLabel);
+		
+		JLabel lblPlanesActivos = new JLabel("Planes Activos: ");
+		lblPlanesActivos.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		lblPlanesActivos.setBounds(775, 129, 316, 27);
+		panelGraphYStats.add(lblPlanesActivos);
+		
+		JLabel lblNewLabel_2 = new JLabel("Pagos realizados:");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		lblNewLabel_2.setBounds(775, 208, 316, 27);
+		panelGraphYStats.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Pagos por realizar: ");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		lblNewLabel_3.setBounds(775, 287, 316, 27);
+		panelGraphYStats.add(lblNewLabel_3);
+		
+		JLabel lblAdministracin = new JLabel("Administración");
+		lblAdministracin.setForeground(Color.WHITE);
+		lblAdministracin.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblAdministracin.setBounds(43, 25, 412, 31);
+		panelAdmin.add(lblAdministracin);
+		
+		JLabel lblDatosGeneralesDel = new JLabel("Datos Generales del sistema");
+		lblDatosGeneralesDel.setForeground(Color.WHITE);
+		lblDatosGeneralesDel.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblDatosGeneralesDel.setBounds(198, 338, 412, 31);
+		panelAdmin.add(lblDatosGeneralesDel);
 
 	}
 	

@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.Color;
 
 public class ListarParaAsigServ extends JDialog {
 
@@ -65,6 +66,7 @@ public class ListarParaAsigServ extends JDialog {
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setBackground(new Color(29,41,59));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
@@ -99,10 +101,12 @@ public class ListarParaAsigServ extends JDialog {
 		}
 
 		JLabel lblNewLabel = new JLabel("Filtrar por: ");
+		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setBounds(422, 46, 80, 14);
 		contentPanel.add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("Servicios");
+		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblNewLabel_1.setBounds(25, 24, 237, 42);
 		contentPanel.add(lblNewLabel_1);

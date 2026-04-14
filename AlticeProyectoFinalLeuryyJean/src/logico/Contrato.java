@@ -15,7 +15,7 @@ public class Contrato {
 	private Empleado emp; //id del empleado que hizo el contrato
 	private String direccionInstalacion; //obtenido a traves del cliente
 	
-	public Contrato(String numeroContrato, Plan plan, Cliente cli, Empleado emp, String direccionInstalacion) {
+	public Contrato(String numeroContrato, Plan plan, Cliente cli, Empleado emp) {
 		super();
 		this.numeroContrato = numeroContrato;
 		this.inicio = LocalDateTime.now();

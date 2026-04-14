@@ -121,24 +121,24 @@ public class RegistrarPlan extends JDialog {
 		JLabel lblNewLabel_1_2_1 = new JLabel("Precio Total Mensual");
 		lblNewLabel_1_2_1.setForeground(Color.WHITE);
 		lblNewLabel_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_1_2_1.setBounds(295, 206, 185, 16);
+		lblNewLabel_1_2_1.setBounds(316, 206, 185, 16);
 		panelAtras.add(lblNewLabel_1_2_1);
 
 		lblPrecioTotal = new JLabel("RD$ 0.00");
 		lblPrecioTotal.setForeground(new Color(221, 112, 87));
 		lblPrecioTotal.setFont(new Font("Tahoma", Font.PLAIN, 35));
-		lblPrecioTotal.setBounds(295, 223, 184, 36);
+		lblPrecioTotal.setBounds(316, 223, 312, 36);
 		panelAtras.add(lblPrecioTotal);
 
 		JLabel lblNewLabel_6 = new JLabel("Precio con impuestos (18% ITBIS, 10% ISC, 2% CDT)");
 		lblNewLabel_6.setForeground(Color.WHITE);
-		lblNewLabel_6.setBounds(295, 269, 304, 12);
+		lblNewLabel_6.setBounds(316, 269, 304, 12);
 		panelAtras.add(lblNewLabel_6);
 
 		lblPrecioBase = new JLabel("RD$ 0.00");
 		lblPrecioBase.setForeground(Color.WHITE);
 		lblPrecioBase.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblPrecioBase.setBounds(40, 223, 184, 36);
+		lblPrecioBase.setBounds(40, 223, 245, 36);
 		panelAtras.add(lblPrecioBase);
 
 		JLabel lblNewLabel_1_2 = new JLabel("Precio Base (Antes de impuestos)");
@@ -169,6 +169,7 @@ public class RegistrarPlan extends JDialog {
 		rdbtnResidencial.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				rdbtnNegocios.setSelected(false);
+				actualizarPrecios();
 			}
 		});
 		rdbtnResidencial.setForeground(Color.WHITE);
@@ -180,6 +181,7 @@ public class RegistrarPlan extends JDialog {
 		rdbtnNegocios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				rdbtnResidencial.setSelected(false);
+				actualizarPrecios();
 			}
 		});
 		rdbtnNegocios.setForeground(Color.WHITE);
@@ -285,7 +287,7 @@ public class RegistrarPlan extends JDialog {
 				}
 			}
 		});
-		btnEliminarServicio.setBounds(36, 654, 158, 23);
+		btnEliminarServicio.setBounds(36, 654, 174, 23);
 		panelAtras.add(btnEliminarServicio);
 
 		{
