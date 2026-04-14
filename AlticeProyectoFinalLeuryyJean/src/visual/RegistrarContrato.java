@@ -59,14 +59,14 @@ public class RegistrarContrato extends JFrame {
 
 	public static void main(String[] args) {
 		try {
-			RegistrarContrato frame = new RegistrarContrato();
+			RegistrarContrato frame = new RegistrarContrato(null);
 			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public RegistrarContrato() {
+	public RegistrarContrato(Contrato encontrado) {
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setFont(new Font("Tahoma", Font.BOLD, 16));

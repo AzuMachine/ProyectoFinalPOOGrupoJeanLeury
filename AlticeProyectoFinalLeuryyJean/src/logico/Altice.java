@@ -27,6 +27,8 @@ public class Altice implements Serializable{
 	private int idServFIB = 1;
 	private int idServTV = 1;
 	private int idServTEL = 1;
+	private int idContrato=1;
+
 
 	public Altice() {
 		super();
@@ -39,6 +41,7 @@ public class Altice implements Serializable{
 		this.idEmpleado =0;
 		this.idPlan =1;
 		this.idCliente =1;
+		this.idContrato = 1;
 	}
 
 	public static Altice getInstance() {
@@ -124,6 +127,17 @@ public class Altice implements Serializable{
 		this.idServTV = idServTV;
 	}
 
+	public int getIdContrato() {
+		return idContrato;
+	}
+	
+	public void setIdTiket(int idTiket) {
+		this.idTiket = idTiket;
+	}
+	
+	public void setIdContrato(int idContrato) {
+		this.idContrato = idContrato;
+	}
 	public void setIdServTEL(int idServTEL) {
 		this.idServTEL = idServTEL;
 	}
@@ -420,5 +434,50 @@ public class Altice implements Serializable{
 	}
 	
 	//Fin codigo Tikets
+	
+	
+	//1. Funciones extra.1
+	
+	// Cantidad de empleados con estado true
+	public int cantidadEmpleadosActivos() {
+	    int count = 0;
+	    for (Persona p : misHumanos) {
+	        if (p instanceof Empleado && p.isEstado()) {
+	            count++;
+	        }
+	    }
+	    return count;
+	}
+
+	// Cantidad de planes vigentes
+	public int cantidadPlanesActivos() {
+	    int count = 0;
+	    for (Plan p : misPlanes) {
+	        if (p.getState().equals(Plan.Estado.VIGENTE)) {
+	            count++;
+	        }
+	    }
+	    return count;
+	}
+
+	// Cantidad de pagos en la lista general
+	public int cantidadPagosRealizados() {
+	    return misPagos.size();
+	}
+
+	// Cantidad de contratos que NO están cancelados (pendientes de pago futuro/vigentes)
+	public int cantidadPagosPorRealizar() {
+	    int count = 0;
+	    for (Contrato c : misContratos) {
+	        if (!c.getEstado().equals(Contrato.Estado.CANCELADO)) {
+	            count++;
+	        }
+	    }
+	    return count;
+	}
+	
+	//Fin codigo funciones extra
+	
+	
 }
 
