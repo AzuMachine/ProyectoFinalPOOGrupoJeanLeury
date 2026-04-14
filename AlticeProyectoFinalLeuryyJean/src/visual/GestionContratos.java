@@ -60,7 +60,7 @@ public class GestionContratos extends JDialog {
 		btnCrearCon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Llamada a la clase solicitada
-				RegistrarClienteLeury reg = new RegistrarClienteLeury(null);
+				RegistrarContrato reg = new RegistrarContrato(null);
 				reg.setModal(true);
 				reg.setVisible(true);	
 			}
@@ -75,7 +75,7 @@ public class GestionContratos extends JDialog {
 		btnListarCon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Llamada a la clase solicitada
-				ListarClientesLeury list = new ListarClientesLeury();
+				ListarContratos list = new ListarContratos();
 				list.setModal(true);
 				list.setVisible(true);
 			}
