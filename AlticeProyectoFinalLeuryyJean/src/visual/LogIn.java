@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
@@ -27,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.nio.file.FileSystemNotFoundException;
 import java.awt.event.ActionEvent;
 
@@ -44,50 +46,51 @@ public class LogIn extends JFrame {
 	 */
 	/*Creando proceso de archivos*/
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				FileInputStream altEntra; 
-				FileOutputStream altSale;
-				ObjectInputStream altRead;
-				ObjectOutputStream altWrite;
-				try {
-					altEntra = new FileInputStream("Altice.dat");
-					altRead = new ObjectInputStream(altEntra);
-					Altice temp = (Altice)altRead.readObject();
-					Altice.setAlt(temp);
-					altEntra.close();
-					altRead.close();
-				} catch (FileNotFoundException e) {
-					try {
-						altSale = new FileOutputStream("Altice.dat");
-						altWrite = new ObjectOutputStream(altSale);
-						Usuario def = new Usuario(Usuario.rolEmp.ADMINISTRADOR,"admin","admin");
-						Empleado aux = new Empleado("AdminDefault",def,0,"Disco duro","M","N/A","N/A","N/A","EMP-0"); 
-						aux.setDepartamento("Administración");
-						Altice.getInstance().regPersona(aux);
-						altWrite.writeObject(Altice.getInstance());
-						altSale.close();
-						altWrite.close();
-					} catch (FileNotFoundException e1) {
-					} catch (IOException e2) {
+	    EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            FileInputStream altEntra; 
+	            ObjectInputStream altRead;
+	            boolean cargado = false;
 
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
+	            // 1. Intentar cargar el archivo principal
+	            try {
+	                altEntra = new FileInputStream("Altice.dat");
+	                altRead = new ObjectInputStream(altEntra);
+	                Altice.setAlt((Altice)altRead.readObject());
+	                altRead.close();
+	                cargado = true;
+	            } catch (FileNotFoundException e) {
+	                // 2. Si no existe, intentar cargar el respaldo local "RespaldoEmpresa.dat"
+	                try {
+	                    altEntra = new FileInputStream("RespaldoEmpresa.dat");
+	                    altRead = new ObjectInputStream(altEntra);
+	                    Altice.setAlt((Altice)altRead.readObject());
+	                    altRead.close();
+	                    cargado = true;
+	                    System.out.println("Cargado desde respaldo local.");
+	                } catch (Exception e2) {
+	                    System.out.println("No hay respaldo local.");
+	                }
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
 
-				try {
-					LogIn frame = new LogIn();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}		
-			}
-		});
+	            // 3. Si nada funcionó, crear configuración inicial
+	            if (!cargado) {
+	                crearConfiguracionInicial();
+	            }
+
+	            // 4. Iniciar la interfaz siempre
+	            try {
+	                LogIn frame = new LogIn();
+	                frame.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }		
+	        }
+	    });
 	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -192,5 +195,43 @@ public class LogIn extends JFrame {
 
 		panelLogin.add(btnLogIn);
 
+	}
+	private static boolean recuperarRespaldoDeServidor() {
+		try {
+			Socket socket = new Socket("127.0.0.1", 7000);
+			ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+			
+			// Recibimos el objeto Altice del servidor
+			Altice temp = (Altice) entrada.readObject();
+			Altice.setAlt(temp);
+			
+			// Guardamos localmente para que ya exista la próxima vez
+			FileOutputStream altSale = new FileOutputStream("Altice.dat");
+			ObjectOutputStream altWrite = new ObjectOutputStream(altSale);
+			altWrite.writeObject(Altice.getInstance());
+			altWrite.close();
+			entrada.close();
+			socket.close();
+			JOptionPane.showMessageDialog(null, "Sistema restaurado exitosamente desde el servidor de respaldo.");
+			return true;
+		} catch (Exception e) {
+			System.out.println("No se pudo contactar al servidor de respaldo.");
+			return false;
+		}
+	}
+	private static void crearConfiguracionInicial() {
+		try {
+			FileOutputStream altSale = new FileOutputStream("Altice.dat");
+			ObjectOutputStream altWrite = new ObjectOutputStream(altSale);
+			Usuario def = new Usuario(Usuario.rolEmp.ADMINISTRADOR, "admin", "admin");
+			Empleado aux = new Empleado("AdminDefault", def, 0, "Disco duro", "M", "N/A", "N/A", "N/A", "EMP-0"); 
+			aux.setDepartamento("Administración");
+			Altice.getInstance().regPersona(aux);
+			altWrite.writeObject(Altice.getInstance());
+			altSale.close();
+			altWrite.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

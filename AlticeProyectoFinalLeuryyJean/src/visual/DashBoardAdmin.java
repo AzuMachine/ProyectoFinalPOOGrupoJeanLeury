@@ -1,6 +1,7 @@
 package visual;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -31,7 +32,15 @@ import java.net.Socket;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.axis.NumberAxis;
 
 public class DashBoardAdmin extends JFrame {
 
@@ -41,6 +50,7 @@ public class DashBoardAdmin extends JFrame {
 	private JButton btnContratos;
 	private JButton btnMisDatos;
 	private JButton btnRespaldo;
+	private JPanel panelGraphic;
 
 	/**
 	 * Launch the application.
@@ -122,6 +132,7 @@ public class DashBoardAdmin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				GestionEmpleados gemp = new GestionEmpleados();
 				gemp.setVisible(true);
+				actualizarGraficoEmpleados();
 			}
 		});
 		btnGeEmp.setBackground(new Color(255, 110, 52));
@@ -290,9 +301,9 @@ public class DashBoardAdmin extends JFrame {
 		panelAdmin.add(panelGraphYStats);
 		panelGraphYStats.setLayout(null);
 		
-		JPanel panelGraphic = new JPanel();
+		panelGraphic = new JPanel();
 		panelGraphic.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelGraphic.setBounds(51, 55, 591, 259);
+		panelGraphic.setBounds(28, 24, 648, 320);
 		panelGraphYStats.add(panelGraphic);
 		panelGraphic.setLayout(new BorderLayout(0, 0));
 		
@@ -342,6 +353,7 @@ public class DashBoardAdmin extends JFrame {
 		});
 
 		panelAdmin.add(btnRespaldo);
+		actualizarGraficoEmpleados();
 
 	}
 	
@@ -382,5 +394,43 @@ public class DashBoardAdmin extends JFrame {
 	        JOptionPane.showMessageDialog(this, "Error de conexión con el servidor de respaldo.", "Error", JOptionPane.ERROR_MESSAGE);
 	        e.printStackTrace();
 	    }
+	}
+	
+	public void actualizarGraficoEmpleados() {
+	    // 1. Obtener los datos reales de la lógica
+	    int activos = Altice.getInstance().cantidadEmpleadosActivos();
+	    int total = Altice.getInstance().getMisHumanos().size();
+
+	    // 2. Crear el dataset
+	    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+	    dataset.addValue(activos, "Empleados", "Activos");
+	    dataset.addValue(total, "Empleados", "Total");
+
+	    // 3. Crear el gráfico de barras
+	    JFreeChart barChart = ChartFactory.createBarChart(
+	        "Estado de Empleados", // Título
+	        "Categoría",           // Eje X
+	        "Cantidad",            // Eje Y
+	        dataset, 
+	        PlotOrientation.VERTICAL,
+	        false, true, false);
+
+	    CategoryPlot plot = barChart.getCategoryPlot();
+	    NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+	    rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+	    plot.setBackgroundPaint(Color.WHITE);
+	    rangeAxis.setLowerBound(0);
+	    BarRenderer renderer = (BarRenderer) plot.getRenderer();
+	    renderer.setSeriesPaint(0, new Color(255, 110, 52)); // Color Altice
+
+	    // 5. Insertar en el panelGraphic
+	    ChartPanel chartPanel = new ChartPanel(barChart);
+	    chartPanel.setPreferredSize(new Dimension(panelGraphic.getWidth(), panelGraphic.getHeight()));
+	    
+	    panelGraphic.setLayout(new BorderLayout());
+	    panelGraphic.removeAll();
+	    panelGraphic.add(chartPanel, BorderLayout.CENTER);
+	    panelGraphic.revalidate();
+	    panelGraphic.repaint();
 	}
 }

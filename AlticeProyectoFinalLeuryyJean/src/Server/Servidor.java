@@ -1,45 +1,32 @@
 package Server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.File;
 
-public class Servidor extends Thread{
+public class Servidor {
 
 	public static void main(String args[]) {
 		ServerSocket sfd = null;
 		try {
 			sfd = new ServerSocket(7000);
+			System.out.println("Servidor de Respaldos iniciado en el puerto 7000...");
 		}
 		catch (IOException ioe) {
-			System.out.println("Comunicación rechazada."+ioe);
+			System.out.println("Comunicación rechazada: " + ioe);
 			System.exit(1);
 		}
 		
 		while(true) {
 			try {
 				Socket nsfd = sfd.accept();
-				System.out.println("Comunicación Aceptada de:"+nsfd.getInetAddress());
-				DataInputStream oos = new DataInputStream(nsfd.getInputStream());
-				DataOutputStream escritor = new DataOutputStream(new FileOutputStream(new File("Altice_respaldo.dat")));
-				int unByte;
-				try {
-					while((unByte = oos.read())!= -1)
-						escritor.write(unByte);
-					oos.close();
-					escritor.close();
-				}catch(IOException e) {
-					e.printStackTrace();
-				}
+				System.out.println("Conexión recibida desde: " + nsfd.getInetAddress());
+				Flujo hiloRespaldo = new Flujo(nsfd);
+				hiloRespaldo.start(); 
 			}
 			catch(IOException ioe){
-				System.out.println("Error: " + ioe);
+				System.out.println("Error aceptando conexión: " + ioe);
 			}
-			
 		}
 	}
 }
