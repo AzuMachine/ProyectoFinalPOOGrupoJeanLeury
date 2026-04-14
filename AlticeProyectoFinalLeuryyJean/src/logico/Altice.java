@@ -1,7 +1,6 @@
 package logico;
 
 import java.io.Serializable;
-import java.security.KeyStore.TrustedCertificateEntry;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -21,6 +20,7 @@ public class Altice implements Serializable{
 	public static Usuario loginUser;
 
 	private int idPlan =1;
+	private int idTiket = 1;
 	private int idEmpleado =0;
 	private int idCliente =1;
 	private int idServFIB = 1;
@@ -343,7 +343,7 @@ public class Altice implements Serializable{
 	
 	//1.Tiket. 1 CambiarEstado
 	
-	public boolean tiketTomado(Ticket seletedTicket) {
+	public boolean ticketTomado(Ticket seletedTicket) {
 		
 		if(seletedTicket != null && seletedTicket.getState().equals(logico.Ticket.Estado.ABIERTO)) {
 			seletedTicket.setState(logico.Ticket.Estado.EN_PROCESO);
@@ -353,13 +353,41 @@ public class Altice implements Serializable{
 		return false;
 	}
 	
-	public boolean tiketResuelto(Ticket seletedTicket) {
+	public boolean ticketResuelto(Ticket seletedTicket) {
 		
 		if(seletedTicket != null && seletedTicket.getState().equals(logico.Ticket.Estado.EN_PROCESO)) {
 			seletedTicket.setState(logico.Ticket.Estado.RESUELTO);
 		}
 		
 		return false;
+	}
+	
+	//1.Tiket. 2 Agregar
+	
+	public void agregarTiket(Ticket elTikei) {
+		misTickets.add(elTikei);
+		setIdTicket(getIdTiket() + 1);
+	}
+
+	public int getIdTiket() {
+		return idTiket;
+	}
+
+	public void setIdTicket(int idTiket) {
+		this.idTiket = idTiket;
+	}
+	
+	//1.Tiket.3 Buscar
+
+	public Ticket buscarTiketByID(String id_Ticket) {
+		
+		for (Ticket elTicket : misTickets) {
+			if(elTicket.getIdTicket().equalsIgnoreCase(id_Ticket)) {
+				return elTicket;
+			}
+		}
+		
+		return null;
 	}
 	
 	//Fin codigo Tikets
