@@ -166,7 +166,9 @@ public class DashBoardAdmin extends JFrame {
 		//Reportes funcion del boton
 		btnReportes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Informes inf = new Informes();
+				inf.setModal(true);
+				inf.setVisible(true);
 			}
 		});
 		btnReportes.setBackground(new Color(255, 110, 52));
@@ -245,7 +247,8 @@ public class DashBoardAdmin extends JFrame {
 				ges.setVisible(true);
 			}
 		});
-		btnGestionClientes.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/adminDash.png")));
+		btnGestionClientes.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/adminDash.png"))); //mibombo
+		
 		btnGestionClientes.setForeground(Color.WHITE);
 		btnGestionClientes.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnGestionClientes.setBackground(new Color(255, 110, 52));

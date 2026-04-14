@@ -8,7 +8,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import javax.swing.border.SoftBevelBorder;
+
+import logico.Altice;
+
 import javax.swing.border.BevelBorder;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -53,6 +63,29 @@ public class DashBoardComercial extends JFrame {
 	 * Create the dialog.
 	 */
 	public DashBoardComercial() {
+		
+		//Para el guardado
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				FileOutputStream altSalidaComercial;
+				ObjectOutputStream altWriteComercial;
+				
+				try {
+					altSalidaComercial = new FileOutputStream("Altice.dat");
+					altWriteComercial = new ObjectOutputStream(altSalidaComercial);
+					altWriteComercial.writeObject(Altice.getInstance());
+				} catch (FileNotFoundException e1) {
+					
+					e1.printStackTrace();
+				}catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
 		setFont(new Font("Tahoma", Font.BOLD, 14));
 		setTitle("GESTION Y VENTAS ALTICE - SUCURSAL CENTRAL");
 		setResizable(false);

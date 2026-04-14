@@ -46,7 +46,7 @@ public class LogIn extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				FileInputStream altEntra;
+				FileInputStream altEntra; 
 				FileOutputStream altSale;
 				ObjectInputStream altRead;
 				ObjectOutputStream altWrite;

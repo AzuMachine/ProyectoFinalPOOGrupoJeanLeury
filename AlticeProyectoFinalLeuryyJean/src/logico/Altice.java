@@ -1,9 +1,11 @@
 package logico;
 
 import java.io.Serializable;
+import java.security.KeyStore.TrustedCertificateEntry;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import logico.Contrato.Estado;
 import logico.Servicio.Serv;
 import logico.Usuario.rolEmp;
 
@@ -135,6 +137,7 @@ public class Altice implements Serializable{
 	}
 
 	//<<<<<<<<<<<<<<<<<<<<<<INICIO METODOS DE BUSQUEDA y ACCIONES>>>>>>>>>>>>>>>>>>>>
+
 	//1.Plan.1 Buscar Plan by ID
 	public Plan buscarPlanByID(String idPlan) {
 		for (Plan planes : misPlanes) {
@@ -147,6 +150,15 @@ public class Altice implements Serializable{
 	public void agrPlan(Plan plan) {
 		misPlanes.add(plan);
 		idPlan++;
+	}
+
+	//1.Plan.3 Eliminar
+	public void eliminarPlan(Plan selectedPlan) {
+		misPlanes.remove(selectedPlan);
+
+		if(selectedPlan != null) {
+			selectedPlan.setState(logico.Plan.Estado.DESCONTINUADO);
+		}
 	}
 
 	//Fin codigos planes
@@ -178,9 +190,15 @@ public class Altice implements Serializable{
 
 	//1.Servicio.3 Eliminar
 	public void eliminarServicio(Servicio selectedServ) {
+
 		misServicios.remove(selectedServ);
 
+
+		if(selectedServ != null) {
+			selectedServ.setHabilitado(false);
+		}
 	}
+
 	
 	//1.Servicio.4 Actualizar
 	public void actualizarServicio(Servicio serv) {
@@ -189,6 +207,7 @@ public class Altice implements Serializable{
 			misServicios.set(index, serv);
 		}
 	}
+
 	//1.Servicio.5
 	public int buscarIndiceServicioId(String idServicio) {
 		int  aux = -1;
@@ -202,9 +221,24 @@ public class Altice implements Serializable{
 			}
 			i++;
 		}
-
 		return aux;
 	}
+
+	//1. Servicios. 5 Buscar Index serv
+	private int buscarIndexServicioByID(String idService) {
+		int auxServices = -1;
+		boolean encontrado = false;
+		int ind = 0;
+
+		while (!encontrado && ind < misServicios.size()) {
+			if(misServicios.get(ind).getIdService().equalsIgnoreCase(idService)) {
+				encontrado = true; auxServices = ind;
+			}
+			ind++;
+		}
+		return auxServices;
+	}
+
 	//Fin codigo Servicios
 
 	//1. Login.1 confirmar ingreso
@@ -248,6 +282,8 @@ public class Altice implements Serializable{
 		}
 		return null;
 	}
+
+
 	//Fin codigo Persona
 
 	//1.Empleado.1 Actualizar empleado
@@ -296,6 +332,65 @@ public class Altice implements Serializable{
 			misHumanos.set(index, emp);
 		}
 	}
+
 	//Fin codigo Empleado
+
+	//1.Contrato. 1 HacerCancelar
+
+	public boolean changeContratoStateCancelado(Contrato seletedContrato) {
+		if(seletedContrato != null && seletedContrato.getEstado() != Estado.SUSPENDIDO) {
+			seletedContrato.setEstado(Estado.CANCELADO);
+			return true;
+		}
+		return false;
+	}
+
+	//1.Contrato. 2 Suspendido
+
+	public boolean changeContratoStateSuspendido(Contrato seletedContrato) {
+		if(seletedContrato != null && seletedContrato.getEstado() != Estado.CANCELADO) {
+			seletedContrato.setEstado(Estado.SUSPENDIDO);
+			return true;
+		}
+		return false;
+	}
+
+	//1.Contrado. 3 buscarContratoByNum
+
+	public Contrato buscarContratoByNumero(String numeroContratoID) {
+		
+		for (Contrato contrato : misContratos) {
+			if(contrato.getNumeroContrato().equalsIgnoreCase(numeroContratoID)) {
+				return contrato;
+			}
+		}
+		
+		return null;
+	}
+
+	//Fin codigo Contrato
+	
+	//1.Tiket. 1 CambiarEstado
+	
+	public boolean tiketTomado(Ticket seletedTicket) {
+		
+		if(seletedTicket != null && seletedTicket.getState().equals(logico.Ticket.Estado.ABIERTO)) {
+			seletedTicket.setState(logico.Ticket.Estado.EN_PROCESO);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean tiketResuelto(Ticket seletedTicket) {
+		
+		if(seletedTicket != null && seletedTicket.getState().equals(logico.Ticket.Estado.EN_PROCESO)) {
+			seletedTicket.setState(logico.Ticket.Estado.RESUELTO);
+		}
+		
+		return false;
+	}
+	
+	//Fin codigo Tikets
 }
 
