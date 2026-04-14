@@ -22,6 +22,8 @@ import logico.Altice;
 import javax.swing.border.BevelBorder;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.SwingConstants;
@@ -55,7 +57,7 @@ public class DashBoardComercial extends JFrame {
 			dialog.setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Ha ocurrido un error. Por favor cierre el programa.","Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

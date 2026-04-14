@@ -67,7 +67,7 @@ public class DashBoardTecnico extends JFrame {
 					DashBoardTecnico frame = new DashBoardTecnico();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Ha ocurrido un error. Por favor cierre el programa.","Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

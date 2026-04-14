@@ -62,15 +62,6 @@ public class RegistrarEmpleado extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	 public static void main(String[] args) {
-		 try {
-			 RegistrarEmpleado dialog = new RegistrarEmpleado(null);
-			 dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			 dialog.setVisible(true);
-		 } catch (Exception e) {
-			 e.printStackTrace();
-		 }
-	 }
 
 	 /**
 	  * Create the dialog.

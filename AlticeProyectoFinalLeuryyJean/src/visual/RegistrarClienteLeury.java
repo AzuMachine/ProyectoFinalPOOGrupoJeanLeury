@@ -56,15 +56,6 @@ public class RegistrarClienteLeury extends JDialog {
     private JLabel lblTitulo;
     private JLabel lblSexo;
 
-    public static void main(String[] args) {
-        try {
-            RegistrarClienteLeury dialog = new RegistrarClienteLeury(null);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public RegistrarClienteLeury(Cliente cliente) {
         cli = cliente;

@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 public class DashBoardAdmin extends JFrame {
@@ -49,7 +50,7 @@ public class DashBoardAdmin extends JFrame {
 					DashBoardAdmin frame = new DashBoardAdmin();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Ha ocurrido un error. Por favor cierre el programa.","Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -269,6 +270,9 @@ public class DashBoardAdmin extends JFrame {
 		btnContratos = new JButton("Gestión de Contratos");
 		btnContratos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				GestionContratos aux = new GestionContratos();
+				aux.setModal(true);
+				aux.setVisible(true);
 			}
 		});
 		btnContratos.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/adminDash.png")));
@@ -290,22 +294,22 @@ public class DashBoardAdmin extends JFrame {
 		panelGraphYStats.add(panelGraphic);
 		panelGraphic.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblNewLabel = new JLabel("Empleados Activos: ");
+		JLabel lblNewLabel = new JLabel("Empleados Activos: " + Altice.getInstance().cantidadEmpleadosActivos());
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		lblNewLabel.setBounds(775, 50, 316, 27);
 		panelGraphYStats.add(lblNewLabel);
-		
-		JLabel lblPlanesActivos = new JLabel("Planes Activos: ");
+
+		JLabel lblPlanesActivos = new JLabel("Planes Activos: " + Altice.getInstance().cantidadPlanesActivos());
 		lblPlanesActivos.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		lblPlanesActivos.setBounds(775, 129, 316, 27);
 		panelGraphYStats.add(lblPlanesActivos);
-		
-		JLabel lblNewLabel_2 = new JLabel("Pagos realizados:");
+
+		JLabel lblNewLabel_2 = new JLabel("Pagos realizados: " + Altice.getInstance().cantidadPagosRealizados());
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		lblNewLabel_2.setBounds(775, 208, 316, 27);
 		panelGraphYStats.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("Pagos por realizar: ");
+
+		JLabel lblNewLabel_3 = new JLabel("Pagos por realizar: " + Altice.getInstance().cantidadPagosPorRealizar());
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		lblNewLabel_3.setBounds(775, 287, 316, 27);
 		panelGraphYStats.add(lblNewLabel_3);

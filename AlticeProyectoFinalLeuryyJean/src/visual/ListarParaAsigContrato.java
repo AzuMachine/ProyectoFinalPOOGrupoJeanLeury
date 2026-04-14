@@ -43,15 +43,6 @@ public class ListarParaAsigContrato extends JDialog {
 	private final Color INPUT_DARK = new Color(43, 51, 73);        
 	private final Color ACCENT_ORANGE = new Color(246, 114, 75);
 
-	public static void main(String[] args) {
-		try {
-			ListarParaAsigContrato dialog = new ListarParaAsigContrato();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	public ListarParaAsigContrato() {
 		setTitle("Contratos Disponibles - Altice");

@@ -45,15 +45,6 @@ public class RegistrarTickets extends JDialog {
 	private JRadioButton rdbtnAveria;
 	private JRadioButton rdbtnInstalacion;
 
-	public static void main(String[] args) {
-		try {
-			RegistrarTickets dialog = new RegistrarTickets();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	public RegistrarTickets() {
 		setTitle("Sistema de Tickets - Altice");

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -29,7 +30,7 @@ public class DashBoardCliente extends JFrame {
 					DashBoardCliente frame = new DashBoardCliente();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Ha ocurrido un error. Por favor cierre el programa.","Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

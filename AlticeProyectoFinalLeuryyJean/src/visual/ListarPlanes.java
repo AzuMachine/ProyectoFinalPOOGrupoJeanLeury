@@ -43,16 +43,6 @@ public class ListarPlanes extends JDialog {
 	private static JComboBox cbxSelecFiltro;
 	private static JRadioButton rdbtnDescontinuados;
 
-	public static void main(String[] args) {
-		try {
-			ListarPlanes dialog = new ListarPlanes();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public ListarPlanes() {
 		setTitle("Listado de Planes");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ListarPlanes.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));

@@ -57,16 +57,8 @@ public class RegistrarContrato extends JFrame {
 	private Plan planSelected = null;
 
 
-	public static void main(String[] args) {
-		try {
-			RegistrarContrato frame = new RegistrarContrato();
-			frame.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
-	public RegistrarContrato() {
+	public RegistrarContrato(Contrato encontrado) {
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setFont(new Font("Tahoma", Font.BOLD, 16));
