@@ -18,6 +18,16 @@ import logico.Plan;
 
 import javax.swing.SwingConstants;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import java.awt.BorderLayout;
+
 public class InformesGestionOperativa extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -29,6 +39,7 @@ public class InformesGestionOperativa extends JDialog {
 	private JLabel lblCantPlanesActivos;
 	private JLabel lblCantClientesActivos;
 	private JLabel lblCantCancelaciones;
+	private JPanel pnlGrafico;
 
 	/**
 	 * Launch the application.
@@ -215,8 +226,8 @@ public class InformesGestionOperativa extends JDialog {
 		lblCantClientesActivos.setForeground(new Color(221, 112, 87));
 		panel_1_1_1_1.add(lblCantClientesActivos);
 		
-		JPanel pnlGrafico = new JPanel();
-		pnlGrafico.setBounds(673, 82, 381, 376);
+		pnlGrafico = new JPanel();
+		pnlGrafico.setBounds(673, 82, 405, 376);
 		contentPanel.add(pnlGrafico);
 		actualizarIndicadores();
 	}
@@ -254,5 +265,35 @@ public class InformesGestionOperativa extends JDialog {
 	    lblCantClientesActivos.setText(String.valueOf(contClientes));
 	    lblCantPlanesActivos.setText(String.valueOf(contPlanes));
 	    lblCantCancelaciones.setText(String.valueOf(contCancelaciones));
+	    actualizarGraficoGeneral(contEmpleados, contClientes, contPlanes);
+	}
+	
+	private void actualizarGraficoGeneral(int emps, int clis, int planes) {
+	    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+	    dataset.addValue(emps, "Cantidad", "Empleados");
+	    dataset.addValue(clis, "Cantidad", "Clientes");
+	    dataset.addValue(planes, "Cantidad", "Planes");
+
+	    JFreeChart barChart = ChartFactory.createBarChart(
+	        "Resumen Operativo", 
+	        "Categoría", 
+	        "Total Activos", 
+	        dataset, 
+	        PlotOrientation.VERTICAL, 
+	        false, true, false
+	    );
+
+	    CategoryPlot plot = barChart.getCategoryPlot();
+	    plot.setBackgroundPaint(Color.WHITE);
+	    NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+	    rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+	    BarRenderer renderer = (BarRenderer) plot.getRenderer();
+	    renderer.setSeriesPaint(0, new Color(255, 110, 52));
+	    ChartPanel chartPanel = new ChartPanel(barChart);
+	    pnlGrafico.setLayout(new BorderLayout());
+	    pnlGrafico.removeAll();
+	    pnlGrafico.add(chartPanel, BorderLayout.CENTER);
+	    pnlGrafico.revalidate();
+	    pnlGrafico.repaint();
 	}
 }

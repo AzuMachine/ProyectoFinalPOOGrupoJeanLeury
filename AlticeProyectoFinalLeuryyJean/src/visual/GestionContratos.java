@@ -30,10 +30,12 @@ public class GestionContratos extends JDialog {
 	/**
 	 * Launch the application.
 	 */
+	
 	/**
 	 * Create the dialog.
 	 */
 	public GestionContratos() {
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GestionClientes.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
 		setTitle("Gestión de Contratos | Perfil Admin: <dynamic>");
 		setResizable(false);
@@ -61,6 +63,7 @@ public class GestionContratos extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				// Llamada a la clase solicitada
 				RegistrarContrato reg = new RegistrarContrato(null);
+				//reg.setModal(true);
 				reg.setModal(true);
 				reg.setVisible(true);	
 			}

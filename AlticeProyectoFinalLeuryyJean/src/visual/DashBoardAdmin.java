@@ -161,6 +161,7 @@ public class DashBoardAdmin extends JFrame {
 				GestionPlanes ges = new GestionPlanes();
 				ges.setModal(true);
 				ges.setVisible(true);
+				
 			}
 		});
 		btnGePlan.setBackground(new Color(255, 110, 52));
@@ -427,7 +428,6 @@ public class DashBoardAdmin extends JFrame {
 	    ChartPanel chartPanel = new ChartPanel(barChart);
 	    chartPanel.setPreferredSize(new Dimension(panelGraphic.getWidth(), panelGraphic.getHeight()));
 	    
-	    panelGraphic.setLayout(new BorderLayout());
 	    panelGraphic.removeAll();
 	    panelGraphic.add(chartPanel, BorderLayout.CENTER);
 	    panelGraphic.revalidate();

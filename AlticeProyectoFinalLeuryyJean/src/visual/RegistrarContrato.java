@@ -322,10 +322,6 @@ public class RegistrarContrato extends JDialog {
 					Pago nuevoPago = new Pago("REC-" + codContrato, nuevoContrato, total, "N/A");
 					Altice.getInstance().getMisPagos().add(nuevoPago);
 
-					// 3. Crear Ticket de instalación (Técnico = null)
-					Ticket nuevoTicket = new Ticket("TK-" + codContrato, clienteSelected, nuevoContrato, Ticket.Tipo.INSTALACION, Ticket.Prioridad.ALTA, "Instalación Inicial de Plan", null);
-					Altice.getInstance().getMisTickets().add(nuevoTicket);
-
 					JOptionPane.showMessageDialog(null, "Contrato registrado con éxito. Ticket de instalación generado.", "Finalizado", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 					

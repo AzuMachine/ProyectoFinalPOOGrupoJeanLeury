@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -33,6 +34,8 @@ public class InformesAnalisisFinanciero extends JDialog {
 	private JLabel lblCantPagosAtrasados;
 	private JLabel lblIngresoBruto;
 	private JLabel lblIngresoNeto;
+	private DefaultTableModel model;
+	private Object[] row;
 
 	/**
 	 * Launch the application.
@@ -246,6 +249,10 @@ public class InformesAnalisisFinanciero extends JDialog {
 		panelPagos.add(scrollPane, BorderLayout.CENTER);
 		
 		table = new JTable();
+		model = new DefaultTableModel();
+		String[] headers = {"ID Pago", "Cliente", "Monto", "Fecha"};
+		model.setColumnIdentifiers(headers);
+		table.setModel(model);
 		scrollPane.setViewportView(table);
 		
 		JLabel lblPagosPorPeriodo = new JLabel("Pagos por período: Mes actual");
@@ -253,5 +260,50 @@ public class InformesAnalisisFinanciero extends JDialog {
 		lblPagosPorPeriodo.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblPagosPorPeriodo.setBounds(628, 40, 342, 25);
 		contentPanel.add(lblPagosPorPeriodo);
+		
+		loadPagosMes();
+	}
+	
+	private void loadPagosMes() {
+		model.setRowCount(0);
+		
+		Calendar actualMonth = Calendar.getInstance();
+		int mesActual = actualMonth.get(Calendar.MONTH);
+		int annioActual = actualMonth.get(Calendar.YEAR);
+		
+		
+		int cantHechos = 0;
+		int cantAtrasados = 0;
+		float bruto = 0f;
+		
+		for(logico.Pago pago: logico.Altice.getInstance().getMisPagos()) {
+			
+			Calendar calPago = Calendar.getInstance();
+			//Se convierte el localDate a Date
+			java.time.LocalDateTime fecha = pago.getFechaPago();
+			calPago.set(fecha.getYear(), fecha.getMonthValue() - 1, fecha.getDayOfMonth());
+			
+			if(calPago.get(Calendar.MONTH) == mesActual && calPago.get(Calendar.YEAR) == annioActual) {
+				row = new Object[4];
+				
+				row[0] = pago.getNumeroRecibo();
+	            row[1] = pago.getCon().getCli().getNombre();
+	            row[2] = pago.getMonto();
+	            row[3] = fecha.toLocalDate();
+	            
+	            model.addRow(row);
+	            
+	            cantHechos++;
+	            bruto += pago.getMonto();
+			}
+			
+		}
+		// Actualizar Labels de la interfaz
+	    lblCantPagosHechos.setText(String.valueOf(cantHechos));
+	    lblIngresoBruto.setText("$" + String.format("%.2f", bruto));
+	   
+	    lblIngresoNeto.setText("$" + String.format("%.2f", bruto * 0.90)); 
+	    
+	    lblCantPagosAtrasados.setText(String.valueOf(logico.Altice.getInstance().getMisContratos().size()));
 	}
 }

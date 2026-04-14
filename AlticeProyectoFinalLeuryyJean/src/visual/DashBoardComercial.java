@@ -158,6 +158,9 @@ public class DashBoardComercial extends JFrame {
 			btnNewButton = new JButton("Gestión Clientes");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					GestionClientes ges = new GestionClientes();
+					ges.setModal(true);
+					ges.setVisible(true);
 				}
 			});
 			btnNewButton.setBackground(ACCENT_ORANGE);
@@ -168,6 +171,9 @@ public class DashBoardComercial extends JFrame {
 			btnNuevasVentas = new JButton("Nuevas Ventas");
 			btnNuevasVentas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					RegistrarContrato reg = new RegistrarContrato(null);
+					reg.setModal(true);
+					reg.setVisible(true);
 				}
 			});
 			btnNuevasVentas.setBackground(ACCENT_ORANGE);
@@ -189,6 +195,9 @@ public class DashBoardComercial extends JFrame {
 			btnAsignarTiket = new JButton("Asignar Tiket");
 			btnAsignarTiket.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					CrearTikets elTicket = new CrearTikets();
+					elTicket.setModal(true);
+					elTicket.setVisible(true);
 				}
 			});
 			btnAsignarTiket.setBackground(ACCENT_ORANGE);
@@ -278,6 +287,14 @@ public class DashBoardComercial extends JFrame {
 			panelDeudores_1.add(lblCantTiketsAsig);
 			
 			JButton btnVerLista_1 = new JButton("VER LISTA COMPLETA");
+			btnVerLista_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ListarTiketsAsignar list = new ListarTiketsAsignar();
+					list.setModal(true);
+					list.setVisible(true);
+					list.btnSeleccionar.setEnabled(false);
+				}
+			});
 			btnVerLista_1.setForeground(Color.WHITE);
 			btnVerLista_1.setBackground(new Color(80, 60, 60));
 			btnVerLista_1.setBounds(56, 120, 200, 30);

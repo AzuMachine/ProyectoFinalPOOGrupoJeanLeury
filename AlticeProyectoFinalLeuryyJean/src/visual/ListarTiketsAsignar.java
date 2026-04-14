@@ -31,7 +31,7 @@ public class ListarTiketsAsignar extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
-	private JButton btnSeleccionar;
+	public JButton btnSeleccionar;
 	private JButton btnSalir;
 	private static Object raw[];
 	private static DefaultTableModel model;
@@ -166,7 +166,7 @@ public class ListarTiketsAsignar extends JDialog {
 			raw[1] = tempTicket.getCli().getNombre();
 			raw[2] = tempTicket.getCon().getNumeroContrato();
 			raw[3] = tempTicket.getTecnico().getNombre();
-			// raw[4] = tempTicket.getFecha(); // Agregar si tienes el atributo fecha
+			raw[4] = tempTicket.getFechaCreacion();
 			model.addRow(raw);
 		}
 	}

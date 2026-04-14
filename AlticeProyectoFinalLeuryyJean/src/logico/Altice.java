@@ -282,8 +282,6 @@ public class Altice implements Serializable{
 		}
 		return null;
 	}
-
-
 	//Fin codigo Persona
 
 	//1.Empleado.1 Actualizar empleado
@@ -368,8 +366,18 @@ public class Altice implements Serializable{
 		}
 		return false;
 	}
-
-	//1.Contrado. 3 buscarContratoByNum
+	
+	//1.Contrato. 3 Poner Vigente
+	public boolean changeContratoStateVigente(Contrato seletedContrato) {
+		
+		if(seletedContrato != null && seletedContrato.getEstado() != Estado.SUSPENDIDO && seletedContrato.getEstado().equals(Estado.PENDIENTE)) {
+			seletedContrato.setEstado(Estado.VIGENTE);
+			return true;
+		}
+		return false;
+	}
+	
+	//1.Contrado. 4 buscarContratoByNum
 
 	public Contrato buscarContratoByNumero(String numeroContratoID) {
 		
@@ -381,6 +389,7 @@ public class Altice implements Serializable{
 		
 		return null;
 	}
+	
 
 	//Fin codigo Contrato
 	
@@ -475,7 +484,51 @@ public class Altice implements Serializable{
 	    }
 	    return count;
 	}
+	//Ventas por categoria
+	public ArrayList<Integer> ventasPorCategoriaList() {
+	    int internet = 0;
+	    int tv = 0;
+	    int telefonia = 0;
+
+	    for (Contrato c : misContratos) {
+	        // Solo contamos contratos vigentes
+	        if (c.getEstado().equals(logico.Contrato.Estado.VIGENTE)) {
+	            Plan p = c.getPlan();
+	            if (p != null) {
+	                for (Servicio s : p.getPlanServices()) {
+	                    if (s.getTipo().equals(logico.Servicio.Serv.INTERNET)) internet++;
+	                    if (s.getTipo().equals(logico.Servicio.Serv.TELEVISION)) tv++;
+	                    if (s.getTipo().equals(logico.Servicio.Serv.TELEFONIA)) telefonia++;
+	                }
+	            }
+	        }
+	    }
+
+	    ArrayList<Integer> resultado = new ArrayList<>();
+	    resultado.add(internet); 
+	    resultado.add(tv);        
+	    resultado.add(telefonia); 
+	    
+	    return resultado;
+	}
 	
+	//cantidad de clientes para grafico
+	public ArrayList<Integer> cantidadClientesGrafico() {
+	    int activos = 0;
+	    int total = 0;
+	    for (Persona p : misHumanos) {
+	        if (p instanceof logico.Cliente) {
+	            total++;
+	            if (p.isEstado()) {
+	                activos++;
+	            }
+	        }
+	    }
+	    ArrayList<Integer> datos = new ArrayList<>();
+	    datos.add(activos); // Índice 0
+	    datos.add(total);   // Índice 1
+	    return datos;
+	}
 	//Fin codigo funciones extra
 	
 	

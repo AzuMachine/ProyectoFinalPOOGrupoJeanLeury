@@ -23,6 +23,16 @@ import java.awt.event.WindowEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import java.awt.BorderLayout;
+
 public class GestionEmpleados extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -30,7 +40,8 @@ public class GestionEmpleados extends JDialog {
 	private JButton btnCrearEmp;
 	private JButton btnListarEmp;
 	private JPanel panelGraficoGestion;
-	//private Dimension dim;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -66,7 +77,8 @@ public class GestionEmpleados extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				RegistrarEmpleado reg = new RegistrarEmpleado(null);
 				reg.setModal(true);
-				reg.setVisible(true);	
+				reg.setVisible(true);
+				actualizarGraficoEmpleados();
 			}
 		});
 		btnCrearEmp.setBounds(468, 75, 169, 96);
@@ -79,6 +91,7 @@ public class GestionEmpleados extends JDialog {
 				ListarEmpleados list= new ListarEmpleados();
 				list.setModal(true);
 				list.setVisible(true);
+				actualizarGraficoEmpleados();
 			}
 		});
 		btnListarEmp.setBounds(468, 220, 169, 96);
@@ -94,7 +107,7 @@ public class GestionEmpleados extends JDialog {
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 21));
 		lblNewLabel.setBounds(20, 24, 340, 27);
 		panel.add(lblNewLabel);
-
+		actualizarGraficoEmpleados();
 	}
 	
 	public Persona logged() {
@@ -110,5 +123,43 @@ public class GestionEmpleados extends JDialog {
 	        }
 	    }
 	    return logged;
+	}
+	
+	private void actualizarGraficoEmpleados() {
+	    int activos = Altice.getInstance().cantidadEmpleadosActivos();
+	    int total = Altice.getInstance().getMisHumanos().size();
+
+	    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+	    dataset.addValue(activos, "Empleados", "Activos");
+	    dataset.addValue(total, "Empleados", "Total");
+
+	    JFreeChart barChart = ChartFactory.createBarChart(
+	        "", // Sin título para ahorrar espacio
+	        "Estado", 
+	        "Cantidad", 
+	        dataset, 
+	        PlotOrientation.VERTICAL,
+	        false, true, false);
+
+	    CategoryPlot plot = barChart.getCategoryPlot();
+	    plot.setBackgroundPaint(Color.WHITE);
+	    
+	    // Forzar números enteros en el eje Y
+	    NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+	    rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+	    rangeAxis.setLowerBound(0);
+
+	    // Color Naranja Altice
+	    BarRenderer renderer = (BarRenderer) plot.getRenderer();
+	    renderer.setSeriesPaint(0, new Color(255, 110, 52));
+
+	    ChartPanel chartPanel = new ChartPanel(barChart);
+	    
+	    // Configuración del panel contenedor
+	    panelGraficoGestion.setLayout(new BorderLayout());
+	    panelGraficoGestion.removeAll();
+	    panelGraficoGestion.add(chartPanel, BorderLayout.CENTER);
+	    panelGraficoGestion.revalidate();
+	    panelGraficoGestion.repaint();
 	}
 }

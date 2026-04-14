@@ -4,7 +4,11 @@ import java.awt.EventQueue;
 
 import javax.swing.JDialog;
 import javax.swing.JButton;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -19,9 +23,20 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import java.util.ArrayList;
+
 public class GestionPlanes extends JDialog {
 
 	private static final long serialVersionUID = 1L;
+	private JPanel panelGraficoGestion;
 
 	/**
 	 * Launch the application.
@@ -60,6 +75,7 @@ public class GestionPlanes extends JDialog {
 				RegistrarPlan reg = new RegistrarPlan(null);
 				reg.setModal(true);
 				reg.setVisible(true);
+				actualizarGraficoVentas();
 			}
 		});
 		btnCrearPlan.setBackground(new Color(255, 110, 52));
@@ -72,23 +88,25 @@ public class GestionPlanes extends JDialog {
 				ListarPlanes lis= new ListarPlanes();
 				lis.setModal(true);
 				lis.setVisible(true);
+				actualizarGraficoVentas();
 			}
 		});
 		btnListarPlanes.setBackground(new Color(255, 110, 52));
 		btnListarPlanes.setBounds(468, 220, 169, 96);
 		panel.add(btnListarPlanes);
 		
-		JPanel panelGraficoGestion = new JPanel();
+		panelGraficoGestion = new JPanel();
 		panelGraficoGestion.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelGraficoGestion.setBounds(20, 75, 428, 241);
 		panel.add(panelGraficoGestion);
+		panelGraficoGestion.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblNewLabel = new JLabel("Popularidad: Planes más vendidos este mes\r\n");
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 21));
 		lblNewLabel.setBounds(20, 24, 464, 27);
 		panel.add(lblNewLabel);
-
+		actualizarGraficoVentas();
 	}
 	
 	public Persona logged() {
@@ -104,5 +122,36 @@ public class GestionPlanes extends JDialog {
 	        }
 	    }
 	    return logged;
+	}
+	
+	public void actualizarGraficoVentas() {
+	    ArrayList<Integer> datosVentas = Altice.getInstance().ventasPorCategoriaList();
+	    
+	    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+	    dataset.addValue(datosVentas.get(0), "Ventas", "Internet");
+	    dataset.addValue(datosVentas.get(1), "Ventas", "TV");
+	    dataset.addValue(datosVentas.get(2), "Ventas", "Telefonía");
+
+	    JFreeChart barChart = ChartFactory.createBarChart(
+	        "", "Servicio", "Cantidad", 
+	        dataset, PlotOrientation.VERTICAL, 
+	        false, true, false
+	    );
+
+	    CategoryPlot plot = barChart.getCategoryPlot();
+	    plot.setBackgroundPaint(Color.WHITE);
+	    ((NumberAxis) plot.getRangeAxis()).setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+	    BarRenderer renderer = (BarRenderer) plot.getRenderer();
+	    renderer.setSeriesPaint(0, new Color(255, 110, 52));
+
+	    ChartPanel chartPanel = new ChartPanel(barChart);
+	    
+	    panelGraficoGestion.setLayout(new BorderLayout()); 
+	    
+	    panelGraficoGestion.removeAll(); 
+	    panelGraficoGestion.add(chartPanel, BorderLayout.CENTER);
+	    
+	    panelGraficoGestion.revalidate();
+	    panelGraficoGestion.repaint();
 	}
 }
