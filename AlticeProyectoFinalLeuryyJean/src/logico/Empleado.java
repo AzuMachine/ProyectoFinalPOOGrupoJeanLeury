@@ -58,6 +58,9 @@ public class Empleado extends Persona {
 	public void setFechaIngreso(LocalDateTime fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
 	}
-
+	
+	public void sumarComision(float monto) {
+	    this.comisiones += monto;
+	}
 	
 }

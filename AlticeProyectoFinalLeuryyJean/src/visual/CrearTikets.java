@@ -252,6 +252,17 @@ public class CrearTikets extends JDialog {
 		txtTecnico.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ListarParaAsigTec.selected = null;
+				ListarParaAsigTec listTec = new ListarParaAsigTec();
+				listTec.loadHeader();
+				listTec.setModal(true);
+				listTec.setVisible(true);
+				
+				if(ListarParaAsigTec.selected != null) {
+					txtTecnico.setText(ListarParaAsigTec.selected.getNombre());
+				}else {
+					txtTecnico.setText("");
+				}
 			}
 		});
 		txtTecnico.setForeground(new Color(246, 114, 75));

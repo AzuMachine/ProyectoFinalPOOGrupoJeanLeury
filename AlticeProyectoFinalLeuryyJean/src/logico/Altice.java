@@ -282,8 +282,6 @@ public class Altice implements Serializable{
 		}
 		return null;
 	}
-
-
 	//Fin codigo Persona
 
 	//1.Empleado.1 Actualizar empleado

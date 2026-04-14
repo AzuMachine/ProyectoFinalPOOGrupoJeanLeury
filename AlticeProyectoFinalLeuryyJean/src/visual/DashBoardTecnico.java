@@ -8,6 +8,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileOutputStream;
@@ -16,7 +18,13 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
@@ -28,15 +36,6 @@ import logico.Empleado;
 import logico.Persona;
 import logico.Ticket;
 import logico.Ticket.Tipo;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.ListSelectionModel;
 
 public class DashBoardTecnico extends JFrame {
 
@@ -273,9 +272,18 @@ public class DashBoardTecnico extends JFrame {
 				if(selected != null) {
 					Altice.getInstance().ticketResuelto(selected);
 
+					Persona per = Altice.getInstance().buscarPersonaByRNC(txtIDTECNICO.getText());
+					
+					if(per instanceof Empleado) {
+						Empleado emp = (Empleado) per;
+						emp.sumarComision(100f);
+					}
+					
 					if(selected.getType().equals(Tipo.INSTALACION) && selected.getCon().getEstado().equals(Estado.PENDIENTE)) {
 						selected.getCon().setEstado(Estado.VIGENTE);
 						unSoloticket = 0;
+
+						
 						JOptionPane.showMessageDialog(null, "Instalación completada: El contrato " + selected.getCon().getNumeroContrato() + " ha sido activado (VIGENTE).", "Sistema Altice", JOptionPane.INFORMATION_MESSAGE);
 					}
 
