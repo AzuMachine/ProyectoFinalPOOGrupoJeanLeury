@@ -325,8 +325,18 @@ public class Altice implements Serializable{
 		}
 		return false;
 	}
-
-	//1.Contrado. 3 buscarContratoByNum
+	
+	//1.Contrato. 3 Poner Vigente
+	public boolean changeContratoStateVigente(Contratos seletedContrato) {
+		
+		if(seletedContrato != null && seletedContrato.getEstado() != Estado.SUSPENDIDO && seletedContrato.getEstado().equals(Estado.PENDIENTE)) {
+			seletedContrato.setEstado(Estado.VIGENTE);
+			return true;
+		}
+		return false;
+	}
+	
+	//1.Contrado. 4 buscarContratoByNum
 
 	public Contratos buscarContratoByNumero(String numeroContratoID) {
 		
@@ -338,6 +348,7 @@ public class Altice implements Serializable{
 		
 		return null;
 	}
+	
 
 	//Fin codigo Contrato
 	

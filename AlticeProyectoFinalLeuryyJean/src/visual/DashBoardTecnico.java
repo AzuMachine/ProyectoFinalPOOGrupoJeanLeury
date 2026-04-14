@@ -212,10 +212,15 @@ public class DashBoardTecnico extends JFrame {
 
 		// Botón Realizado
 		btnRealizado = new JButton("Realizado");
+		btnRealizado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnRealizado.setEnabled(false);
 		btnRealizado.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnRealizado.setForeground(new Color(0, 0, 0));
-		btnRealizado.setBackground(new Color(46, 204, 113)); // Verde para éxito
+		btnRealizado.setBackground(new Color(46, 204, 113)); 
 		btnRealizado.setPreferredSize(new Dimension(120, 40));
 		buttonPane.add(btnRealizado);
 
@@ -228,7 +233,7 @@ public class DashBoardTecnico extends JFrame {
 		});
 		btnSalir.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnSalir.setForeground(new Color(0, 0, 0));
-		btnSalir.setBackground(new Color(192, 57, 43)); // Rojo para salir
+		btnSalir.setBackground(new Color(192, 57, 43)); 
 		btnSalir.setPreferredSize(new Dimension(100, 40));
 		buttonPane.add(btnSalir);
 	}
