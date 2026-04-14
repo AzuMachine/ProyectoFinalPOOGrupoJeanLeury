@@ -1,25 +1,11 @@
 package visual;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
 import java.awt.Color;
-import javax.swing.border.LineBorder;
-
-import logico.Altice;
-import logico.Empleado;
-import logico.Persona;
-import logico.Usuario;
-
-import javax.swing.JTextField;
+import java.awt.EventQueue;
 import java.awt.Font;
-import javax.swing.JButton;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,8 +13,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.file.FileSystemNotFoundException;
-import java.awt.event.ActionEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+
+import logico.Altice;
+import logico.Empleado;
+import logico.Persona;
+import logico.Usuario;
 
 public class LogIn extends JFrame {
 
@@ -46,7 +43,7 @@ public class LogIn extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				FileInputStream altEntra;
+				FileInputStream altEntra; 
 				FileOutputStream altSale;
 				ObjectInputStream altRead;
 				ObjectOutputStream altWrite;
@@ -61,7 +58,7 @@ public class LogIn extends JFrame {
 					try {
 						altSale = new FileOutputStream("Altice.dat");
 						altWrite = new ObjectOutputStream(altSale);
-						Usuario def = new Usuario(Usuario.rol.ADMINISTRADOR,"admin","admin");
+						Usuario def = new Usuario(Usuario.rolEmp.ADMINISTRADOR,"admin","admin");
 						Empleado aux = new Empleado("AdminDefault",def,0,"Disco duro","M","N/A","N/A","N/A","EMP-0"); 
 						aux.setDepartamento("Administración");
 						Altice.getInstance().regPersona(aux);
@@ -151,23 +148,28 @@ public class LogIn extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String user = txtUsuarioLog.getText();
 				String pass = txtPassLog.getText();
-
+				
+				
 				if (Altice.getInstance().confirmarIngreso(user, pass)) {
 					Usuario logueado = Altice.getLoginUser();
-
-					if (logueado.getRol() == Usuario.rol.ADMINISTRADOR) {
+					Persona per = Altice.getInstance().buscarPersonaByRNC(user);
+					
+					if (logueado.getRol() == Usuario.rolEmp.ADMINISTRADOR) {
 						DashBoardAdmin admin = new DashBoardAdmin();
 						admin.setVisible(true);
 					} 
-					else if (logueado.getRol() == Usuario.rol.COMERCIAL) {
+					else if (logueado.getRol() == Usuario.rolEmp.COMERCIAL) {
 						DashBoardComercial comercial = new DashBoardComercial();
 						comercial.setVisible(true);
 					} 
-					else if (logueado.getRol() == Usuario.rol.TECNICO) {
+					else if (logueado.getRol() == Usuario.rolEmp.TECNICO) {
+						Empleado emp = (Empleado) per;
 						DashBoardTecnico tecnico = new DashBoardTecnico();
+						tecnico.setTecnicoLogueado(emp);
 						tecnico.setVisible(true);
+						dispose();
 					} 
-					else if (logueado.getRol() == Usuario.rol.CLIENTE) {
+					else if (logueado.getRol() == Usuario.rolEmp.CLIENTE) {
 						DashBoardCliente cliente = new DashBoardCliente();
 						cliente.setVisible(true);
 					}

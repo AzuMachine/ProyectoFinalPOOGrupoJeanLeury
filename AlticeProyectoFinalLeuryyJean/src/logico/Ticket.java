@@ -8,7 +8,7 @@ public class Ticket {
 	public enum Estado {ABIERTO, EN_PROCESO, RESUELTO}
 	private String idTicket;
 	private Cliente cli;
-	private Contratos con; //Para saber el servicio/o cual de ellos falla
+	private Contrato con; //Para saber el servicio/o cual de ellos falla
 	private Tipo type;
 	private Prioridad pri;
 	private String desc; // detalle del ticket
@@ -16,7 +16,7 @@ public class Ticket {
 	private Empleado tecnico; //tecnico al que se le asigna (hacer verificaciones de lugar) 
 	private LocalDateTime fechaCreacion;
 	
-	public Ticket(String idTicket, Cliente cli, Contratos con, Tipo type, Prioridad pri, String desc, Empleado tecnico) {
+	public Ticket(String idTicket, Cliente cli, Contrato con, Tipo type, Prioridad pri, String desc, Empleado tecnico) {
 		super();
 		this.idTicket = idTicket;
 		this.cli = cli;
@@ -37,7 +37,7 @@ public class Ticket {
 		return cli;
 	}
 
-	public Contratos getCon() {
+	public Contrato getCon() {
 		return con;
 	}
 
@@ -73,7 +73,7 @@ public class Ticket {
 		this.cli = cli;
 	}
 
-	public void setCon(Contratos con) {
+	public void setCon(Contrato con) {
 		this.con = con;
 	}
 

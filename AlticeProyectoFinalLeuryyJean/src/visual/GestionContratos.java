@@ -8,7 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class ListarParaVerPlanes extends JDialog {
+public class GestionContratos extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -18,7 +18,7 @@ public class ListarParaVerPlanes extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ListarParaVerPlanes dialog = new ListarParaVerPlanes();
+			GestionContratos dialog = new GestionContratos();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -29,7 +29,7 @@ public class ListarParaVerPlanes extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListarParaVerPlanes() {
+	public GestionContratos() {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());

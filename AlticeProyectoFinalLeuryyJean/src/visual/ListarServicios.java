@@ -134,7 +134,7 @@ public class ListarServicios extends JDialog {
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(selectedServ != null) {
-					DashBoardCrearServ aux = new DashBoardCrearServ(selectedServ);
+					RegistrarServicio aux = new RegistrarServicio(selectedServ);
 					aux.setModal(true);
 					aux.setVisible(true);
 				}

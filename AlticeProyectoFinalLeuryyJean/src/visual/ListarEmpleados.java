@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import logico.Altice;
 import logico.Empleado;
 import logico.Persona;
-import logico.Usuario.rol;
+import logico.Usuario.rolEmp;
 
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -34,6 +34,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 
 public class ListarEmpleados extends JDialog {
 
@@ -49,6 +51,8 @@ public class ListarEmpleados extends JDialog {
 	private JScrollPane scrollPane;
 	private static JComboBox cbxSelecFiltro;
 	private static JRadioButton rdbtnDespedidos;
+	private JTextField txtBusqueda;
+	private JButton btnBuscar;
 
 
 	/**
@@ -72,13 +76,15 @@ public class ListarEmpleados extends JDialog {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ListarEmpleados.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
 		setBounds(100, 100, 1077, 640);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		contentPanel.setBackground(new Color(29,41,59));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(292, 136, 743, 375);
+			scrollPane.setBounds(33, 136, 994, 375);
 			contentPanel.add(scrollPane);
 			{
 				table = new JTable();
@@ -129,12 +135,14 @@ public class ListarEmpleados extends JDialog {
 		}
 
 		JLabel lblAquSeMuestran = new JLabel("Gestión y listado de empleados");
-		lblAquSeMuestran.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblAquSeMuestran.setBounds(10, 11, 505, 31);
+		lblAquSeMuestran.setForeground(new Color(255, 255, 255));
+		lblAquSeMuestran.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblAquSeMuestran.setBounds(33, 25, 412, 31);
 		contentPanel.add(lblAquSeMuestran);
 
 		JLabel lblNewLabel_1 = new JLabel("Filtrar por:");
-		lblNewLabel_1.setBounds(865, 18, 60, 14);
+		lblNewLabel_1.setForeground(new Color(255, 255, 255));
+		lblNewLabel_1.setBounds(906, 77, 60, 14);
 		contentPanel.add(lblNewLabel_1);
 
 		cbxSelecFiltro = new JComboBox();
@@ -147,46 +155,93 @@ public class ListarEmpleados extends JDialog {
 			}
 		});
 		cbxSelecFiltro.setModel(new DefaultComboBoxModel(new String[] {"<<Seleccione>>", "Administrador", "Comercial", "Técnico"}));
-		cbxSelecFiltro.setBounds(930, 18, 121, 22);
+		cbxSelecFiltro.setBounds(906, 103, 121, 22);
 		contentPanel.add(cbxSelecFiltro);
 
 		rdbtnDespedidos = new JRadioButton("Mostrar Despedidos");
+		rdbtnDespedidos.setForeground(Color.WHITE);
 		rdbtnDespedidos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				loadEmpleados();
 			}
 		});
-		rdbtnDespedidos.setBounds(832, 50, 161, 23);
+		rdbtnDespedidos.setBounds(667, 106, 143, 23);
+		rdbtnDespedidos.setBackground(new Color(29,41,59));
 		contentPanel.add(rdbtnDespedidos);
 
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBounds(29, 75, 222, 436);
-		contentPanel.add(panel);
-		panel.setLayout(null);
-
-		JPanel panelTopVentas = new JPanel();
-		panelTopVentas.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelTopVentas.setBounds(18, 29, 185, 136);
-		panel.add(panelTopVentas);
-
-		JPanel panelTopTecnicos = new JPanel();
-		panelTopTecnicos.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelTopTecnicos.setBounds(18, 194, 185, 92);
-		panel.add(panelTopTecnicos);
-
-		JPanel panelPeoresTecnicos = new JPanel();
-		panelPeoresTecnicos.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelPeoresTecnicos.setBounds(18, 315, 185, 92);
-		panel.add(panelPeoresTecnicos);
-
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(29, 53, 46, 14);
-		contentPanel.add(lblNewLabel);
-
 		JLabel lblNewLabel_2 = new JLabel("Doble click para detalle de empleado");
-		lblNewLabel_2.setBounds(537, 513, 218, 14);
+		lblNewLabel_2.setForeground(Color.WHITE);
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNewLabel_2.setBounds(421, 513, 218, 14);
 		contentPanel.add(lblNewLabel_2);
+		
+		txtBusqueda = new JTextField();
+		txtBusqueda.setBounds(33, 105, 160, 20);
+		contentPanel.add(txtBusqueda);
+		txtBusqueda.setColumns(10);
+		
+		btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String rnc = txtBusqueda.getText();
+		        Persona aux = Altice.getInstance().buscarPersonaByRNC(rnc);
+
+		        if (aux != null && aux instanceof Empleado) {
+		            Empleado empEncontrado = (Empleado) aux;
+		            
+		            // Definimos los textos de los botones
+		            Object[] opciones = {"Sí", "No", "Cancelar"};
+		            
+		            int seleccion = JOptionPane.showOptionDialog(
+		                null, 
+		                "Empleado encontrado: " + empEncontrado.getNombre() + "\n¿Desea abrir la vista de detalles?", 
+		                "Resultado de Búsqueda", 
+		                JOptionPane.YES_NO_CANCEL_OPTION, 
+		                JOptionPane.QUESTION_MESSAGE, 
+		                null, 
+		                opciones, 
+		                opciones[0]
+		            );
+
+		            // Opción SI: Abre modo detalle
+		            if (seleccion == 0) {
+		                RegistrarEmpleado det = new RegistrarEmpleado(empEncontrado);
+		                det.modoDetalle();
+		                det.setModal(true);
+		                det.setVisible(true);
+		            } 
+		            
+		            // Opción NO: Solo selecciona para habilitar botones de la lista
+		            if (seleccion == 1) {
+		                selected = empEncontrado;
+		                
+		                // Habilitamos los botones según el estado del empleado
+		                if (selected.isEstado()) {
+		                    btnActualizar.setEnabled(true);
+		                    btnDespedir.setEnabled(true);
+		                } else {
+		                    btnActualizar.setEnabled(false);
+		                    btnDespedir.setEnabled(false);
+		                }
+		                
+		                JOptionPane.showMessageDialog(null, "Empleado " + selected.getNombre() + " seleccionado correctamente.");
+		            }
+		            
+		            // Si es Cancelar (seleccion == 2), no hace nada.
+		            
+		        } else {
+		            JOptionPane.showMessageDialog(null, "No se encontró ningún empleado con el RNC: " + rnc, "Error", JOptionPane.ERROR_MESSAGE);
+		        }
+		    }
+		});
+		btnBuscar.setBounds(215, 102, 89, 23);
+		contentPanel.add(btnBuscar);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("Buscar Empleado por RNC");
+		lblNewLabel_2_1.setForeground(Color.WHITE);
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNewLabel_2_1.setBounds(33, 77, 218, 14);
+		contentPanel.add(lblNewLabel_2_1);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -240,7 +295,7 @@ public class ListarEmpleados extends JDialog {
 				getRootPane().setDefaultButton(btnActualizar);
 			}
 			{
-				btnCancelar = new JButton("Cancel");
+				btnCancelar = new JButton("Cancelar");
 				btnCancelar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
@@ -265,19 +320,19 @@ public class ListarEmpleados extends JDialog {
 				Empleado emp = (Empleado) temp;
 				boolean esRolBuscado = false; 
 
-				rol rolEmpleado = emp.getUser().getRol();
+				rolEmp rolEmpleado = emp.getUser().getRol();
 
 				//si es <<seleccione>>
 				if (selected.equalsIgnoreCase("<<Seleccione>>")){
 					esRolBuscado = true; //agrega todos al arreglo
 				}
-				else if (selected.equalsIgnoreCase("Administrador") && rolEmpleado == rol.ADMINISTRADOR){
+				else if (selected.equalsIgnoreCase("Administrador") && rolEmpleado == rolEmp.ADMINISTRADOR){
 					esRolBuscado = true;
 				}
-				else if (selected.equalsIgnoreCase("Comercial") && rolEmpleado == rol.COMERCIAL){
+				else if (selected.equalsIgnoreCase("Comercial") && rolEmpleado == rolEmp.COMERCIAL){
 					esRolBuscado = true;
 				}
-				else if (selected.equalsIgnoreCase("Técnico") && rolEmpleado == rol.TECNICO){
+				else if (selected.equalsIgnoreCase("Técnico") && rolEmpleado == rolEmp.TECNICO){
 					esRolBuscado = true;
 				}
 
@@ -301,13 +356,9 @@ public class ListarEmpleados extends JDialog {
 					}
 
 					model.addRow(raw);
-
 				}
 			}
 		}
-
-
-
 	}
 
 	public void loadHeaders() {

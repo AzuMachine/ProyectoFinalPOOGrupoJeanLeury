@@ -2,7 +2,7 @@ package logico;
 
 import java.time.LocalDateTime;
 
-public class Contratos {
+public class Contrato {
 	public enum Estado {PENDIENTE, VIGENTE, SUSPENDIDO, CANCELADO} /*PENDIENDTE (ya se hizo el contrato, 
 	pero aun no se ha instalado), VIGENTE (paga a tiempo y el servicio funciona), 
 	SUSPENDIDO (cuando hay corte por deuda), CANCELADO (aplica al cambiar de plan, se cancela y se crea otro contrato nuevo)*/
@@ -15,7 +15,7 @@ public class Contratos {
 	private Empleado emp; //id del empleado que hizo el contrato
 	private String direccionInstalacion; //obtenido a traves del cliente
 	
-	public Contratos(String numeroContrato, Plan plan, Cliente cli, Empleado emp, String direccionInstalacion) {
+	public Contrato(String numeroContrato, Plan plan, Cliente cli, Empleado emp) {
 		super();
 		this.numeroContrato = numeroContrato;
 		this.inicio = LocalDateTime.now();

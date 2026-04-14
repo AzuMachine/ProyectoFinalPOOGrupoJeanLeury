@@ -25,7 +25,7 @@ import logico.Ticket;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class CrearTikets extends JDialog {
+public class RegistrarTickets extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel panelContent = new JPanel();
@@ -44,11 +44,10 @@ public class CrearTikets extends JDialog {
 	private JRadioButton rdbtnBaja;
 	private JRadioButton rdbtnAveria;
 	private JRadioButton rdbtnInstalacion;
-	private JTextField txtTecnico;
 
 	public static void main(String[] args) {
 		try {
-			CrearTikets dialog = new CrearTikets();
+			RegistrarTickets dialog = new RegistrarTickets();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -56,8 +55,9 @@ public class CrearTikets extends JDialog {
 		}
 	}
 
-	public CrearTikets() {
+	public RegistrarTickets() {
 		setTitle("Sistema de Tickets - Altice");
+		// Reducimos el alto total para que sea más manejable (900px es suficiente)
 		setBounds(100, 100, 630, 920); 
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
@@ -125,48 +125,48 @@ public class CrearTikets extends JDialog {
 		JLabel lblTipo = new JLabel("Tipo de Ticket:");
 		lblTipo.setForeground(Color.WHITE);
 		lblTipo.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblTipo.setBounds(20, 262, 150, 20);
+		lblTipo.setBounds(20, 200, 150, 20);
 		panelContent.add(lblTipo);
 
 		rdbtnAveria = new JRadioButton("Avería");
 		rdbtnAveria.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		rdbtnAveria.setForeground(Color.WHITE);
 		rdbtnAveria.setBackground(NAVY_ALTICE);
-		rdbtnAveria.setBounds(20, 287, 100, 25);
+		rdbtnAveria.setBounds(20, 225, 100, 25);
 		panelContent.add(rdbtnAveria);
 
 		rdbtnInstalacion = new JRadioButton("Instalación");
 		rdbtnInstalacion.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		rdbtnInstalacion.setForeground(Color.WHITE);
 		rdbtnInstalacion.setBackground(NAVY_ALTICE);
-		rdbtnInstalacion.setBounds(120, 287, 120, 25);
+		rdbtnInstalacion.setBounds(120, 225, 120, 25);
 		panelContent.add(rdbtnInstalacion);
 
 		JLabel lblPrioridad = new JLabel("Nivel de Prioridad:");
 		lblPrioridad.setForeground(Color.WHITE);
 		lblPrioridad.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblPrioridad.setBounds(20, 332, 150, 20);
+		lblPrioridad.setBounds(20, 270, 150, 20);
 		panelContent.add(lblPrioridad);
 
 		rdbtnBaja = new JRadioButton("Baja");
 		rdbtnBaja.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		rdbtnBaja.setForeground(Color.WHITE);
 		rdbtnBaja.setBackground(NAVY_ALTICE);
-		rdbtnBaja.setBounds(20, 357, 70, 25);
+		rdbtnBaja.setBounds(20, 295, 70, 25);
 		panelContent.add(rdbtnBaja);
 
 		rdbtnMedia = new JRadioButton("Media");
 		rdbtnMedia.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		rdbtnMedia.setForeground(Color.WHITE);
 		rdbtnMedia.setBackground(NAVY_ALTICE);
-		rdbtnMedia.setBounds(95, 358, 75, 25);
+		rdbtnMedia.setBounds(95, 296, 75, 25);
 		panelContent.add(rdbtnMedia);
 
 		rdbtnAlta = new JRadioButton("Alta");
 		rdbtnAlta.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		rdbtnAlta.setForeground(Color.WHITE);
 		rdbtnAlta.setBackground(NAVY_ALTICE);
-		rdbtnAlta.setBounds(185, 357, 70, 25);
+		rdbtnAlta.setBounds(185, 295, 70, 25);
 		panelContent.add(rdbtnAlta);
 
 		// --- PANEL DERECHO: INFO CLIENTE ---
@@ -226,14 +226,14 @@ public class CrearTikets extends JDialog {
 		JLabel lblComentario = new JLabel("Comentario del Ticket:");
 		lblComentario.setForeground(ACCENT_ORANGE);
 		lblComentario.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblComentario.setBounds(20, 404, 226, 25);
+		lblComentario.setBounds(20, 360, 226, 25);
 		panelContent.add(lblComentario);
 		
 		txtPane_Comentrio_Ticket = new JTextPane();
 		txtPane_Comentrio_Ticket.setForeground(Color.WHITE);
 		txtPane_Comentrio_Ticket.setBackground(INPUT_DARK);
 		txtPane_Comentrio_Ticket.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtPane_Comentrio_Ticket.setBounds(20, 439, 570, 331);
+		txtPane_Comentrio_Ticket.setBounds(20, 390, 570, 380);
 		panelContent.add(txtPane_Comentrio_Ticket);
 		
 		JLabel lblAviso = new JLabel("ℹ Esta información no se puede modificar una vez creada.");
@@ -241,25 +241,6 @@ public class CrearTikets extends JDialog {
 		lblAviso.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		lblAviso.setBounds(20, 780, 400, 20);
 		panelContent.add(lblAviso);
-		
-		JLabel lblIdTcnicoclick = new JLabel("ID Técnico (Click):");
-		lblIdTcnicoclick.setForeground(Color.WHITE);
-		lblIdTcnicoclick.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblIdTcnicoclick.setBounds(20, 190, 150, 20);
-		panelContent.add(lblIdTcnicoclick);
-		
-		txtTecnico = new JTextField();
-		txtTecnico.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		txtTecnico.setForeground(new Color(246, 114, 75));
-		txtTecnico.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtTecnico.setEditable(false);
-		txtTecnico.setBackground(new Color(43, 51, 73));
-		txtTecnico.setBounds(20, 215, 200, 30);
-		panelContent.add(txtTecnico);
 
 		// --- PANEL DE BOTONES ---
 		JPanel buttonPane = new JPanel();

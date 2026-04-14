@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import logico.Contratos.Estado;
+import logico.Contrato.Estado;
 import logico.Servicio.Serv;
+import logico.Usuario.rolEmp;
 
 public class Altice implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -15,7 +16,7 @@ public class Altice implements Serializable{
 	private ArrayList<Plan> misPlanes;
 	private ArrayList<Servicio> misServicios;
 	private ArrayList<Pago> misPagos;
-	private ArrayList<Contratos> misContratos;
+	private ArrayList<Contrato> misContratos;
 	private ArrayList<Ticket> misTickets;
 	public static Usuario loginUser;
 
@@ -26,8 +27,6 @@ public class Altice implements Serializable{
 	private int idServFIB = 1;
 	private int idServTV = 1;
 	private int idServTEL = 1;
-
-
 
 	public Altice() {
 		super();
@@ -65,7 +64,7 @@ public class Altice implements Serializable{
 		return misPagos;
 	}
 
-	public ArrayList<Contratos> getMisContratos() {
+	public ArrayList<Contrato> getMisContratos() {
 		return misContratos;
 	}
 
@@ -137,7 +136,8 @@ public class Altice implements Serializable{
 		Altice.alt = alt;
 	}
 
-	//<<<<<<<<<<<<<<<<<<<<<<INICIO METODOS DE BUSQUEDA>>>>>>>>>>>>>>>>>>>>
+	//<<<<<<<<<<<<<<<<<<<<<<INICIO METODOS DE BUSQUEDA y ACCIONES>>>>>>>>>>>>>>>>>>>>
+
 	//1.Plan.1 Buscar Plan by ID
 	public Plan buscarPlanByID(String idPlan) {
 		for (Plan planes : misPlanes) {
@@ -167,7 +167,9 @@ public class Altice implements Serializable{
 
 	public Servicio buscarServicioByID(String idServi) {
 		for (Servicio services : misServicios) {
-			if(services.getIdService().equalsIgnoreCase(idServi)) {return services;}
+			if(services.getIdService().equalsIgnoreCase(idServi)) {
+				return services;
+			}
 		}
 		return null;
 	}
@@ -188,40 +190,44 @@ public class Altice implements Serializable{
 
 	//1.Servicio.3 Eliminar
 	public void eliminarServicio(Servicio selectedServ) {
+
+		misServicios.remove(selectedServ);
+
+
 		if(selectedServ != null) {
 			selectedServ.setHabilitado(false);
 		}
 	}
 
-
-	//1.Servicios. 4 Actualizar
-	public void actualizarServicio(Servicio miServi) {
-		int index = buscarIndexServicioByID(miServi.getIdService());
-
-		if(index != -1) {
-			misServicios.set(index, miServi);
+	
+	//1.Servicio.4 Actualizar
+	public void actualizarServicio(Servicio serv) {
+		int index = buscarIndiceServicioId(serv.getIdService());
+		if(index!=-1) {
+			misServicios.set(index, serv);
 		}
-
 	}
 
-	//1. Servicios. 5 Buscar Index serv
-	private int buscarIndexServicioByID(String idService) {
-		int auxServices = -1;
-		boolean encontrado = false;
-		int ind = 0;
+	//1.Servicio.5 Buscar Indice servicio por ID	
+	public int buscarIndiceServicioId(String idServicio) {
+		int  aux = -1;
+		boolean encontrado = false; 
+		int i =0;
 
-		while (!encontrado && ind < misServicios.size()) {
-			if(misServicios.get(ind).getIdService().equalsIgnoreCase(idService)) {
-				encontrado = true; auxServices = ind;
+		while(!encontrado && i<misServicios.size()){
+			if(misServicios.get(i).getIdService().equalsIgnoreCase(idServicio)) {
+				encontrado = true;
+				aux = i;
 			}
-			ind++;
+			i++;
 		}
-
-		return auxServices;
+		return aux;
 	}
 
-	//Fin codigo servicios
 
+	//Fin codigo Servicios
+
+	//1. Login.1 confirmar ingreso
 	public boolean confirmarIngreso(String username, String pass) {
 		boolean login = false;
 		for (Persona p: misHumanos ) {
@@ -232,6 +238,14 @@ public class Altice implements Serializable{
 			}
 		}
 		return login;
+	}
+	//1. Login.2 adminPorDefecto
+	public void adminPorDefecto() {
+	    if (misHumanos.size() == 0) {
+	        Usuario adminUser = new Usuario(rolEmp.ADMINISTRADOR, "admin", "admin");
+	        Empleado admin = new Empleado("Administrador", adminUser, 0, "N/A", "N/A", "000", "admin@altice.com", "000", "ADM-001");
+	        misHumanos.add(admin);
+	    }
 	}
 
 	//1.Persona.1 Agregar persona
@@ -265,6 +279,7 @@ public class Altice implements Serializable{
 			misHumanos.set(index, emp);
 		}
 	}
+
 	//1.Empleado.2 Buscar Empleado por ID
 	public Persona buscarEmpleadoByID(String idEmp) {
 		for (Persona p : misHumanos) {
@@ -278,7 +293,7 @@ public class Altice implements Serializable{
 		return null;
 	}
 
-	//1.Empleado.3 Buscar IndiceEmpleadoId
+	//1.Empleado.3 Buscar indice Empleado Id
 	public int buscarIndiceEmpleadoId(String idEmp) {
 		int  aux = -1;
 		boolean encontrado = false; 
@@ -295,6 +310,7 @@ public class Altice implements Serializable{
 		}
 		return aux;
 	}
+
 	//1.Empleado.4 despedir Empleado
 	public void despedirEmpleado(Empleado emp) {
 		int index = buscarIndiceEmpleadoId(emp.getIdEmpleado());
@@ -303,12 +319,25 @@ public class Altice implements Serializable{
 			misHumanos.set(index, emp);
 		}
 	}
+	
+	//1.Empleado.5 Buscar Empleado por RNC
+	public Persona buscarEmpleadoByRNC(String RNC) {
+		for (Persona p : misHumanos) {
+			if(p instanceof Empleado) {
+				Empleado emp = (Empleado)p;
+				if (emp.getRnc().equalsIgnoreCase(RNC)) {
+					return emp;
+				}
+			}
+		}
+		return null;
+	}
 
 	//Fin codigo Empleado
 
 	//1.Contrato. 1 HacerCancelar
 
-	public boolean changeContratoStateCancelado(Contratos seletedContrato) {
+	public boolean changeContratoStateCancelado(Contrato seletedContrato) {
 		if(seletedContrato != null && seletedContrato.getEstado() != Estado.SUSPENDIDO) {
 			seletedContrato.setEstado(Estado.CANCELADO);
 			return true;
@@ -318,7 +347,7 @@ public class Altice implements Serializable{
 
 	//1.Contrato. 2 Suspendido
 
-	public boolean changeContratoStateSuspendido(Contratos seletedContrato) {
+	public boolean changeContratoStateSuspendido(Contrato seletedContrato) {
 		if(seletedContrato != null && seletedContrato.getEstado() != Estado.CANCELADO) {
 			seletedContrato.setEstado(Estado.SUSPENDIDO);
 			return true;
@@ -327,7 +356,7 @@ public class Altice implements Serializable{
 	}
 	
 	//1.Contrato. 3 Poner Vigente
-	public boolean changeContratoStateVigente(Contratos seletedContrato) {
+	public boolean changeContratoStateVigente(Contrato seletedContrato) {
 		
 		if(seletedContrato != null && seletedContrato.getEstado() != Estado.SUSPENDIDO && seletedContrato.getEstado().equals(Estado.PENDIENTE)) {
 			seletedContrato.setEstado(Estado.VIGENTE);
@@ -338,9 +367,9 @@ public class Altice implements Serializable{
 	
 	//1.Contrado. 4 buscarContratoByNum
 
-	public Contratos buscarContratoByNumero(String numeroContratoID) {
+	public Contrato buscarContratoByNumero(String numeroContratoID) {
 		
-		for (Contratos contrato : misContratos) {
+		for (Contrato contrato : misContratos) {
 			if(contrato.getNumeroContrato().equalsIgnoreCase(numeroContratoID)) {
 				return contrato;
 			}

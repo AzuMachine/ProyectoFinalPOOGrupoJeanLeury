@@ -6,14 +6,14 @@ import java.time.LocalDateTime;
 public class Usuario implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	public enum rol{ADMINISTRADOR, COMERCIAL, TECNICO, CLIENTE}
-	private rol rol; //rol de la persona para
+	public enum rolEmp{ADMINISTRADOR, COMERCIAL, TECNICO, CLIENTE}
+	private rolEmp rol; //rol de la persona para
 	private String userName;
 	private String password;
 	private LocalDateTime ultimoIngreso;
 	
 	
-	public Usuario(logico.Usuario.rol rol, String userName, String password) {
+	public Usuario(logico.Usuario.rolEmp rol, String userName, String password) {
 		super();
 		this.rol = rol;
 		this.userName = userName;
@@ -22,7 +22,7 @@ public class Usuario implements Serializable{
 	}
 
 
-	public rol getRol() {
+	public rolEmp getRol() {
 		return rol;
 	}
 
@@ -42,7 +42,7 @@ public class Usuario implements Serializable{
 	}
 
 
-	public void setRol(rol rol) {
+	public void setRol(rolEmp rol) {
 		this.rol = rol;
 	}
 

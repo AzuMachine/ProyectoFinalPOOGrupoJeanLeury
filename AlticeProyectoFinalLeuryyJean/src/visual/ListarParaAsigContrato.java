@@ -24,8 +24,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import logico.Altice;
-import logico.Contratos;
-import logico.Contratos.Estado;
+import logico.Contrato;
+import logico.Contrato.Estado;
 
 public class ListarParaAsigContrato extends JDialog {
 
@@ -36,7 +36,7 @@ public class ListarParaAsigContrato extends JDialog {
 	private JButton btnSalir;
 	private static Object raw[];
 	private static DefaultTableModel model;
-	public static Contratos seleted = null;
+	public static Contrato seleted = null;
 
 	// Paleta de colores consistente
 	private final Color NAVY_ALTICE = new Color(33, 50, 65);      
@@ -166,7 +166,7 @@ public class ListarParaAsigContrato extends JDialog {
 		model.setRowCount(0);
 		raw = new Object[6];
 		
-		for (Contratos contraTemp : Altice.getInstance().getMisContratos()) {
+		for (Contrato contraTemp : Altice.getInstance().getMisContratos()) {
 			if(contraTemp.getEstado().equals(Estado.PENDIENTE)) {
 				raw[0] = contraTemp.getNumeroContrato();
 				raw[1] = contraTemp.getInicio();

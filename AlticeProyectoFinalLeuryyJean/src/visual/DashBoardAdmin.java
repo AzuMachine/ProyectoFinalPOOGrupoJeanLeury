@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logico.Altice;
+import logico.Empleado;
 import logico.Persona;
 
 import java.awt.Toolkit;
@@ -26,12 +27,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 public class DashBoardAdmin extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel panelAdmin;
 	private Dimension dim;
+	private JButton btnContratos;
+	private JButton btnMisDatos;
 
 	/**
 	 * Launch the application.
@@ -79,6 +85,7 @@ public class DashBoardAdmin extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DashBoardAdmin.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 857, 661);
+		setResizable(false);
 		dim = getToolkit().getScreenSize();
 		setSize(dim.width-50,dim.height - 45);
 		setLocationRelativeTo(null);
@@ -90,12 +97,12 @@ public class DashBoardAdmin extends JFrame {
 		
 		JPanel panelBotones = new JPanel();
 		panelBotones.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelBotones.setBounds(118, 54, 1297, 204);
+		panelBotones.setBounds(43, 79, 1447, 241);
 		panelAdmin.add(panelBotones);
 		panelBotones.setLayout(null);
 		
 		//Boton de Seccion empleados
-		JButton btnGeEmp = new JButton("Gestión de Empleados");
+		JButton btnGeEmp = new JButton("Gestión Empleados");
 		//Gestion empleados cambio de color
 		btnGeEmp.addMouseListener(new MouseAdapter() {
 			@Override
@@ -117,8 +124,8 @@ public class DashBoardAdmin extends JFrame {
 		btnGeEmp.setBackground(new Color(255, 110, 52));
 		btnGeEmp.setForeground(Color.WHITE);
 		btnGeEmp.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnGeEmp.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/perfil.png")));
-		btnGeEmp.setBounds(55, 41, 255, 122);
+		btnGeEmp.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/50perfil.png")));
+		btnGeEmp.setBounds(14, 52, 224, 75);
 		panelBotones.add(btnGeEmp);
 		
 		//Boton de Seccion Planes
@@ -137,13 +144,16 @@ public class DashBoardAdmin extends JFrame {
 		//Plan funcion del boton
 		btnGePlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				GestionPlanes ges = new GestionPlanes();
+				ges.setModal(true);
+				ges.setVisible(true);
 			}
 		});
 		btnGePlan.setBackground(new Color(255, 110, 52));
-		btnGePlan.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/configPlan2.png")));
+		btnGePlan.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/50configPlan2.png")));
 		btnGePlan.setForeground(Color.WHITE);
 		btnGePlan.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnGePlan.setBounds(365, 41, 255, 122);
+		btnGePlan.setBounds(252, 52, 224, 75);
 		panelBotones.add(btnGePlan);
 		
 		//Boton de Seccion Reportes
@@ -162,18 +172,20 @@ public class DashBoardAdmin extends JFrame {
 		//Reportes funcion del boton
 		btnReportes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Informes inf = new Informes();
+				inf.setModal(true);
+				inf.setVisible(true);
 			}
 		});
 		btnReportes.setBackground(new Color(255, 110, 52));
-		btnReportes.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/reportes.png")));
+		btnReportes.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/50reportes.png")));
 		btnReportes.setForeground(Color.WHITE);
 		btnReportes.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnReportes.setBounds(675, 41, 255, 122);
+		btnReportes.setBounds(490, 52, 224, 75);
 		panelBotones.add(btnReportes);
 		
 		//Boton de Perfil de Admin
-		JButton btnMisDatos = new JButton("Mis Datos");
+		btnMisDatos = new JButton("Mis Datos");
 		//Admin cambio de color
 		btnMisDatos.addMouseListener(new MouseAdapter() {
 			@Override
@@ -188,25 +200,127 @@ public class DashBoardAdmin extends JFrame {
 		//Admin funcion del boton
 		btnMisDatos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Empleado aux = (Empleado)logged();
+				RegistrarEmpleado detalle = new RegistrarEmpleado(aux);
+				detalle.modoDetalle();
+				detalle.setModal(true);
+				detalle.setVisible(true);
 			}
 		});
 		btnMisDatos.setBackground(new Color(255, 110, 52));
-		btnMisDatos.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/admin.png")));
+		btnMisDatos.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/adminDash.png")));
 		btnMisDatos.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnMisDatos.setForeground(Color.WHITE);
-		btnMisDatos.setBounds(985, 41, 255, 122);
+		btnMisDatos.setBounds(1204, 52, 224, 75);
 		panelBotones.add(btnMisDatos);
+		
+		JButton btnGestionServ = new JButton("Gestión Servicios");
+		btnGestionServ.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnGestionServ.setBackground(new Color(255, 110, 0));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnGestionServ.setBackground(new Color(255, 110, 52)); 
+			}
+		});
+		btnGestionServ.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GestionServicios ges = new GestionServicios();
+				ges.setModal(true);
+				ges.setVisible(true);
+			}
+		});
+		btnGestionServ.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/50servicios.png")));
+		btnGestionServ.setForeground(Color.WHITE);
+		btnGestionServ.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnGestionServ.setBackground(new Color(255, 110, 52));
+		btnGestionServ.setBounds(728, 52, 224, 75);
+		panelBotones.add(btnGestionServ);
+		
+		JButton btnGestionClientes = new JButton("Gestión Clientes");
+		btnGestionClientes.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnGestionClientes.setBackground(new Color(255, 110, 0));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnGestionClientes.setBackground(new Color(255, 110, 52));
+			}
+		});
+		
+		btnGestionClientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GestionClientes ges = new GestionClientes();
+				ges.setModal(true);
+				ges.setVisible(true);
+			}
+		});
+		btnGestionClientes.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/adminDash.png"))); //mibombo
+		
+		btnGestionClientes.setForeground(Color.WHITE);
+		btnGestionClientes.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnGestionClientes.setBackground(new Color(255, 110, 52));
+		btnGestionClientes.setBounds(966, 52, 224, 75);
+		panelBotones.add(btnGestionClientes);
+		
+		btnContratos = new JButton("Gestión de Contratos");
+		btnContratos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnContratos.setIcon(new ImageIcon(DashBoardAdmin.class.getResource("/Imagenes/adminDash.png")));
+		btnContratos.setForeground(Color.WHITE);
+		btnContratos.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnContratos.setBackground(new Color(255, 110, 52));
+		btnContratos.setBounds(611, 138, 224, 75);
+		panelBotones.add(btnContratos);
 		
 		JPanel panelGraphYStats = new JPanel();
 		panelGraphYStats.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelGraphYStats.setBounds(198, 312, 1137, 449);
+		panelGraphYStats.setBounds(198, 392, 1137, 369);
 		panelAdmin.add(panelGraphYStats);
 		panelGraphYStats.setLayout(null);
 		
 		JPanel panelGraphic = new JPanel();
 		panelGraphic.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelGraphic.setBounds(51, 51, 591, 346);
+		panelGraphic.setBounds(51, 55, 591, 259);
 		panelGraphYStats.add(panelGraphic);
+		panelGraphic.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel = new JLabel("Empleados Activos: ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		lblNewLabel.setBounds(775, 50, 316, 27);
+		panelGraphYStats.add(lblNewLabel);
+		
+		JLabel lblPlanesActivos = new JLabel("Planes Activos: ");
+		lblPlanesActivos.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		lblPlanesActivos.setBounds(775, 129, 316, 27);
+		panelGraphYStats.add(lblPlanesActivos);
+		
+		JLabel lblNewLabel_2 = new JLabel("Pagos realizados:");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		lblNewLabel_2.setBounds(775, 208, 316, 27);
+		panelGraphYStats.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Pagos por realizar: ");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		lblNewLabel_3.setBounds(775, 287, 316, 27);
+		panelGraphYStats.add(lblNewLabel_3);
+		
+		JLabel lblAdministracin = new JLabel("Administración");
+		lblAdministracin.setForeground(Color.WHITE);
+		lblAdministracin.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblAdministracin.setBounds(43, 25, 412, 31);
+		panelAdmin.add(lblAdministracin);
+		
+		JLabel lblDatosGeneralesDel = new JLabel("Datos Generales del sistema");
+		lblDatosGeneralesDel.setForeground(Color.WHITE);
+		lblDatosGeneralesDel.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblDatosGeneralesDel.setBounds(198, 338, 412, 31);
+		panelAdmin.add(lblDatosGeneralesDel);
 
 	}
 	

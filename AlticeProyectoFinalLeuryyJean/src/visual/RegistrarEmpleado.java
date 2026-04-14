@@ -11,7 +11,7 @@ import javax.swing.border.EmptyBorder;
 import logico.Altice;
 import logico.Empleado;
 import logico.Usuario;
-import logico.Usuario.rol;
+import logico.Usuario.rolEmp;
 
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
@@ -56,6 +56,9 @@ public class RegistrarEmpleado extends JDialog {
 	private JSpinner spnEdad;
 	public JComboBox cbxRol;
 	private JButton btnGenerar;
+	private boolean detalle = false;
+	private JLabel lblTitulo;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -209,17 +212,17 @@ public class RegistrarEmpleado extends JDialog {
 		 lblNewLabel_3.setBounds(348, 68, 190, 14);
 		 panelReg.add(lblNewLabel_3);
 
-		 JLabel lblTitulo = new JLabel("Crear Nuevo Empleado");
+		 lblTitulo = new JLabel("Crear Nuevo Empleado");
 
 		 if(emp == null) {
 			 lblTitulo.setText("Crear Nuevo Empleado");
 		 }else {
-			 lblTitulo.setText("Actualizar Empleado");
+			 lblTitulo.setText("Actualizar Empleado");				 
 		 }
 
 		 lblTitulo.setForeground(Color.WHITE);
 		 lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 20));
-		 lblTitulo.setBounds(24, 11, 280, 36);
+		 lblTitulo.setBounds(38, 23, 280, 36);
 		 panelReg.add(lblTitulo);
 
 		 JLabel lblNewLabel_3_1 = new JLabel("Datos Personales");
@@ -328,15 +331,15 @@ public class RegistrarEmpleado extends JDialog {
 
 						 if(emp == null) {
 							 Usuario us= crearUsuario();
-							 rol rolUser = us.getRol();
+							 rolEmp rolUser = us.getRol();
 							 Empleado aux = new Empleado(txtNombre.getText(), us, new Integer(spnEdad.getValue().toString()),txtDireccion.getText(),getSexo(), txtTelefono.getText(), txtCorreo.getText(), txtRNC.getText(),lblIdEmpleado.getText());
 
 							 if(rolUser !=null) {
-								 if (rolUser == rol.ADMINISTRADOR) {
+								 if (rolUser == rolEmp.ADMINISTRADOR) {
 									 aux.setDepartamento("Administración");
-								 } else if (rolUser == rol.COMERCIAL) {
+								 } else if (rolUser == rolEmp.COMERCIAL) {
 									 aux.setDepartamento("Ventas y A.C."); 
-								 } else if (rolUser == rol.TECNICO) {
+								 } else if (rolUser == rolEmp.TECNICO) {
 									 aux.setDepartamento("Infra. y Redes");
 								 }
 							 }
@@ -362,13 +365,13 @@ public class RegistrarEmpleado extends JDialog {
 							 //Rol y el Departamento
 							 String selectedRol = cbxRol.getSelectedItem().toString();
 							 if (selectedRol.equalsIgnoreCase("Administrador")) {
-								 emp.getUser().setRol(rol.ADMINISTRADOR);
+								 emp.getUser().setRol(rolEmp.ADMINISTRADOR);
 								 emp.setDepartamento("Administración");
 							 } else if (selectedRol.equalsIgnoreCase("Comercial")) {
-								 emp.getUser().setRol(rol.COMERCIAL);
+								 emp.getUser().setRol(rolEmp.COMERCIAL);
 								 emp.setDepartamento("Ventas y A.C.");
 							 } else if (selectedRol.equalsIgnoreCase("Técnico")) {
-								 emp.getUser().setRol(rol.TECNICO);
+								 emp.getUser().setRol(rolEmp.TECNICO);
 								 emp.setDepartamento("Infra. y Redes");
 							 }
 
@@ -453,13 +456,13 @@ public class RegistrarEmpleado extends JDialog {
 	 public Usuario crearUsuario(){
 		 String selected = cbxRol.getSelectedItem().toString();
 
-		 rol rolElegido = null;
+		 rolEmp rolElegido = null;
 		 if (selected.equalsIgnoreCase("Administrador")) {
-			 rolElegido = rol.ADMINISTRADOR;
+			 rolElegido = rolEmp.ADMINISTRADOR;
 		 } else if (selected.equalsIgnoreCase("Comercial")) {
-			 rolElegido = rol.COMERCIAL;
+			 rolElegido = rolEmp.COMERCIAL;
 		 } else if (selected.equalsIgnoreCase("Técnico")) {
-			 rolElegido = rol.TECNICO;
+			 rolElegido = rolEmp.TECNICO;
 		 }
 
 		 Usuario user = new Usuario(rolElegido, txtUsername.getText(),txtPassword.getText());
@@ -502,12 +505,12 @@ public class RegistrarEmpleado extends JDialog {
 			 txtPassword.setText(emp.getUser().getPassword());
 			 txtDepartamento.setText(emp.getDepartamento());
 
-			 rol elRol = emp.getUser().getRol();
-			 if (elRol == rol.ADMINISTRADOR) {
+			 rolEmp elRol = emp.getUser().getRol();
+			 if (elRol == rolEmp.ADMINISTRADOR) {
 				 cbxRol.setSelectedItem("Administrador");
-			 } else if (elRol == rol.COMERCIAL) {
+			 } else if (elRol == rolEmp.COMERCIAL) {
 				 cbxRol.setSelectedItem("Comercial");
-			 } else if (elRol == rol.TECNICO) {
+			 } else if (elRol == rolEmp.TECNICO) {
 				 cbxRol.setSelectedItem("Técnico");
 			 }
 
@@ -524,7 +527,9 @@ public class RegistrarEmpleado extends JDialog {
 	 }
 
 	 public void modoDetalle() {
+		 detalle = true;
 		 setTitle("Detalle del Empleado");
+		 lblTitulo.setText("Detalles de Empleado");				 
 		 txtNombre.setEditable(false);
 		 txtRNC.setEditable(false);
 		 txtTelefono.setEditable(false);

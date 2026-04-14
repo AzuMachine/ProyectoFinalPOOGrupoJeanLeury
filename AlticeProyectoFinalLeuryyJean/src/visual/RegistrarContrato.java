@@ -6,21 +6,34 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame; 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-public class Contrato extends JFrame { 
+import logico.Altice;
+import logico.Cliente;
+import logico.Contrato;
+import logico.Empleado;
+import logico.Pago;
+import logico.Persona;
+import logico.Plan;
+import logico.Ticket;
+
+public class RegistrarContrato extends JFrame { 
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane; 
@@ -37,20 +50,25 @@ public class Contrato extends JFrame {
 	private final Color INPUT_DARK = new Color(43, 51, 73);       
 	private final Color BURNT_SIENNA = new Color(221, 112, 87);   
 	private JTextField txtPlanes;
+	private JButton btnBuscarClienteRNC;
+	private JComboBox cmbxMetodoPago;
+	private JButton btnFinalizarContra;
+	private Cliente clienteSelected = null;
+	private Plan planSelected = null;
 
 
 	public static void main(String[] args) {
 		try {
-			Contrato frame = new Contrato();
+			RegistrarContrato frame = new RegistrarContrato();
 			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public Contrato() {
+	public RegistrarContrato() {
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setFont(new Font("Tahoma", Font.BOLD, 16));
 		setTitle("SISTEMA DE GESTIÓN DE CLIENTES Y CONTRATOS - ALTICE");
 		setResizable(false);
@@ -78,10 +96,11 @@ public class Contrato extends JFrame {
 		panel.add(panelBusqueda);
 		panelBusqueda.setLayout(null);
 
-		JLabel lblNewLabel_1 = new JLabel("Icono");
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(RegistrarContrato.class.getResource("/Imagenes/50configPlan2.png")));
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1.setBounds(15, 30, 80, 70);
+		lblNewLabel_1.setBounds(53, 40, 66, 70);
 		panelBusqueda.add(lblNewLabel_1);
 
 		JLabel lblNewLabel_2 = new JLabel("RNC del Cliente:");
@@ -98,12 +117,24 @@ public class Contrato extends JFrame {
 		panelBusqueda.add(txtRNC_Cliente);
 		txtRNC_Cliente.setColumns(10);
 
-		JButton BtnBuscarClienteRNC = new JButton("Buscar Cliente");
-		BtnBuscarClienteRNC.setBackground(ACCENT_ORANGE);
-		BtnBuscarClienteRNC.setForeground(Color.WHITE);
-		BtnBuscarClienteRNC.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		BtnBuscarClienteRNC.setBounds(540, 45, 180, 35);
-		panelBusqueda.add(BtnBuscarClienteRNC);
+		btnBuscarClienteRNC = new JButton("Buscar Cliente");
+		btnBuscarClienteRNC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Persona p = Altice.getInstance().buscarPersonaByRNC(txtRNC_Cliente.getText());
+				if (p instanceof Cliente) {
+					clienteSelected = (Cliente) p;
+					JOptionPane.showMessageDialog(null, "Cliente encontrado: " + clienteSelected.getNombre(), "Información", JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, "Cliente no registrado en el sistema", "Error", JOptionPane.ERROR_MESSAGE);
+					clienteSelected = null;
+				}
+			}
+		});
+		btnBuscarClienteRNC.setBackground(ACCENT_ORANGE);
+		btnBuscarClienteRNC.setForeground(Color.WHITE);
+		btnBuscarClienteRNC.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnBuscarClienteRNC.setBounds(540, 45, 180, 35);
+		panelBusqueda.add(btnBuscarClienteRNC);
 
 		JLabel lblNewLabel_3 = new JLabel("Ingrese documento de identidad para la busqueda del Cliente");
 		lblNewLabel_3.setForeground(Color.WHITE);
@@ -138,21 +169,28 @@ public class Contrato extends JFrame {
 		panelPlanes.add(lblNewLabel_DescPlan);
 
 		txtPlanes = new JTextField();
+		txtPlanes.setText("Haga clic aquí para listar planes...");
 		txtPlanes.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtPlanes.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				ListarPlanes listP = new ListarPlanes();
-				listP.setEnabled(true);
+				ListarParaAsignarPlanes listP = new ListarParaAsignarPlanes();
+				listP.setModal(true);
+				listP.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosed(WindowEvent e) {
+						if (ListarParaAsignarPlanes.selected != null) {
+							planSelected = ListarParaAsignarPlanes.selected;
+							txtPlanes.setText(planSelected.getNombreComercial());
+							actualizarCaja();
+						}
+					}
+				});
 				listP.setVisible(true);
 			}
 		});
 		txtPlanes.setEditable(false);
 		txtPlanes.setBounds(15, 50, 370, 35);
-		panelPlanes.add(txtPlanes);
-		//txtPlanes.setColumns(10);
-
 		panelPlanes.add(txtPlanes);
 
 		JLabel lblSeleccinDelPlan = new JLabel("Selección del Plan:");
@@ -166,7 +204,7 @@ public class Contrato extends JFrame {
 		panelDeCaja.setBackground(NAVY_ALTICE);
 		panelDeCaja.setLayout(null);
 		panelDeCaja.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		panelDeCaja.setBounds(455, 240, 400, 350); // Aumentado
+		panelDeCaja.setBounds(455, 240, 400, 350);
 		panel.add(panelDeCaja);
 
 		JLabel lblCajaCierre = new JLabel("Caja y Cierre");
@@ -184,7 +222,7 @@ public class Contrato extends JFrame {
 		txtPrecioBasePlan = new JTextField();
 		txtPrecioBasePlan.setFont(new Font("Tahoma", Font.BOLD, 16));
 		txtPrecioBasePlan.setEditable(false);
-		txtPrecioBasePlan.setBounds(185, 50, 200, 35); // Aumentado
+		txtPrecioBasePlan.setBounds(185, 50, 200, 35);
 		panelDeCaja.add(txtPrecioBasePlan);
 
 		JLabel lblInstalacion = new JLabel("Costo Instalación:");
@@ -194,6 +232,7 @@ public class Contrato extends JFrame {
 		panelDeCaja.add(lblInstalacion);
 
 		txtCostoInstalacion = new JTextField();
+		txtCostoInstalacion.setText("1500.00");
 		txtCostoInstalacion.setFont(new Font("Tahoma", Font.BOLD, 16));
 		txtCostoInstalacion.setEditable(false);
 		txtCostoInstalacion.setBackground(ACCENT_ORANGE);
@@ -242,9 +281,9 @@ public class Contrato extends JFrame {
 		lblDatosPago.setBounds(15, 5, 150, 25);
 		panelDatosPago.add(lblDatosPago);
 
-		JComboBox cmbxMetodoPago = new JComboBox();
+		cmbxMetodoPago = new JComboBox();
 		cmbxMetodoPago.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cmbxMetodoPago.setModel(new DefaultComboBoxModel(new String[] {"<<Seleccione>>"}));
+		cmbxMetodoPago.setModel(new DefaultComboBoxModel(new String[] {"<<Seleccione>>","Efectivo","Transferencia","Tarjeta","Punto Altice"}));
 		cmbxMetodoPago.setBounds(175, 30, 180, 30);
 		panelDatosPago.add(cmbxMetodoPago);
 
@@ -254,12 +293,12 @@ public class Contrato extends JFrame {
 		panelDatosPago.add(lblFactura);
 
 		textField = new JTextField();
+		textField.setText("FAC-" + (int)(Math.random() * 100000));
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textField.setEditable(false);
 		textField.setBounds(175, 63, 180, 28);
 		panelDatosPago.add(textField);
 
-		// Panel de Botones Inferior
 		JPanel buttonPane = new JPanel();
 		buttonPane.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		FlowLayout fl_buttonPane = new FlowLayout(FlowLayout.RIGHT);
@@ -268,10 +307,43 @@ public class Contrato extends JFrame {
 		buttonPane.setLayout(fl_buttonPane);
 		contentPane.add(buttonPane, BorderLayout.SOUTH);
 
-		JButton BtnFinalizarContra = new JButton("Finalizar y Cobrar");
-		BtnFinalizarContra.setFont(new Font("Tahoma", Font.BOLD, 16)); // Aumentado
-		BtnFinalizarContra.setFocusPainted(false);
-		buttonPane.add(BtnFinalizarContra);
+		btnFinalizarContra = new JButton("Finalizar y Cobrar");
+		btnFinalizarContra.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (clienteSelected != null && planSelected != null && cmbxMetodoPago.getSelectedIndex() > 0) {
+					
+					// Obtenemos el empleado logueado desde la instancia de Altice
+					Empleado empLog = null;
+					Persona pLog = Altice.getInstance().buscarPersonaByRNC(Altice.loginUser.getUserName());
+					if (pLog instanceof Empleado) {
+						empLog = (Empleado) pLog;
+					}
+
+					// 1. Crear el Contrato
+					String codContrato = textField.getText();
+					Contrato nuevoContrato = new Contrato(codContrato, planSelected, clienteSelected, empLog);
+					Altice.getInstance().getMisContratos().add(nuevoContrato);
+
+					// 2. Crear el Pago
+					float total = planSelected.getPrecioTotal() + Float.parseFloat(txtCostoInstalacion.getText());
+					Pago nuevoPago = new Pago("REC-" + codContrato, nuevoContrato, total, "N/A");
+					Altice.getInstance().getMisPagos().add(nuevoPago);
+
+					// 3. Crear Ticket de instalación (Técnico = null)
+					Ticket nuevoTicket = new Ticket("TK-" + codContrato, clienteSelected, nuevoContrato, Ticket.Tipo.INSTALACION, Ticket.Prioridad.ALTA, "Instalación Inicial de Plan", null);
+					Altice.getInstance().getMisTickets().add(nuevoTicket);
+
+					JOptionPane.showMessageDialog(null, "Contrato registrado con éxito. Ticket de instalación generado.", "Finalizado", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "Debe buscar un cliente, seleccionar un plan y elegir un método de pago", "Atención", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		btnFinalizarContra.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnFinalizarContra.setFocusPainted(false);
+		buttonPane.add(btnFinalizarContra);
 
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
@@ -279,7 +351,16 @@ public class Contrato extends JFrame {
 				dispose();
 			}
 		});
-		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 16)); // Aumentado
+		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 16));
 		buttonPane.add(btnCancelar);
+	}
+
+	private void actualizarCaja() {
+		if (planSelected != null) {
+			float precioBase = planSelected.getPrecioTotal();
+			float costoInstalacion = Float.parseFloat(txtCostoInstalacion.getText());
+			txtPrecioBasePlan.setText("RD$ " + precioBase);
+			txtTotalCajaInicial.setText("RD$ " + (precioBase + costoInstalacion));
+		}
 	}
 }
