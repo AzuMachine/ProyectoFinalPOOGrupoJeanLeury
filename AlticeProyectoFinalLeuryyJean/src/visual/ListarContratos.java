@@ -47,15 +47,6 @@ public class ListarContratos extends JDialog {
 	private JTextField txtBusqueda;
 	private JButton btnBuscar;
 
-	public static void main(String[] args) {
-		try {
-			ListarContratos dialog = new ListarContratos();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	public ListarContratos() {
 		setTitle("Lista de Contratos");

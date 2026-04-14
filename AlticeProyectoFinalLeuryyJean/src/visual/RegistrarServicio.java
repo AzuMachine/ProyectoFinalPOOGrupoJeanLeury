@@ -50,15 +50,7 @@ public class RegistrarServicio extends JDialog {
     private JButton btnCancelar;
     private JButton btnListar;
     
-    public static void main(String[] args) {
-        try {
-            RegistrarServicio dialog = new RegistrarServicio(null);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public RegistrarServicio(Servicio servicio) {
         setTitle("Registrar Servicios - Altice");

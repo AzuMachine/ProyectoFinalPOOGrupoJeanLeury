@@ -57,14 +57,6 @@ public class RegistrarContrato extends JFrame {
 	private Plan planSelected = null;
 
 
-	public static void main(String[] args) {
-		try {
-			RegistrarContrato frame = new RegistrarContrato(null);
-			frame.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	public RegistrarContrato(Contrato encontrado) {
 		

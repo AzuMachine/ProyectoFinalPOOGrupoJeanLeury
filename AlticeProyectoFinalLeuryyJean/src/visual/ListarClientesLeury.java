@@ -43,15 +43,6 @@ public class ListarClientesLeury extends JDialog {
 	private static JComboBox<String> cbxTipoCliente;
 	private static JRadioButton rdbtnInactivos;
 
-	public static void main(String[] args) {
-		try {
-			ListarClientesLeury dialog = new ListarClientesLeury();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	public ListarClientesLeury() {
 		setTitle("Lista de Clientes");

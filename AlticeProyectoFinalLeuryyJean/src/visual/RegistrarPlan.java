@@ -53,16 +53,6 @@ public class RegistrarPlan extends JDialog {
 	private JButton btnRegistrar;
 	private JPanel panelAgregar;
 
-	public static void main(String[] args) {
-		try {
-			// Pasamos null para modo registro
-			RegistrarPlan dialog = new RegistrarPlan(null);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	// Constructor modificado para recibir un Plan
 	public RegistrarPlan(Plan plan) {

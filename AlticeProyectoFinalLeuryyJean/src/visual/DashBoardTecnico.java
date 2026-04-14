@@ -26,6 +26,7 @@ import logico.Altice;
 import logico.Ticket;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -58,7 +59,7 @@ public class DashBoardTecnico extends JFrame {
 					DashBoardTecnico frame = new DashBoardTecnico();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Ha ocurrido un error. Por favor cierre el programa.","Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
