@@ -63,7 +63,11 @@ public class GestionContratos extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				// Llamada a la clase solicitada
 				RegistrarContrato reg = new RegistrarContrato(null);
+<<<<<<< HEAD
 				//reg.setModal(true);
+=======
+				reg.setModal(true);
+>>>>>>> branch 'master' of https://github.com/AzuMachine/ProyectoFinalPOOGrupoJeanLeury.git
 				reg.setVisible(true);	
 			}
 		});
@@ -77,7 +81,7 @@ public class GestionContratos extends JDialog {
 		btnListarCon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Llamada a la clase solicitada
-				ListarClientesLeury list = new ListarClientesLeury();
+				ListarContratos list = new ListarContratos();
 				list.setModal(true);
 				list.setVisible(true);
 			}

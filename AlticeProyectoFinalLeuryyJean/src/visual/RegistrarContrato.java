@@ -15,6 +15,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame; 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,7 +34,7 @@ import logico.Persona;
 import logico.Plan;
 import logico.Ticket;
 
-public class RegistrarContrato extends JFrame { 
+public class RegistrarContrato extends JDialog { 
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane; 

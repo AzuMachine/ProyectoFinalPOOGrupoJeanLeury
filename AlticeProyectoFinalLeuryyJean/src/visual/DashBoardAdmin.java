@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,6 +40,7 @@ public class DashBoardAdmin extends JFrame {
 	private Dimension dim;
 	private JButton btnContratos;
 	private JButton btnMisDatos;
+	private JButton btnRespaldo;
 
 	/**
 	 * Launch the application.
@@ -284,7 +286,7 @@ public class DashBoardAdmin extends JFrame {
 		
 		JPanel panelGraphYStats = new JPanel();
 		panelGraphYStats.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelGraphYStats.setBounds(198, 392, 1137, 369);
+		panelGraphYStats.setBounds(198, 378, 1137, 369);
 		panelAdmin.add(panelGraphYStats);
 		panelGraphYStats.setLayout(null);
 		
@@ -325,6 +327,21 @@ public class DashBoardAdmin extends JFrame {
 		lblDatosGeneralesDel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblDatosGeneralesDel.setBounds(198, 338, 412, 31);
 		panelAdmin.add(lblDatosGeneralesDel);
+		
+		btnRespaldo = new JButton("Respaldo Servidor");
+		btnRespaldo.setBackground(new Color(255, 110, 52)); // Manteniendo tu estética
+		btnRespaldo.setForeground(Color.WHITE);
+		btnRespaldo.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnRespaldo.setBounds(683, 758, 167, 40); // Ubicación sugerida
+
+		btnRespaldo.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        // Llamamos a la función de envío
+		        enviarRespaldoAlServidor();
+		    }
+		});
+
+		panelAdmin.add(btnRespaldo);
 
 	}
 	
@@ -342,5 +359,28 @@ public class DashBoardAdmin extends JFrame {
 	        }
 	    }
 	    return logged;
+	}
+	public void enviarRespaldoAlServidor() {
+	    try {
+	        // 1. Conectar al servidor (ajusta la IP si no es local)
+	        Socket socket = new Socket("127.0.0.1", 7000); 
+	        
+	        // 2. Preparar el flujo para enviar el objeto
+	        ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+	        
+	        // 3. Enviar la instancia única de Altice (el corazón de tu sistema)
+	        // Usamos Altice.getInstance() porque es lo que guardas localmente
+	        salida.writeObject(Altice.getInstance());
+	        
+	        // 4. Limpiar y cerrar
+	        salida.flush();
+	        salida.close();
+	        socket.close();
+	        
+	        JOptionPane.showMessageDialog(this, "Respaldo enviado al servidor con éxito.");
+	    } catch (IOException e) {
+	        JOptionPane.showMessageDialog(this, "Error de conexión con el servidor de respaldo.", "Error", JOptionPane.ERROR_MESSAGE);
+	        e.printStackTrace();
+	    }
 	}
 }
