@@ -7,24 +7,27 @@ import java.net.Socket;
 public class Servidor {
 
     public static void main(String args[]) {
-        // El try-with-resources asegura que el ServerSocket se cierre automáticamente
+        // 1. Usamos try-with-resources para que el ServerSocket se cierre solo
         try (ServerSocket sfd = new ServerSocket(7001)) {
             System.out.println("Servidor de Respaldos iniciado en el puerto 7001...");
             
             while (true) {
                 try {
+                    // 2. Aceptamos la conexión
                     Socket nsfd = sfd.accept();
                     System.out.println("Conexión recibida desde: " + nsfd.getInetAddress());
                     
-                    // Se delega la gestión del socket al hilo 'Flujo'
+                    // 3. Pasamos el socket al hilo. 
+                    // El hilo 'Flujo' debe ser el encargado de cerrar 'nsfd' al terminar.
                     Flujo hiloRespaldo = new Flujo(nsfd);
                     hiloRespaldo.start(); 
+                    
                 } catch (IOException ioe) {
                     System.out.println("Error aceptando conexión: " + ioe.getMessage());
                 }
             }
         } catch (IOException ioe) {
-            System.out.println("No se pudo iniciar el servidor en el puerto 7001: " + ioe.getMessage());
+            System.out.println("Comunicación rechazada o puerto ocupado: " + ioe.getMessage());
             System.exit(1);
         }
     }
