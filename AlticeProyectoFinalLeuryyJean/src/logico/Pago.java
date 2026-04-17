@@ -1,8 +1,10 @@
 package logico;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Pago {
+public class Pago implements Serializable{
+	private static final long serialVersionUID = 1L;
 	public enum Metodo {EFECTIVO, TRANSFERENCIA, TARJETA, PUNTO_ALTICE}
 	private String numeroRecibo;
 	private Contrato con;

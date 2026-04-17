@@ -1,9 +1,10 @@
 	package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Plan {
-	
+public class Plan implements Serializable{
+	private static final long serialVersionUID = 1L;
 	public enum Tipo {RESIDENCIAL,NEGOCIOS}
 	public enum Estado {VIGENTE, DESCONTINUADO} //al eliminar los planes simplemente los descontinuamos, no los eliminamos del registro
     

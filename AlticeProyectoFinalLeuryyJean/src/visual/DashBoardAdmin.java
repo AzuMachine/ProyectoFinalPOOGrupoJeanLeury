@@ -375,24 +375,17 @@ public class DashBoardAdmin extends JFrame {
 	}
 	public void enviarRespaldoAlServidor() {
 	    try {
-	        // 1. Conectar al servidor (ajusta la IP si no es local)
-	        Socket socket = new Socket("127.0.0.1", 7000); 
-	        
-	        // 2. Preparar el flujo para enviar el objeto
+	        Socket socket = new Socket("127.0.0.1", 7001); 
 	        ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
 	        
-	        // 3. Enviar la instancia única de Altice (el corazón de tu sistema)
-	        // Usamos Altice.getInstance() porque es lo que guardas localmente
 	        salida.writeObject(Altice.getInstance());
 	        
-	        // 4. Limpiar y cerrar
-	        salida.flush();
-	        salida.close();
+	        salida.flush(); // SUPER IMPORTANTE: Envía lo que falte
+	        salida.close(); // Esto cierra el stream y el socket
 	        socket.close();
 	        
-	        JOptionPane.showMessageDialog(this, "Respaldo enviado al servidor con éxito.");
-	    } catch (IOException e) {
-	        JOptionPane.showMessageDialog(this, "Error de conexión con el servidor de respaldo.", "Error", JOptionPane.ERROR_MESSAGE);
+	        JOptionPane.showMessageDialog(this, "Respaldo enviado al servidor.");
+	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 	}

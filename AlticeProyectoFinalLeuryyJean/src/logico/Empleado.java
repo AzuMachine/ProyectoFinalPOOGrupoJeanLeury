@@ -1,8 +1,10 @@
 package logico;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Empleado extends Persona {
+public class Empleado extends Persona implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String idEmpleado; 
 	private float sueldoBase;
 	private float comisiones; //Depende del tipo de trabajador, Administrador-> 15% sueldo base, Comercial ->5% por cada venta, tecnico-> 100$ por ticket resuelto

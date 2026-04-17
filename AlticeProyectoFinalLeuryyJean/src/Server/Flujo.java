@@ -1,9 +1,13 @@
 package Server;
 
+import java.io.EOFException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+import logico.Altice;
 
 public class Flujo extends Thread {
     
@@ -14,27 +18,32 @@ public class Flujo extends Thread {
     }
 
     @Override
+ // Dentro de tu clase Flujo (que extiende de Thread)
     public void run() {
-        try {
-            ObjectInputStream entradaDatos = new ObjectInputStream(conexionCliente.getInputStream());
+        try (ObjectInputStream entrada = new ObjectInputStream(conexionCliente.getInputStream())) {
             
-            Object sistemaRespaldado = entradaDatos.readObject();
+            // Intentar recibir el objeto Altice
+            Altice respaldo = (Altice) entrada.readObject();
             
-            FileOutputStream archivoSalida = new FileOutputStream("RespaldoEmpresa.dat");
-            ObjectOutputStream escritorArchivo = new ObjectOutputStream(archivoSalida);
+            // Aquí guardas el respaldo en el disco del servidor
+            FileOutputStream fileOut = new FileOutputStream("Respaldo_Servidor.dat");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(respaldo);
+            out.close();
             
-            escritorArchivo.writeObject(sistemaRespaldado);
+            System.out.println("Respaldo procesado y guardado con éxito.");
             
-            escritorArchivo.close();
-            archivoSalida.close();
-            entradaDatos.close();
-            conexionCliente.close();
-            
-            System.out.println("El respaldo se guardó correctamente en el servidor.");
-            
-        } catch (Exception e) {
-            System.out.println("Ocurrió un error al intentar guardar el respaldo.");
-            e.printStackTrace(); // o algún mensaje joption o lo que sea
+        } catch (EOFException e) {
+            // Esto es normal cuando el cliente cierra el socket rápido
+            System.out.println("Transmisión finalizada: El cliente cerró la conexión.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error en el flujo de datos: " + e.getMessage());
+        } finally {
+            try {
+                if (conexionCliente != null) conexionCliente.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

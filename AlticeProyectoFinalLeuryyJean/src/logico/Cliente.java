@@ -1,8 +1,10 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Cliente extends Persona {
+public class Cliente extends Persona implements Serializable{
+	private static final long serialVersionUID = 1L;
 	public enum Cat {FISICO, JURIDICO}
 	private Cat categoria; //Fisico o juridico
 	private boolean deuda; //para saber si hay deuda o no

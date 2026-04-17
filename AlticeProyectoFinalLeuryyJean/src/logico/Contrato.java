@@ -1,8 +1,10 @@
 package logico;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Contrato {
+public class Contrato implements Serializable{
+	private static final long serialVersionUID = 1L;
 	public enum Estado {PENDIENTE, VIGENTE, SUSPENDIDO, CANCELADO} /*PENDIENDTE (ya se hizo el contrato, 
 	pero aun no se ha instalado), VIGENTE (paga a tiempo y el servicio funciona), 
 	SUSPENDIDO (cuando hay corte por deuda), CANCELADO (aplica al cambiar de plan, se cancela y se crea otro contrato nuevo)*/

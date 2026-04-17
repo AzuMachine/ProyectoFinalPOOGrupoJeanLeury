@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Usuario implements Serializable{
-	
 	private static final long serialVersionUID = 1L;
 	public enum rolEmp{ADMINISTRADOR, COMERCIAL, TECNICO, CLIENTE}
 	private rolEmp rol; //rol de la persona para

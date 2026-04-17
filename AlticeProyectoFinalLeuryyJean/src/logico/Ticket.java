@@ -1,8 +1,10 @@
 package logico;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Ticket {
+public class Ticket implements Serializable{
+	private static final long serialVersionUID = 1L;
 	public enum Tipo{INSTALACION, AVERIA}
 	public enum Prioridad {ALTA, MEDIA, BAJA}
 	public enum Estado {ABIERTO, EN_PROCESO, RESUELTO}

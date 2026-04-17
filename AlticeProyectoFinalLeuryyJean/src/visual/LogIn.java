@@ -1,16 +1,5 @@
 package visual;
 
-
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
-
-
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -24,16 +13,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.file.FileSystemNotFoundException;
-import java.awt.event.ActionEvent;
-
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -43,210 +30,160 @@ import logico.Empleado;
 import logico.Persona;
 import logico.Usuario;
 
-
 public class LogIn extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JLabel alticeIconoLogIn;
 	private JTextField txtUsuarioLog;
 	private JTextField txtPassLog;
 	private JButton btnLogIn;
 
-	/**
-	 * Launch the application.
-	 */
-	/*Creando proceso de archivos*/
 	public static void main(String[] args) {
-	    EventQueue.invokeLater(new Runnable() {
-	        public void run() {
-	            FileInputStream altEntra; 
-	            ObjectInputStream altRead;
-	            boolean cargado = false;
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				boolean cargado = false;
 
-	            // 1. Intentar cargar el archivo principal
-	            try {
-	                altEntra = new FileInputStream("Altice.dat");
-	                altRead = new ObjectInputStream(altEntra);
-	                Altice.setAlt((Altice)altRead.readObject());
-	                altRead.close();
-	                cargado = true;
-	            } catch (FileNotFoundException e) {
-	                // 2. Si no existe, intentar cargar el respaldo local "RespaldoEmpresa.dat"
-	                try {
-	                    altEntra = new FileInputStream("RespaldoEmpresa.dat");
-	                    altRead = new ObjectInputStream(altEntra);
-	                    Altice.setAlt((Altice)altRead.readObject());
-	                    altRead.close();
-	                    cargado = true;
-	                    System.out.println("Cargado desde respaldo local.");
-	                } catch (Exception e2) {
-	                    System.out.println("No hay respaldo local.");
-	                }
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
+				// 1. Intentar cargar el archivo principal o el respaldo local
+				cargado = cargarDatosLocal("Altice.dat") || cargarDatosLocal("RespaldoEmpresa.dat");
 
-	            // 3. Si nada funcionó, crear configuración inicial
-	            if (!cargado) {
-	                crearConfiguracionInicial();
-	            }
+				// 2. Si nada funcionó, intentar del servidor (opcional) o crear inicial
+				if (!cargado) {
+					// Intentar recuperar del servidor con timeout para no bloquear
+					if (!recuperarRespaldoDeServidor()) {
+						crearConfiguracionInicial();
+					}
+				}
 
-	            // 4. Iniciar la interfaz siempre
-	            try {
-	                LogIn frame = new LogIn();
-	                frame.setVisible(true);
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }		
-	        }
-	    });
+				// 3. Iniciar la interfaz
+				try {
+					LogIn frame = new LogIn();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
-	
-	/**
-	 * Create the frame.
-	 */
+
+	// Método auxiliar para evitar repetición de código y fugas de recursos
+	private static boolean cargarDatosLocal(String nombreArchivo) {
+		try (FileInputStream fis = new FileInputStream(nombreArchivo);
+			 ObjectInputStream ois = new ObjectInputStream(fis)) {
+			Altice.setAlt((Altice) ois.readObject());
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	public LogIn() {
 		setTitle("Altice v1.0");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LogIn.class.getResource("/Imagenes/AlticeLogoVentanas.PNG")));
-
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 403, 541);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
-		contentPane.setLocation(-173, 0);
-		contentPane.setBackground(new Color(29,41,59));
+		contentPane.setBackground(new Color(29, 41, 59));
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JPanel panelLogin = new JPanel();
-		panelLogin.setBorder(new LineBorder(new Color(44, 51, 70), 1, true));
 		panelLogin.setBackground(new Color(44, 51, 70));
 		panelLogin.setBounds(92, 98, 203, 305);
 		contentPane.add(panelLogin);
 		panelLogin.setLayout(null);
 
-		alticeIconoLogIn = new JLabel("");
+		JLabel alticeIconoLogIn = new JLabel("");
 		alticeIconoLogIn.setBounds(74, 19, 59, 63);
-		panelLogin.add(alticeIconoLogIn);
 		alticeIconoLogIn.setIcon(new ImageIcon(LogIn.class.getResource("/Imagenes/AlticeIcon40px.png")));
+		panelLogin.add(alticeIconoLogIn);
 
 		txtUsuarioLog = new JTextField();
-		txtUsuarioLog.setForeground(SystemColor.window);
-		txtUsuarioLog.setBorder(new LineBorder(SystemColor.activeCaption, 1, true));
+		txtUsuarioLog.setForeground(Color.WHITE);
+		txtUsuarioLog.setBackground(new Color(73, 87, 107));
 		txtUsuarioLog.setBounds(20, 134, 160, 27);
-		txtUsuarioLog.setBackground(new Color (73,87,107));
 		panelLogin.add(txtUsuarioLog);
-		txtUsuarioLog.setColumns(10);
 
 		txtPassLog = new JTextField();
-		txtPassLog.setForeground(SystemColor.window);
-		txtPassLog.setBorder(new LineBorder(new Color(171, 173, 179)));
+		txtPassLog.setForeground(Color.WHITE);
+		txtPassLog.setBackground(new Color(73, 87, 107));
 		txtPassLog.setBounds(20, 213, 160, 27);
-		txtPassLog.setBackground(new Color (73,87,107));
 		panelLogin.add(txtPassLog);
-		txtPassLog.setColumns(10);
 
-		JLabel lblNewLabel = new JLabel("Usuario:");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setBounds(20, 101, 86, 14);
-		panelLogin.add(lblNewLabel);
+		JLabel lblUser = new JLabel("Usuario:");
+		lblUser.setForeground(Color.WHITE);
+		lblUser.setBounds(20, 101, 86, 14);
+		panelLogin.add(lblUser);
 
-		JLabel lblNewLabel_1 = new JLabel("Contraseña:");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setBounds(20, 180, 86, 14);
-		panelLogin.add(lblNewLabel_1);
+		JLabel lblPass = new JLabel("Contraseña:");
+		lblPass.setForeground(Color.WHITE);
+		lblPass.setBounds(20, 180, 86, 14);
+		panelLogin.add(lblPass);
 
 		btnLogIn = new JButton("Iniciar Sesión");
+		btnLogIn.setBackground(new Color(255, 110, 52));
+		btnLogIn.setForeground(Color.WHITE);
+		btnLogIn.setBounds(57, 259, 110, 23);
 		btnLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String user = txtUsuarioLog.getText();
 				String pass = txtPassLog.getText();
-				
-				
+
 				if (Altice.getInstance().confirmarIngreso(user, pass)) {
 					Usuario logueado = Altice.getLoginUser();
 					Persona per = Altice.getInstance().buscarPersonaByRNC(user);
-					
-					if (logueado.getRol() == Usuario.rolEmp.ADMINISTRADOR) {
-						DashBoardAdmin admin = new DashBoardAdmin();
-						admin.setVisible(true);
-					} 
-					else if (logueado.getRol() == Usuario.rolEmp.COMERCIAL) {
-						DashBoardComercial comercial = new DashBoardComercial();
-						comercial.setVisible(true);
-					} 
-					else if (logueado.getRol() == Usuario.rolEmp.TECNICO) {
-						Empleado emp = (Empleado) per;
-						DashBoardTecnico tecnico = new DashBoardTecnico();
-						tecnico.setTecnicoLogueado(emp);
-						tecnico.setVisible(true);
-						dispose();
-					} 
-					else if (logueado.getRol() == Usuario.rolEmp.CLIENTE) {
-						DashBoardCliente cliente = new DashBoardCliente();
-						cliente.setVisible(true);
-					}
-					dispose(); 
 
+					if (logueado.getRol() == Usuario.rolEmp.ADMINISTRADOR) {
+						new DashBoardAdmin().setVisible(true);
+					} else if (logueado.getRol() == Usuario.rolEmp.TECNICO) {
+						DashBoardTecnico tecnico = new DashBoardTecnico();
+						tecnico.setTecnicoLogueado((Empleado) per);
+						tecnico.setVisible(true);
+					}
+					dispose();
 				} else {
-					if (user.isEmpty()||pass.isEmpty()) {
-						javax.swing.JOptionPane.showMessageDialog(null, "El campo del usuario y la contraseña no deben estar vacíos", "Campos Incompletos", javax.swing.JOptionPane.ERROR_MESSAGE);
-					}
-					else {
-						javax.swing.JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de Autenticación", javax.swing.JOptionPane.ERROR_MESSAGE);						
-					}
-					
+					JOptionPane.showMessageDialog(null, "Credenciales incorrectas");
 				}
 			}
 		});
-		btnLogIn.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		btnLogIn.setForeground(SystemColor.textHighlightText);
-		btnLogIn.setBorder(new LineBorder(new Color(255, 110, 52), 1, true));
-		btnLogIn.setBackground(new Color(255, 110, 52));
-		btnLogIn.setBounds(57, 259, 89, 23);
-
 		panelLogin.add(btnLogIn);
-
 	}
+
 	private static boolean recuperarRespaldoDeServidor() {
-		try {
-			Socket socket = new Socket("127.0.0.1", 7000);
-			ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+		// Try-with-resources para cerrar socket y streams automáticamente
+		try (Socket socket = new Socket()) {
+			// Timeout de 2 segundos: si el servidor no responde, no congela el LogIn
+			socket.connect(new InetSocketAddress("127.0.0.1", 7001), 2000);
 			
-			// Recibimos el objeto Altice del servidor
-			Altice temp = (Altice) entrada.readObject();
-			Altice.setAlt(temp);
-			
-			// Guardamos localmente para que ya exista la próxima vez
-			FileOutputStream altSale = new FileOutputStream("Altice.dat");
-			ObjectOutputStream altWrite = new ObjectOutputStream(altSale);
-			altWrite.writeObject(Altice.getInstance());
-			altWrite.close();
-			entrada.close();
-			socket.close();
-			JOptionPane.showMessageDialog(null, "Sistema restaurado exitosamente desde el servidor de respaldo.");
-			return true;
+			try (ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+				 FileOutputStream altSale = new FileOutputStream("Altice.dat");
+				 ObjectOutputStream altWrite = new ObjectOutputStream(altSale)) {
+				
+				Altice temp = (Altice) entrada.readObject();
+				Altice.setAlt(temp);
+				altWrite.writeObject(Altice.getInstance());
+				
+				JOptionPane.showMessageDialog(null, "Sistema restaurado desde el servidor.");
+				return true;
+			}
 		} catch (Exception e) {
-			System.out.println("No se pudo contactar al servidor de respaldo.");
+			System.out.println("Servidor de respaldo no disponible.");
 			return false;
 		}
 	}
+
 	private static void crearConfiguracionInicial() {
-		try {
-			FileOutputStream altSale = new FileOutputStream("Altice.dat");
-			ObjectOutputStream altWrite = new ObjectOutputStream(altSale);
+		try (FileOutputStream altSale = new FileOutputStream("Altice.dat");
+			 ObjectOutputStream altWrite = new ObjectOutputStream(altSale)) {
+			
 			Usuario def = new Usuario(Usuario.rolEmp.ADMINISTRADOR, "admin", "admin");
-			Empleado aux = new Empleado("AdminDefault", def, 0, "Disco duro", "M", "N/A", "N/A", "N/A", "EMP-0"); 
+			Empleado aux = new Empleado("AdminDefault", def, 0, "Disco duro", "M", "N/A", "N/A", "N/A", "EMP-0");
 			aux.setDepartamento("Administración");
+			
 			Altice.getInstance().regPersona(aux);
 			altWrite.writeObject(Altice.getInstance());
-			altSale.close();
-			altWrite.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
